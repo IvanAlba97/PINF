@@ -1,0 +1,256 @@
+#include <stdio.h> //sprintf()
+#include <math.h>
+#include <stdlib.h> //exit(EXIT_FAILURE)
+#include <string.h> // strcpy()
+#include "polis.h" // evaluapo() derivapo() + enum {astros}
+// (usa: ah, dh, rh, al, dl, av, dv, am, dm, aj, dj, as, ds, ms)
+// ah, dh, rh, al, dl, rl, av, dv, rv, am, dm, rm, aj, dj, mj, as, ds, ms, ee
+#include "variasfu.h" // ardr2xyz(), ard2azalt()
+#include "catalogo.h" // stardata()
+#include "funj2000.h" // tocent(), prenut()
+#include "constant.h" // GRADOS
+
+/*
+static void solybari2 ( double ut, double *sol, double *b_e ) {
+  int i;
+  double ap, dp, rp, av, dv, rv, coa, sia, cod, sid, s[3], b[7];
+
+  ap = evaluapo (ah, ut);
+  dp = evaluapo (dh, ut);
+  rp = evaluapo (rh, ut);
+  coa = cos(ap);
+  sia = sin(ap);
+  cod = cos(dp);
+  sid = sin(dp); // --- (x/r, y/r, z/r)_sol_Tierra = -Tierra_sol
+  s[0] = -coa*cod;
+  s[1] = -sia*cod;
+  s[2] = -sid;
+  b[0] = 2.*9.87e-09/rp; //--- para deflexion luz, b_e(1) = 2æ/c^2/E
+  b[1] = -rp*s[0]; //--- (x, y, z)_baricentro ÷ sol
+  b[2] = -rp*s[1];
+  b[3] = -rp*s[2]; // --- velocidades AR', ë', r'
+  av = derivapo (ah, ut);
+  dv = derivapo (dh, ut);
+  rv = derivapo (rh, ut);
+// --- (x',y',z')_baricentro ÷ sol '! ƒ_b/c = -0.0057755 b_e(5,6,7)
+  b[4] = -0.0057755*(rv*cod*coa - rp*(cod*sia*av + sid*coa*dv));
+  b[5] = -0.0057755*(rv*cod*sia + rp*(cod*coa*av - sid*sia*dv));
+  b[6] = -0.0057755*(rv*sid + rp*cod*dv);
+  for (i = 0; i < 3; i++) *(sol+i) = s[i];
+  for (i = 0; i < 7; i++) *(b_e+i) = b[i];
+}
+
+
+static void redaprox2 ( double *ar, double *de,
+					   double arp, double dep, double arv, double dev,
+					   double *pn, double *b, double *s, double dt) {
+  int j, k;
+  double mpn[3][3], sol[3], b_e[7], cart[3], vel[3], coa, sia, cod;
+// sin paralaje ni velocidad radial
+  for (k = 0; k < 3; k++)
+	for (j = 0; j < 3; j++)
+	  mpn[k][j] = *(pn+3*k+j);
+  for (j = 0; j < 7; j++) b_e[j] = *(b+j);
+  for (j = 0; j < 3; j++) sol[j] = *(s+j);
+  coa = cos(arp);
+  sia = sin(arp);
+  cod = cos(dep);
+  cart[0] = coa*cod;
+  cart[1] = sia*cod;
+  cart[2] = sin(dep);
+  vel[0] = -cart[1]*arv - cart[2]*coa*dev;
+  vel[1] = cart[0]*arv - cart[2]*sia*dev;
+  vel[2] = cod*dev;
+  cart[0] = cart[0] + dt*vel[0];
+  cart[1] = cart[1] + dt*vel[1];
+  cart[2] = cart[2] + dt*vel[2];
+  sia = sqrt( cart[0]*cart[0] + cart[1]*cart[1] + cart[2]*cart[2] );// aux
+  for(j = 0; j < 3; j++) cart[j] = cart[j]/sia;
+  coa = cart[0]*sol[0] + cart[1]*sol[1] + cart[2]*sol[2];
+  sia = 1. + coa;
+  for (j = 0; j < 3; j++)
+	vel[j] = cart[j] + b_e[0]*(sol[j] - cart[j]*coa )/sia;
+  coa = vel[0]*b_e[4] + vel[1]*b_e[5] + vel[2]*b_e[6];
+  sia = 1. + coa;
+  cod = sqrt( 1. - (b_e[4]*b_e[4] + b_e[5]*b_e[5] + b_e[6]*b_e[6]) );
+  coa = 1. + coa/(1. + cod);
+  for(j = 0; j < 3; j++) vel[j] = ( vel[j]*cod + b_e[j+4]*coa )/sia;
+  for(j = 0; j < 3; j++) { // producto (cart) = (mpn).(vel)
+	cart[j] = 0.;
+	for(k = 0; k < 3; k++) cart[j] += mpn[j][k]*vel[k];
+	}
+  *ar = atan2( cart[1], cart[0] );
+  *de = asin( cart[2] );
+}
+*/
+
+static void solybari ( double ut, double *b_e ) {
+  int i;
+  double ap, dp, rp, a, d, r, coa, sia, cod, sid, b[3];
+
+  ap = evaluapo (ah, ut);
+  dp = evaluapo (dh, ut);
+  rp = evaluapo (rh, ut);
+  coa = cos(ap);
+  sia = sin(ap);
+  cod = cos(dp);
+  sid = sin(dp); // --- (x/r, y/r, z/r)_sol_Tierra = -Tierra_sol
+  a = derivapo (ah, ut);
+  d = derivapo (dh, ut);
+  r = derivapo (rh, ut);
+// --- (x',y',z')_baricentro ÷ sol '! ƒ_b/c = -0.0057755 b_e(5,6,7)
+  b[0] = -0.0057755*(r*cod*coa - rp*(cod*sia*a + sid*coa*d));
+  b[1] = -0.0057755*(r*cod*sia + rp*(cod*coa*a - sid*sia*d));
+  b[2] = -0.0057755*(r*sid + rp*cod*d);
+  for (i = 0; i < 3; i++) *(b_e+i) = b[i];
+}
+
+
+static void redaprox ( double *ar, double *de,
+					   double arp, double dep, double arv, double dev,
+					   double *pn, double *b, double dt) {
+  int j, k;
+  double mpn[3][3], b_e[3], cart[3], vel[3], coa, sia, cod;
+// sin paralaje ni vel. radial ni deflexion de la luz ni aberr. relativista
+  for (k = 0; k < 3; k++)
+	for (j = 0; j < 3; j++)
+	  mpn[k][j] = *(pn+3*k+j);
+  for (j = 0; j < 3; j++)
+	b_e[j] = *(b+j);
+  coa = cos(arp);
+  sia = sin(arp);
+  cod = cos(dep);
+  cart[0] = coa*cod;
+  cart[1] = sia*cod;
+  cart[2] = sin(dep);
+  vel[0] = -cart[1]*arv - cart[2]*coa*dev;
+  vel[1] = cart[0]*arv - cart[2]*sia*dev;
+  vel[2] = cod*dev;
+  cart[0] = cart[0] + dt*vel[0];
+  cart[1] = cart[1] + dt*vel[1];
+  cart[2] = cart[2] + dt*vel[2];
+  sia = sqrt( cart[0]*cart[0] + cart[1]*cart[1] + cart[2]*cart[2] );// aux
+  for(j = 0; j < 3; j++)// aberracion
+	vel[j] = cart[j]/sia + b_e[j];// vel == aux.
+  coa = sqrt( vel[0]*vel[0] + vel[1]*vel[1] + vel[2]*vel[2] );
+  for(j = 0; j < 3; j++)// vector unitario
+	vel[j] = vel[j]/coa; // vel == aux.
+  for(j = 0; j < 3; j++) { // producto (cart) = (mpn).(vel)
+	cart[j] = 0.;
+	for(k = 0; k < 3; k++) cart[j] += mpn[j][k]*vel[k];
+	}
+  *ar = atan2( cart[1], cart[0] );
+  *de = asin( cart[2] );
+}
+
+
+static double magnitud ( int j, double ut ) {// para Venus y Marte
+  double a, d, r, s, xh, yh, zh, x, y, z, hp, i;
+
+  a = evaluapo (ah, ut);
+  d = evaluapo (dh, ut);
+  r = evaluapo (rh, ut);
+  ardr2xyz (a, d, r, &xh, &yh, &zh); // cartesianas del sol
+  a = evaluapo (5 + j*j, ut); // av = 6, am = 9
+  d = evaluapo (6 + j*j, ut); // dv = 7, dm = 10
+  s = evaluapo (7 + j*j, ut); // rv = 8, rm = 11
+  ardr2xyz (a, d, s, &x, &y, &z);
+  hp = sqrt( pow(x - xh, 2) + pow(y - yh, 2) + pow(z - zh, 2) );
+  i = acos( (s*s + hp*hp - r*r)/(2.*s*hp) );
+  if (j == 2) {
+	i = (i/GRADOS)/100.;
+	i = i*( 0.09 + i*(2.39 - i*0.65) ) - 4.4;
+	}
+  else if (j == 3)
+	i = 0.016*i/GRADOS - 1.52;
+
+  return 5.*log10(s*hp) + i;
+}
+
+
+static void qalestre ( int i, double ut,
+					   char *nom, char *mag, double *ar, double *de ) {
+  double aa, ap, dd, dp;
+  static double dt, pn[3][3], b_t[3]; //, sol[3], b_e[7];
+  extern int bandprnu;// externa: no tiene depende algoritmo, es para acelerar
+//  double ar2, de2;
+
+  if (bandprnu) {// para acelerar en ordenadores lentos
+//	solybari2 (ut, &sol[0], &b_e[0]); // sol + baricentro (geocentricos)
+	solybari (ut, &b_t[0]); // vel. geocentrica del baricentro
+	prenut (ut, &pn[0][0]); // --- matriz de precesion y nutacion
+	dt = tocent (ut);
+	bandprnu = 0;
+	}
+  stardata (i, nom, mag, &aa, &ap, &dd, &dp);
+//  redaprox2 (&ar2, &de2, aa, dd, ap, dp, &pn[0][0], &b_e[0], &sol[0], dt);
+  redaprox (ar, de, aa, dd, ap, dp, &pn[0][0], &b_t[0], dt);
+}
+
+
+void qalcuerp ( int i, double ut,
+				char *nom, char *mag, double *ar, double *de )
+{
+  if (i == 100) {
+	strcpy (nom, "Venus");
+	sprintf (mag, "%4.1f ", magnitud (2, ut) );
+	*ar = evaluapo (av, ut); // AR
+	*de = evaluapo (dv, ut); // ë
+	}
+  else if (i == 101) {
+	strcpy (nom, "Marte");
+	sprintf (mag, "%4.1f ", magnitud (3, ut) );
+	*ar = evaluapo (am, ut); // AR
+	*de = evaluapo (dm, ut); // ë
+	}
+  else if (i == 102) {
+	strcpy (nom, "J£piter");
+	sprintf (mag, "%4.1f ", evaluapo (mj, ut)-0.15);//ojo, chapuza temporal
+	*ar = evaluapo (aj, ut); //  AR
+	*de = evaluapo (dj, ut); //  ë
+	}
+  else if (i == 103) {
+	strcpy (nom, "Saturno");
+	sprintf (mag, "%4.1f ", evaluapo (ms, ut)-1.69);//ojo, chapuza temporal
+	*ar = evaluapo (as, ut); //  AR
+	*de = evaluapo (ds, ut); // ë
+	}
+  else if (i == 104) {
+	strcpy (nom, "Luna");
+	strcpy (mag, "");
+	*ar = evaluapo (al, ut); // AR
+	*de = evaluapo (dl, ut); // ë
+	}
+  else if (i == 105) {
+	strcpy (nom, "Sol");
+	strcpy (mag, "");
+	*ar = evaluapo (ah, ut); // AR
+	*de = evaluapo (dh, ut); // ë
+	}
+  else
+	qalestre (i, ut, nom, mag, ar, de);
+}
+
+
+
+void acimaltu ( int i, double ut, double lat, double lon,
+				char *nom, char *mag, double *az, double *a ) {
+  double ar, d;
+ 
+  qalcuerp (i, ut, nom, mag, &ar, &d);
+  ard2azalt (ut, ar, d, lat, lon, az, a);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

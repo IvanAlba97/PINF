@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "cgi": "^0.3.1",
+    "node-cgi": "^0.10.0"
+  },
+  "name": "test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

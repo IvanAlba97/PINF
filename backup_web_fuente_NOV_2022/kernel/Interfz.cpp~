@@ -1,0 +1,911 @@
+#include <math.h> // acos, fabs, sqrt
+#include <time.h> // time_t, gmtime()
+#include <stdlib.h> // exit()
+#include <stdio.h> // manipulacion de ficheros
+#include <string.h> // strcpy()
+#include <conio.h>
+#include "catalogo.h" // stardata()
+#include "externos.h"  // funciones necesarias por el front end
+#include "polis.h" // leepoli0(), leepolin()
+#include "funJ2000.h" // diajul()
+#include "grados.h" // grami(), sigrmi(), hodobfen()
+#include "otrocalc.h" // paralaje(), semidiam(), refracci(), latpolar()
+#include "pasomeri.h" // pasmersu()
+#include "ocaorsol.h" // fenosol()
+#include "variasfu.h" // semidesol(), semidelun()
+#include "ortocalu.h" // fenolun(), edadluna()
+#include "reduc.h" // qalcuerp(), acimaltu()
+#include "variasfu.h" // horlug()
+#include "constant.h" // NAUTICO, CIVIL, ORTO_H, GRADOS, R_T_KM
+#include "pasomeri.h" // pasmersu()
+#include "ocaorsol.h" // fenosol()
+#include <Dialogs.hpp>
+
+#define erroan 0.05 // media decima de ' de arco
+
+//============================
+//--- Reservamos memoria para las variables
+//============================
+
+int bandprnu; // Necesaria (extern) en "reduc.cpp"
+static char nom[16], mag[6], cul[6], cu2[6];
+static struct Tcomsol comsol;
+static struct Tcomfel comfel;
+static struct TLatitudPolar lap;
+//--- espacio para 'mer', 'lat', 'aci' y el contenido de sus punteros
+static struct TCircunmeridi lac =
+  {(char*)&nom, (char*)&mag, 0, 0, 0, 0, 0};
+static struct TMeridiano mer =
+  {(char*)&nom, (char*)&mag, (char*)&cul, 0, 0, 0, 0, 0, (char*)&cu2};
+static struct TLatitudCalculada lat =
+  {(char*)&nom, (char*)&mag, (char*)&cul, 0, 0, 0, 0, 0, 0, 0};
+static struct TAcimutAltura aci = {(char*)&nom, (char*)&mag, 0, 0, 0, 0, 0};
+static struct TDetPuntoAproximado dpa =
+  {(char*)&nom, (char*)&mag, 0, 0, 0, 0, 0};
+// dpa: {dpa.nom, dpa.mag, dpa.gav, dpa.mav, dpa.gac, dpa.mac, dpa.da}
+
+
+static struct Tbanderas {
+  int bla, blo, bel, bfe, bzh, bpo;
+} banderas;
+static struct Tcomper {// a¤os de inicio y fin de validez
+  int ain, afi;
+} comper;
+static struct Tcomfec {// Fecha de la observaciones
+	int dia, mes, ano; 	// d¡a, mes y a¤o
+} comfec;
+static struct Tcomlon { // Longitud
+	char   slo;		// Este u oeste
+	int    glo;		// Grados
+	double mlo;		// Minutos
+} comlon;
+static struct Tcomlat { // Latitud
+	char   sla;		// Norte o sur
+	int    gla;		// Grados
+	double mla;		// Minutos
+} comlat;
+static struct TPos {
+  double latitud, longitud, elevacion, zona_hor;
+} posicion;
+static int comzhe, bandelun, bandesol;
+static double comdj, comele, comdho, comrlo, comrla, cohuso, lunDic;
+
+
+//==============================
+//   LECTURA DE PREFERENCIAS: FECHA, SITUACION, INTERVALO DE VALIDEZ...
+//==============================
+
+void getdat (int* ano, int* mes, int* dia) {
+	 struct tm *tiempo;
+	 time_t t;
+// 'getdat' no esta en la libreria: la definimos usando la funcion de C.
+	 t = time (NULL);       // Obtener el tiempo codificado
+	 tiempo = gmtime (&t);  // Desglosar el tiempo en la estructura
+	 *ano = tiempo->tm_year + 1900;
+	 *mes = tiempo->tm_mon + 1;
+	 *dia = tiempo->tm_mday;
+}
+
+
+void leerPos (void) {
+//  struct TPos posicion;
+  FILE *fic;
+
+  if ( ( fic = fopen ("posicion.dat", "rb") ) == NULL ) { // r+b = write binary
+	ShowMessage("Error al abrir archivo posicion.dat");
+	exit (EXIT_FAILURE);
+  }
+  fseek (fic, 0, SEEK_SET); // posicionamos el registro a escribir
+  fread (&posicion, sizeof(posicion), 1, fic); // escribe 'lor' bytes con lo que hay desde &jdP
+  fclose (fic);
+  comrla = posicion.latitud;
+  comrlo = posicion.longitud;
+  comzhe = posicion.zona_hor;
+  comele = posicion.elevacion;
+}
+
+
+int preferen (void)
+{
+  getdat (&comfec.ano,&comfec.mes,&comfec.dia);
+  leepoli0 (&lunDic,&comper.ain,&comper.afi); // lee rango + situacion + (UT - TT)
+  /*  if ( comfec.ano < comper.ain || comfec.ano > comper.afi )
+	return 1;
+	else {  */
+	bandprnu = 1; // .TRUE.
+	bandesol = 1; // .TRUE.
+	bandelun = 1; // .TRUE.
+	leepolin ( comfec.mes, comfec.ano, comper.ain ); // lee polinomios
+	comdj = diajul (comfec.dia,comfec.mes,comfec.ano,0);
+	/*	leerPos ();  */
+	trad_ker();
+	cohuso = comzhe/24.;
+	sigrmi (comrla,&comlat.sla,&comlat.gla,&comlat.mla,erroan);
+	sigrmi (comrlo,&comlon.slo,&comlon.glo,&comlon.mlo,erroan);
+	if ( comlat.sla == '+' ) comlat.sla = 'N';
+	else comlat.sla = 'S';
+	if ( comlon.slo == '+' ) comlon.slo = 'E';
+	else comlon.slo = 'W';
+	comdho = acos( R_T_KM/(R_T_KM + comele) ); // ACOS(r/(r+h))
+	/*}*/
+  return 0;
+}
+
+//==============================
+//   FENOMENOS DE SOL
+//==============================
+
+static void igualahm ( int *h, double *m, int *hora, double *minuto )
+{
+  *(h++) = *(hora++);
+  *(m++) = *(minuto++);
+  *h = *hora;
+  *m = *minuto;
+}
+
+
+static void acimusol ( int ho[2], double ut[2],
+					   int *ssg, double *ssm ) {
+  double az, al;
+
+  if (ho[0] != -1) { // hay un fenomeno
+	acimaltu (105, ut[0], comrla, comrlo, nom, mag, &az, &al);
+	grami (az, ssg, ssm, erroan);
+	if (ho[1] != -1) { // hay doble fenomeno
+	  acimaltu (105, ut[1], comrla, comrlo, nom, mag, &az, &al);
+	  grami (az, ssg+1, ssm+1, erroan);
+	  }
+	}
+}
+
+
+static void haynohay ( double dz )
+{
+  if (comsol.hss[0] == -1) // no hay salida
+	if (comsol.hps[0] == -1) // ni puesta
+	  if ( dz < (ORTO_H + comdho) ) // siempre encima horizonte
+		comsol.hss[0] = 99;
+	  else if (comsol.hpc[0] == -1) // no hay principio civil
+		if (comsol.hfc[0] == -1) // no hay fin civil
+		  if ( dz < (CIVIL + comdho) ) // entre -6 y horizonte
+			comsol.hpc[0] = 99;
+		  else if (comsol.hpn[0] == -1) // no hay principio nautico
+			if (comsol.hfn[0] == -1) // no hay fin nautico
+			  if ( dz < (NAUTICO + comdho) ) // entre -12 y -6
+				comsol.hpn[0] = 99;
+			  else // siempre por debajo de -12
+				comsol.hpn[0] = 88;
+}
+
+
+struct Tcomsol* c_fensol ( void ) {
+  int i, hof[2];
+  double dz, mif[2], ut[2] = {-1., -1.}; //am, al, az
+  struct TMeridiano* meri; // espacio para el puntero meri
+
+if (bandesol) {
+  meri = pasoMeridiano (105);
+  comsol.hpm = meri->hor;
+  comsol.mpm = meri->min;
+  comsol.gra = meri->gra;
+  comsol.mia = meri->ming;
+  comsol.cul = meri->cul[0];
+  comsol.ssd = semidesol (comdj);
+  if (meri->sig == '+') // alturas positivas
+	dz = M_PI/2. - (comsol.gra+comsol.mia/60.)*GRADOS; // distancia cenital
+  else
+	dz = M_PI/2. + (comsol.gra+comsol.mia/60.)*GRADOS; // distancia cenital
+  if ( dz <= (ORTO_H + comdho) )//para front end; ORTO_H = (90 +50/60)*PI/180
+	comsol.bpm = 1; //.TRUE. sol por encima del horizonte en el meridiano
+  else
+	comsol.bpm = 0; //.FALSE.
+  for (i = 0; i < 8; i++) {
+	fenosol (comdj, comrla, comrlo, cohuso, comdho, i, &ut[0]);
+	hodobfen (ut, comdj, cohuso, &hof[0], &mif[0], 10.*erroan); // DJ -> (h,m) de la fecha
+	switch (i) {
+	  case (0): igualahm (&comsol.hpn[0], &comsol.mpn[0], &hof[0], &mif[0]);
+	  break;
+	  case (1): igualahm (&comsol.hpc[0], &comsol.mpc[0], &hof[0], &mif[0]);
+	  break;
+	  case (2):
+		igualahm (&comsol.hss[0], &comsol.mss[0], &hof[0], &mif[0]);
+		acimusol (hof, ut, &comsol.ssg[0], &comsol.ssm[0]);
+	  break;
+	  case (3):
+		igualahm (&comsol.hsi[0], &comsol.msi[0], &hof[0], &mif[0]);
+		acimusol (hof, ut, &comsol.sig[0], &comsol.sim[0]);
+	  break;
+	  case (4):
+		igualahm (&comsol.hpi[0], &comsol.mpi[0], &hof[0], &mif[0]);
+		acimusol (hof, ut, &comsol.pig[0], &comsol.pim[0]);
+	  break;
+	  case (5):
+		igualahm (&comsol.hps[0], &comsol.mps[0], &hof[0], &mif[0]);
+		acimusol (hof, ut, &comsol.psg[0], &comsol.psm[0]);
+	  break;
+	  case (6): igualahm (&comsol.hfc[0], &comsol.mfc[0], &hof[0], &mif[0]);
+	  break;
+	  case (7): igualahm (&comsol.hfn[0], &comsol.mfn[0], &hof[0], &mif[0]);
+	}
+  }
+  bandesol = 0; //.FALSE.
+  haynohay (dz); // claves para pintar carteles en el front end
+}
+  return &comsol;
+}
+
+/*==============================
+   FENOMENOS DE LUNA
+================================*/
+
+struct Tcomfel* c_fenlun ( void ) {
+  double az, al, aux, cor, alm;
+  struct TMeridiano* meri; // espacio para el puntero meri
+/*	char*  nom;	char*  mag;	char*  cul;
+	int    hor;	double min;	char   sig;	int    gra;	double ming;
+	char*  cu2;	int    ho2;	double mi2;	char   si2;	int    gr2;	double ma2;*/
+if (bandelun) {
+  meri = pasoMeridiano (104); // valores en estructura global 'mer'
+  if (meri->hor == -1) {//puede no haber paso meridiano ese dia
+	comfel.hpm = -1;
+	comfel.mpm = -1;
+	comfel.gam = -1;
+// distancia cenital a 0/24h, para ver si Luna encima del horizonte
+	acimaltu (104, comdj-cohuso, comrla, comrlo, nom, mag, &az, &alm);
+	alm += dzoroclu (comdj-cohuso, comdho) - 90.*GRADOS;//av+(DH+SD+ref+par)
+	acimaltu (104, comdj-cohuso+1., comrla, comrlo, nom, mag, &az, &al);
+	al += dzoroclu (comdj-cohuso+1., comdho) - 90.*GRADOS;//av+DH+SD+rf+par
+	if (al > alm)
+	  alm = al; // altura maxima en el dia
+  }
+  else {
+	comfel.hpm = meri->hor;
+	comfel.mpm = meri->min;
+	comfel.gam = meri->gra;
+	comfel.mam = meri->ming;
+	comfel.cul = meri->cul[0];
+	cor = comdj + (comfel.hpm+comfel.mpm/60.)/24. - cohuso;// UT paso mer.
+	cor = dzoroclu (cor, comdho) - 90.*GRADOS;//(Dep+SD+ref+paral)
+	if (meri->sig == '+') // alturas positivas
+	  alm = cor + (comfel.gam+comfel.mam/60.)*GRADOS;//av+(DH+SD+ref+par)
+	else
+	  alm = cor - (comfel.gam+comfel.mam/60.)*GRADOS;//av+(DH+SD+ref+par)
+  }
+// ORTO
+  aux = fenolun (comdj-cohuso, comrla, comrlo, 1, comdho);
+  if (aux > 0.) {
+	acimaltu (104, aux, comrla, comrlo, nom, mag, &az, &al);
+	grami(az, &comfel.gzs, &comfel.mzs, erroan);
+	horaminu (aux+cohuso-comdj, &comfel.hsa, &comfel.msa, 10*erroan); // a 1'
+	}
+  else
+	comfel.hsa = -1;
+  aux = fenolun (comdj-cohuso, comrla, comrlo, 2, comdho); // ocaso
+  if (aux > 0.) {
+	acimaltu (104, aux, comrla, comrlo, nom, mag, &az, &al);
+	grami(az, &comfel.gzp, &comfel.mzp, erroan);
+	horaminu (aux+cohuso-comdj, &comfel.hpu, &comfel.mpu, 10*erroan); // a 1'
+	}
+  else
+	comfel.hpu = -1;
+  if (comfel.hsa == -1 && comfel.hpu == -1) { // ni salida ni puesta:
+	if (alm > 0.) // siempre por encima del horizonte
+	   comfel.bpm = 99;
+	 else // siempre por debajo del horizonte
+	   comfel.bpm = -99;
+  }
+  else
+	comfel.bpm = 1; // hay algun fenomeno
+  comfel.lsd = semidelun (comdj);
+  comfel.eda = edadluna (comdj, lunDic, comper.ain, cohuso);
+  bandelun = 0; //.FALSE.
+}
+  return &comfel;
+}
+
+/*==============================
+   TRADUCCION DE DATOS DE ENTRADA: FRONT END -> KERNEL
+================================*/
+
+void trad_ker ( void )
+{// puedo no haber modificado nada
+  /*  if ( banderas.bla || banderas.blo || banderas.bfe ||
+      banderas.bzh || banderas.bel ) { */
+	bandelun = 1; // para recalcular los fenomenos de luna
+	bandesol = 1; // para recalcular los fenomenos de sol
+	/*if (banderas.bla) { */
+	  comrla = (comlat.gla + comlat.mla/60.)*GRADOS;
+	  if (comlat.sla == 'S') comrla = -comrla;
+	  banderas.bla = 0; //.FALSE.
+	  /* }*/
+	  /*if (banderas.blo) { */
+	  comrlo = (comlon.glo + comlon.mlo/60.)*GRADOS;
+	  if (comlon.slo == 'W') comrlo = -comrlo;
+	  banderas.blo = 0; //.FALSE.
+	  /*}*/
+	  /*if (banderas.bfe) { */
+	  comdj = diajul (comfec.dia, comfec.mes, comfec.ano, 0.);
+	  bandprnu = 1; // para recalcular la matriz de precesion+nutacion
+	  banderas.bfe = 0; //.FALSE.
+	  /* if (banderas.bpo) { */
+	  leepolin ( comfec.mes, comfec.ano, comper.ain );
+	  banderas.bpo = 0;
+	  /*	}*/
+	  /* }*/
+	  /* if (banderas.bzh) { */
+	  cohuso = comzhe/24.;
+	  banderas.bzh = 0; //.FALSE.
+	  /*}*/
+	  /*if (banderas.bel) { */
+	  comdho = acos( R_T_KM/(R_T_KM + comele) ); // ACOS(r/(r+h))
+	  banderas.bel = 0; //.FALSE.
+	  /*}*/
+	  /*}*/
+}
+
+/*==============================
+   ESTIMACION DE LA HORA DE OBSERVACION DEL CREPUSCULO
+   ???????????????????????????????????????????????????
+================================*/
+
+void horacrep2 ( int qal, int* hc, int* mi, int* sc, int* si) {
+  double h1, h2, h, mc;
+
+  *si = 1;
+  if ( qal == 0) {
+	if (comsol.hpn[0] != -1 && comsol.hpc[0] != -1) {// hay civil y nautico
+	  h2 = comsol.hpn[0] + comsol.mpn[0]/60.;
+	  h1 = comsol.hpc[0] + comsol.mpc[0]/60.;
+	  if (h2 > h1)
+		h = (h1 + h2)/2.;
+	  else
+		h = fmod(24. + (h1 - 24. + h2)/2., 24.);
+	}
+	else {// no hay civil o nautico o ninguno
+	  if (comsol.hpn[0] == -1) {// no hay nautico
+		if (comsol.hpc[0] == -1) // tampoco civil
+		  *si = 0;
+		else // hay civil
+		  h = comsol.hpc[0] + comsol.mpc[0]/60.;
+	  }
+	  else  // no hay civil, pero si nautico
+		h = comsol.hpn[0] + comsol.mpn[0]/60.;
+	}
+  }
+  else {
+	if (comsol.hfn[0] != -1 && comsol.hfc[0] != -1) {// hay civil y nautico
+	  h1 = comsol.hfn[0] + comsol.mfn[0]/60.;
+	  h2 = comsol.hfc[0] + comsol.mfc[0]/60.;
+	  if (h2 > h1)
+		h = (h1 + h2)/2.;
+	  else
+		h = fmod(24. + (h1 - 24. + h2)/2., 24.);
+	}
+	else {// no hay civil o nautico o ninguno
+	  if (comsol.hfn[0] == -1) {// no hay nautico
+		if (comsol.hfc[0] == -1) // tampoco civil
+		  *si = 0;
+		else // hay civil
+		  h = comsol.hfc[0] + comsol.mfc[0]/60.;
+	  }
+	  else  // no hay civil, pero si nautico
+		h = comsol.hfn[0] + comsol.mfn[0]/60.;
+	}// hay civil y nautico
+  }
+  if (*si) {
+	*hc = (int) h;
+	mc = 60.*(h - *hc);
+	*mi = (int) mc;
+	*sc = (int) (60.*(mc - *mi) + .5);
+  }
+}
+
+
+void horacrep ( int qal, int* hc, int* mi, int* sc, int* si) {
+  int h1; // bpm
+  double m1, mc, h;
+
+  if ( qal == 1) {
+	h1 = comsol.hpn[0];
+	m1 = comsol.mpn[0];
+	*hc = comsol.hpc[0];
+	mc = comsol.mpc[0];
+	}
+  else {
+	h1 = comsol.hfn[0];
+	m1 = comsol.mfn[0];
+	*hc = comsol.hfc[0];
+	mc = comsol.mfc[0];
+	}
+  *si = 1;
+  if ( h1 < 0 || h1 > 24 )
+	if ( *hc < 0 || *hc > 24 )
+	  *si = 0; // .FALSE.
+	else
+	  h = *hc + mc/60.;
+  else if (*hc < 0 || *hc > 24)
+	h = h1 + m1/60.;
+  else
+	h = 0.5*(h1 + *hc + (m1 + mc)/60.);
+  if (*si) {
+	*hc = (int) h;
+	mc = 60.*(h - *hc);
+///////////////////////////// para que coincida el minuto exacto
+	h1 = (int) mc;
+	if (mc - h1 >= 0.5)
+	  *mi = h1 + 1;
+	else
+	  *mi = h1;
+	*sc = 0;
+//	*mi = (int) mc;
+//	*sc = (int) (60.*(mc - *mi) + .5);
+	}
+}
+
+/*==============================
+   INFORMA AL FRONT END SI HAY QUE CALCULAR LOS FENOMENOS DE SOL/LUNA
+================================*/
+
+int siCalcular (enum TsiCalcular op)
+{
+  switch (op) {
+	case opSol: return bandesol;
+	default: return bandelun; //	case opLuna: return bandelun;
+	}
+}
+
+/*==============================
+   SALVA SITUACION PARA SER LEIDA AL ARRANCAR
+================================*/
+
+void salvaPos (void) {
+//  struct TPos posicion;
+  FILE *fic;
+
+  posicion.latitud  = comrla;
+  posicion.longitud = comrlo;
+  posicion.zona_hor = comzhe;
+  posicion.elevacion= comele;
+  if ( ( fic = fopen ("posicion.dat", "wb") ) == NULL ) { // r+b = write binary
+	ShowMessage("Error al abrir archivo posicion.dat");
+	exit (EXIT_FAILURE);
+  }
+  fseek (fic, 0, SEEK_SET); // posicionamos el registro a escribir
+  fwrite (&posicion, sizeof(posicion), 1, fic); // escribe 'lor' bytes con lo que hay desde &jdP
+  fclose (fic);
+}
+
+
+/*******************************************************************\
+  lee situaci¢n actual (lat, lon, fecha, zona horaria, elev)
+  y los introduce en el registro 'pos'
+  ?????????????????????????????????????????????????????????????????
+\*******************************************************************/
+
+void leerPosicionCommon (struct TPosicion* pos)
+{
+	pos->gla = comlat.gla;
+	pos->mla = comlat.mla;
+	pos->sla = comlat.sla;
+	pos->glo = comlon.glo;
+	pos->mlo = comlon.mlo;
+	pos->slo = comlon.slo;
+	pos->dia = comfec.dia;
+	pos->mes = comfec.mes;
+	pos->ano = comfec.ano;
+	pos->zhe = comzhe;
+	pos->ele = comele;
+}
+
+/************************************************************************\
+  pasa al kernel la posici¢n (lat, lon, fecha, zona horaria, elev)
+  introducida en el registro 'pos'. Activa banderas en su caso
+  ?????????????????????????????????????????????????????????????????????
+\************************************************************************/
+
+void escribirPosicionCommon (const struct TPosicion* pos)
+{ // vemos que datos han cambiado
+
+	if ( comlat.gla != pos->gla || comlat.mla != pos->mla ||
+		 comlat.sla != pos->sla ) {
+		comlat.gla = pos->gla;
+		comlat.mla = pos->mla;
+		comlat.sla = pos->sla;
+		banderas.bla = 1;
+	  }
+	if ( comlon.glo != pos->glo || comlon.mlo != pos->mlo ||
+		 comlon.slo != pos->slo ) {
+		comlon.glo = pos->glo;
+		comlon.mlo = pos->mlo;
+		comlon.slo = pos->slo;
+		banderas.blo = 1;
+	  }
+	if ( comfec.mes != pos->mes || comfec.ano != pos->ano ) {
+		comfec.mes = pos->mes;
+		comfec.ano = pos->ano;
+		banderas.bfe = 1;
+		banderas.bpo = 1;      // Si cambia mes o a¤o, calculo polinomios
+	  }
+	if ( comfec.dia != pos->dia ) {
+		comfec.dia = pos->dia;
+		banderas.bfe = 1;
+	  }
+	if ( comzhe != pos->zhe ) {
+		comzhe = pos->zhe;
+		banderas.bzh = 1;
+	  }
+	if (comele != pos->ele) {
+		comele = pos->ele;
+		banderas.bel = 1;
+	  }
+}
+
+/*==============================
+   CALCULA HORA DE PASO DE UN ASTRO POR EL MERIDIANO SUPERIOR
+================================*/
+
+struct TMeridiano* pasoMeridiano (int nas) {
+  double az, al, ut;
+
+  ut = pasmersu (nas, comdj-cohuso, comrlo);
+  if (ut == -1. || ut+cohuso-comdj >= 1.)
+	mer.hor = -1;
+  else {
+	acimaltu (nas, ut, comrla, comrlo, mer.nom, mer.mag, &az, &al);
+	horaminu (ut+cohuso-comdj, &mer.hor, &mer.min, erroan); // a 1'/10
+	sigrmi (al, &mer.sig, &mer.gra, &mer.ming, erroan);
+	if ( fabs(az-M_PI) < 1 )
+	  strcpy (mer.cul, "Sur");
+	else
+	  strcpy (mer.cul, "Norte");
+	if (mer.hor < 1) { // puede haber doble paso
+//	  ut = pasmersu (nas, ut-cohuso+1./24., comrlo);
+	  ut = pasmersu (nas, ut-cohuso+23./24., comrlo);
+	  if (ut == -1. || ut+cohuso-comdj >= 1)
+		mer.ho2 = -1;
+	  else {
+		acimaltu (nas, ut, comrla, comrlo, mer.nom, mer.mag, &az, &al);
+		horaminu (ut+cohuso-comdj, &mer.ho2, &mer.mi2, erroan); // a 1'/10
+		sigrmi (al, &mer.si2, &mer.gr2, &mer.ma2, erroan);
+		if ( fabs(az-M_PI) < 1 )
+		  strcpy (mer.cu2, "Sur");
+		else
+		  strcpy (mer.cu2, "Norte");
+		}
+	  }
+	else
+	  mer.ho2 = -1;
+	}
+  return &mer;
+}
+
+
+/*==============================
+   CALCULA HORA DE PASO DE UN ASTRO POR EL MERIDIANO INFERIOR
+================================*/
+
+struct TMeridiano* pasoMeridianoInf (int nas) {
+  double az, al, ut;
+
+  ut = pasmerin (nas, comdj-cohuso, comrlo);
+  if (ut == -1. || ut+cohuso-comdj >= 1.)
+	mer.hor = -1;
+  else {
+	acimaltu (nas, ut, comrla, comrlo, mer.nom, mer.mag, &az, &al);
+	horaminu (ut+cohuso-comdj, &mer.hor, &mer.min, erroan); // a 1'/10
+	sigrmi (al, &mer.sig, &mer.gra, &mer.ming, erroan);
+//	if ( fabs(az-M_PI) < 1 )
+//	  strcpy (mer.cul, "Sur");
+//	else
+//	  strcpy (mer.cul, "Norte");
+	if (mer.hor < 1) { // puede haber doble paso
+	  ut = pasmerin (nas, ut-cohuso+23./24., comrlo);
+	  if (ut == -1. || ut+cohuso-comdj >= 1)
+		mer.ho2 = -1;
+	  else {
+		acimaltu (nas, ut, comrla, comrlo, mer.nom, mer.mag, &az, &al);
+		horaminu (ut+cohuso-comdj, &mer.ho2, &mer.mi2, erroan); // a 1'/10
+		sigrmi (al, &mer.si2, &mer.gr2, &mer.ma2, erroan);
+//		if ( fabs(az-M_PI) < 1 )
+//		  strcpy (mer.cu2, "Sur");
+//		else
+//		  strcpy (mer.cu2, "Norte");
+		}
+	  }
+	else
+	  mer.ho2 = -1;
+	}
+  return &mer;
+}
+
+
+/*==============================
+   DETERMINANTE PUNTO APROXIMADO
+================================*/
+
+struct TDetPuntoAproximado
+	   *detPuntoAproximado ( int n, int li, int ao, double mo,
+											int ho, double mi ) {
+  double av, ut, az, ae;
+// dpa: {dpa.nom, dpa.mag, dpa.gav, dpa.mav, dpa.gac, dpa.mac, dpa.da}
+//       Nombre, Magnitud, Altura verdadera, Acimut verdadero, deltaA
+  ut = comdj + (ho + mi/60.)/24. - cohuso;
+  av = (ao + mo/60. - 1.7757*sqrt(comele)/60.)*GRADOS; // aparente
+  if (n == 100) // Venus
+	li = 2; //
+  else if (n == 101) // Marte
+	li = 3;
+  else if (n == 105) // Sol
+	if (li == 0) // Limbo inferior
+	  li = 4;
+	else // Limbo superior
+	  li = 5;
+  else if (n == 104) // Luna
+	if (li == 0) // Limbo inferior
+	  li = 6;
+	else // Limbo superior
+	  li = 7;
+  else
+	li = 1;
+  av += paralaje (li, ut, av) + semidiam (li, comdj) - refracci (av);
+  grami (av, &dpa.gav, &dpa.mav, erroan);
+  acimaltu (n, ut, comrla, comrlo, dpa.nom, dpa.mag, &az, &ae);
+  dpa.da = 60.*(av - ae)/GRADOS; // minutos
+  grami (az, &dpa.gac, &dpa.mac, erroan);
+//  sigrmi (al, &dpa.sal, &dpa.gal, &dpa.mal, erroan);
+
+  return &dpa;
+}
+
+
+void redualto ( int n, int ao, double mo, int ho, double mi,
+                int *gav, double *mav ) { // necesaria en ''OTROS.CPP''
+  double av, ut;
+
+  ut = comdj + (ho + mi/60.)/24. - cohuso;
+  av = (ao + mo/60. - 1.7757*sqrt(comele)/60.)*GRADOS; // aparente
+  av += paralaje (n, ut, av) + semidiam (n, comdj) - refracci (av);
+  grami (av, gav, mav, erroan);
+}
+
+//=========================================
+// CALCULO DE LA LATITUD POR OBSERVACION DE UN ASTRO AL
+// PASO POR EL MERIDIANO SUPERIOR DEL LUGAR
+//=========================================
+
+struct TLatitudCalculada*
+  latitudMeridiana (int lim, int nas, int gr, double ami, char az) {
+  double ar, de, ut;
+
+  ut = pasmersu (nas, comdj-cohuso, comrlo); // UT paso meridiano
+  if (ut == -1.)
+	lat.hor = -1;
+  else {
+	horaminu (ut+cohuso-comdj, &lat.hor, &lat.min, erroan); // a 1'/10
+	if (nas < 100 || nas == 102 || nas == 103)
+	  redualto (1, gr, ami, lat.hor, lat.min, &lat.gra, &lat.ming);// av
+	else if (nas == 100) 		// Venus
+	  redualto (2, gr, ami, lat.hor, lat.min, &lat.gra, &lat.ming);// av
+	else if (nas == 101)		// Marte
+	  redualto (3, gr, ami, lat.hor, lat.min, &lat.gra, &lat.ming);// av
+	else if (nas == 104)		// Luna, l.i.
+	  if (lim == 0) // limbo inferior
+		redualto (6, gr, ami, lat.hor, lat.min, &lat.gra, &lat.ming);// av
+	  else
+		redualto (7, gr, ami, lat.hor, lat.min, &lat.gra, &lat.ming);// av
+	else if (nas == 105)		// Sol, l.i.
+	  if (lim == 0) // limbo inferior
+		redualto (4, gr, ami, lat.hor, lat.min, &lat.gra, &lat.ming);// av
+	  else
+		redualto (5, gr, ami, lat.hor, lat.min, &lat.gra, &lat.ming);// av
+	qalcuerp (nas, ut, lat.nom, lat.mag, &ar, &de);
+	if (az == 'S') { // observe al Sur
+	  strcpy (lat.cul, "Sur"); // latitud = dec + dist. cenital
+	  ar = de + (90. - (lat.gra + lat.ming/60.) )*GRADOS;
+	  }
+	else {
+	  strcpy (lat.cul, "Norte"); // latitud = dec - dist. cenital
+	  ar = de - (90. - (lat.gra + lat.ming/60.))*GRADOS;
+	  }
+	if ( fabs(ar) > M_PI/2. ) { // datos absurdos
+	  lat.grl = -999;
+	  return &lat;
+	}
+	sigrmi (ar, &lat.sil, &lat.grl, &lat.mil, erroan);
+	if (lat.sil == '-')
+	  lat.sil = 'S';
+	else
+	  lat.sil = 'N';
+	}
+  return &lat;
+}
+
+
+//=========================================
+// CALCULO DE LA LATITUD POR OBSERVACION DE UN ASTRO AL
+// PASO POR EL MERIDIANO INFERIOR DEL LUGAR: 03/11/99
+//=========================================
+
+struct TLatitudCalculada*
+	   latitudMeridInf (int lim, int nas, int gr, double ami) {
+  double ar, de, ut;
+
+  ut = pasmerin (nas, comdj-cohuso, comrlo); // UT paso meridiano
+  if (ut == -1.)
+	lat.hor = -1;
+  else {
+	horaminu (ut+cohuso-comdj, &lat.hor, &lat.min, erroan); // a 1'/10
+	if (nas < 100 || nas == 102 || nas == 103)
+	  redualto (1, gr, ami, lat.hor, lat.min, &lat.gra, &lat.ming);// av
+	else if (nas == 100) 		// Venus
+	  redualto (2, gr, ami, lat.hor, lat.min, &lat.gra, &lat.ming);// av
+	else if (nas == 101)		// Marte
+	  redualto (3, gr, ami, lat.hor, lat.min, &lat.gra, &lat.ming);// av
+	else if (nas == 104)		// Luna, l.i.
+	  if (lim == 0) // limbo inferior
+		redualto (6, gr, ami, lat.hor, lat.min, &lat.gra, &lat.ming);// av
+	  else
+		redualto (7, gr, ami, lat.hor, lat.min, &lat.gra, &lat.ming);// av
+	else if (nas == 105)		// Sol, l.i.
+	  if (lim == 0) // limbo inferior
+		redualto (4, gr, ami, lat.hor, lat.min, &lat.gra, &lat.ming);// av
+	  else
+		redualto (5, gr, ami, lat.hor, lat.min, &lat.gra, &lat.ming);// av
+	qalcuerp (nas, ut, lat.nom, lat.mag, &ar, &de);
+	ar = (M_PI/2. - fabs(de)) + (lat.gra + lat.ming/60.)*GRADOS;
+	if ( fabs(ar) > M_PI/2. ) { // datos absurdos
+	  lat.grl = -999;
+	  return &lat;
+	}
+	sigrmi (ar, &lat.sil, &lat.grl, &lat.mil, erroan);
+	if (lat.sil == '-')
+	  lat.sil = 'S';
+	else
+	  lat.sil = 'N';
+	}
+  return &lat;
+}
+
+
+//=========================================
+// CALCULO DE LA LATITUD POR OBSERVACION DE LA POLAR
+//=========================================
+
+struct TLatitudPolar*
+	   latitudPolar ( int aho, double mhp, int agr, double map )
+{  //*** C lculo de la latitud por la polar
+  redualto (1, agr, map, aho, mhp, &lap.gra, &lap.min); // alt. verd.
+  mhp = (aho + mhp/60.)/24. + comdj - cohuso; // hora en DJ
+  map = (agr + map/60.)*GRADOS; // altura verdadera en radianes
+  map = latpolar (mhp, map, comrlo); // auxiliar: latitud
+  if (map > M_PI/2.)
+	lap.grp = -99;
+  else {
+	sigrmi (map, &lap.sig, &lap.grp, &lap.mip, erroan);
+	if ( lap.sig == '+' )
+	  lap.sig = 'N';
+	else
+	  lap.sig = 'S';
+	}
+  return &lap;
+}
+
+
+//=========================================
+// CALCULO DE LA LATITUD POR OBSERVACION CIRCUNMERIDIANA. M.Lara--5/11/99
+//=========================================
+struct TCircunmeridi* latitudCircun ( int n, int li, char cu,
+									  int g, double m, int ho, double mi )
+{  //*** C lculo de la latitud por observacion circunmeridiana
+  double ut, ar, de, av;
+
+//	horaminu (ut+cohuso-comdj, &lat.hor, &lat.min, erroan); // a 1'/10
+  if (n < 100 || n == 102 || n == 103)
+	redualto (1, g, m, ho, mi, &lac.gav, &lac.mav); // alt. verd.
+  else if (n == 100) 		// Venus
+	redualto (2, g, m, ho, mi, &lac.gav, &lac.mav); // alt. verd.
+  else if (n == 101)		// Marte
+	redualto (3, g, m, ho, mi, &lac.gav, &lac.mav); // alt. verd.
+  else if (n == 104)		// Luna
+	if (li == 0) // limbo inferior
+	  redualto (6, g, m, ho, mi, &lac.gav, &lac.mav); // alt. verd.
+	else // limbo superior
+	  redualto (7, g, m, ho, mi, &lac.gav, &lac.mav); // alt. verd.
+  else if (n == 105)		// Sol, l.i.
+	if (li == 0) // limbo inferior
+	  redualto (4, g, m, ho, mi, &lac.gav, &lac.mav); // alt. verd.
+	else // limbo superior
+	  redualto (5, g, m, ho, mi, &lac.gav, &lac.mav); // alt. verd.
+  ut = (ho + mi/60.)/24. + comdj - cohuso; // hora en DJ
+  av = (lac.gav + lac.mav/60.)*GRADOS; // altura verdadera en radianes
+  qalcuerp (n, ut, lac.nom, lac.mag, &ar, &de);
+//  m = circunmeridiana2 (ut, comrla, comrlo, ar, de, av);
+//  sigrmi (m, &lac.sig, &lac.gla, &lac.mla, erroan);
+  m = circunmeridiana (ut, comrla, comrlo, ar, de, av);
+  if (m > 998.)
+	lac.gla = 999;
+  else {
+	if (cu == 'S') { // observe al Sur
+//	strcpy (lat.cul, "Sur"); // latitud = dec + dist. cenital
+	  ar = de + (M_PI/2. - m);
+	}
+	else {
+//	strcpy (lat.cul, "Norte"); // latitud = dec - dist. cenital
+	  ar = de - (M_PI/2. - m);
+	}
+	sigrmi (ar, &lac.sig, &lac.gla, &lac.mla, erroan);
+	if ( lac.sig == '+' )
+	  lac.sig = 'N';
+	else
+	  lac.sig = 'S';
+  }
+
+  return &lac;
+}
+
+
+//=========================================
+// COORDENADAS: HORIZONTALES/ ECUATORIALES
+//=========================================
+
+struct TAcimutAltura* acimutAltura (int nas, int hor, int min, int seg) {
+  double t, az, al;
+
+  t = comdj + (hor + (min + seg/60.) / 60.) / 24. - cohuso;
+  acimaltu (nas, t, comrla, comrlo, aci.nom, aci.mag, &az, &al);
+  grami (az, &aci.gac, &aci.mac, erroan);
+  sigrmi (al, &aci.sal, &aci.gal, &aci.mal, erroan);
+  return &aci;
+}
+
+
+struct TAcimutAltura* declinacionHG (int nas, int hor, int min, int seg) {
+  double ut, ar, d, hG;
+
+  ut = comdj + (hor + (min + seg/60.) / 60.) / 24. - cohuso;
+  qalcuerp (nas, ut, aci.nom, aci.mag, &ar, &d);
+  hG = horlug (ut, ar, 0.); // Hor. en G. del astro (long=0.) (0<HG<2PI)
+  grami (hG, &aci.gac, &aci.mac, erroan);
+  sigrmi (d, &aci.sal, &aci.gal, &aci.mal, erroan);
+  return &aci;
+}
+
+
+void actualat ( char s, int g, double m )
+{
+  comlat.sla = s;
+  comlat.gla = g;
+  comlat.mla = m;
+  banderas.bla = 1; // .TRUE.
+  trad_ker (); // calcula valores configuracion usados por el KERNEL
+}
+
+
+int bisiesto ( int a ) // --- 'a' bisisesto: -> 1; no: -> 0. Usada: C__FECHA
+{
+  return ( a % 4 == 0 && (a % 100 != 0 || a % 400 == 0) ) ? 1 : 0;
+}
+
+
+void leerFecha (struct TFecha* fec)
+{
+	fec->dia = comfec.dia;
+	fec->mes = comfec.mes;
+	fec->ano = comfec.ano;
+}
+
+
+void intervaloValidez (int* ain, int* afi)
+{
+	*ain = comper.ain;
+	*afi = comper.afi;
+}
+
+
+char *namestar ( int i) {
+  double aa, ap, dd, dp; // nom y mag, globales
+
+  stardata (i, nom, mag, &aa, &ap, &dd, &dp);
+  return nom;
+}
+
