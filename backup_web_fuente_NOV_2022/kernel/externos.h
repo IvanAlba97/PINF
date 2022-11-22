@@ -1,6 +1,6 @@
 /********************************************************************\
 |***           Real Instituto y Observatorio de la Armada         ***|
-|***                  Almanaque N utico en Disquete               ***|
+|***                  Almanaque Nï¿½utico en Disquete               ***|
 |***                     Ezequiel Fuentes, 1998                   ***|
 \********************************************************************/
 
@@ -13,30 +13,30 @@ struct Tcomsol {
 	int    hpm;			// hora paso meridiano
 	int    hpn[2];
 	int    hpc[2];
-	int    hss[2];
-	int    hps[2];
-	int    hsi[2];
-	int    hpi[2];
+	int    hss[2];		// hora salida limbo superior
+	int    hps[2];		// hora puesta limbo superior
+	int    hsi[2];		// hora salida limbo inferior
+	int    hpi[2];		// hora puesta limbo inferior
 	int    hfc[2];
 	int    hfn[2];
 	double ssd;
 	double mpm;          // minutos paso meridiano
 	double mpn[2];
 	double mpc[2];
-	double mss[2];
-	double mps[2];
-	double msi[2];
-	double mpi[2];
-	double mfc[2];
+	double mss[2];		//minutos salida limbo superior / hh:mm
+	double mps[2];		//minutos puesta limbo superior / hh:mm
+	double msi[2];		//minutos salida limbo inferior / hh:mm
+	double mpi[2];		//minutos puesta limbo inferior / hh:mm
+	double mfc[2];	
 	double mfn[2];
-	int    ssg[2];
-	int    sig[2];
-	int    psg[2];
-	int    pig[2];
-	double ssm[2];
-	double sim[2];
-	double psm[2];
-	double pim[2];
+	int    ssg[2];		//grados salida limbo superior 
+	int    sig[2];		//grados salida limbo inferior
+	int    psg[2];		//grados puesta limbo superior
+	int    pig[2];		//grados puesta limbo inferior
+	double ssm[2];		//minutos salida limbo superior	/ Âº:"
+	double sim[2];		//minutos salida limbo inferior	/ Âº:"
+	double psm[2];		//minutos puesta limbo superior	/ Âº:"
+	double pim[2];		//minutos puesta limbo inferior	/ Âº:"
 	int    bpm;			// bandera de paso por el meridiano
 	int    gra;
 	double mia;
@@ -49,7 +49,7 @@ struct Tcomfel {
 	int    gam;				// Grados de altura paso meridiano
 	double mam;				// Minutos de altura paso meridiano
 	char   cul;             // Culminacion N/S
-	int    bpm;			// bandera de paso por el meridiano
+	int    bpm;				// bandera de paso por el meridiano
 	int    hsa;				// Hora de salida
 	double msa;				// Minutos salida
 	int    gzs;				// Grados acimut salida
@@ -58,7 +58,7 @@ struct Tcomfel {
 	double mpu;				// Minutos puesta
 	int    gzp;				// Grados acimut puesta
 	double mzp;				// Minutos acimut puesta
-	double lsd;				// Semidi metro
+	double lsd;				// Semidiï¿½metro
 	double eda;				// Edad de la luna
 };
 
@@ -77,22 +77,22 @@ struct TPosicion {
 	int    glo;				// Grados de la longitud
 	double mlo;				// Minutos de la longitud
 	char   slo;				// (E/W) Este u oeste
-	int    dia, mes, ano;	// D¡a, mes y a¤o de la fecha
+	int    dia, mes, ano;	// Dï¿½a, mes y aï¿½o de la fecha
 	int    zhe;				// Zona horaria
-	double ele;				// Elevaci¢n
+	double ele;				// Elevaciï¿½n
 };
 
 struct TMeridiano {
 	char*  nom;			    // Nombre del astro
 	char*  mag;	  		    // Magnitud
-	char*  cul;			    // Culminaci¢n
+	char*  cul;			    // Culminaciï¿½n
 	int    hor;             // hora entera de paso
 	double min;             // minutos de paso
 	char   sig;             // signo de la altura
 	int    gra;             // grados de altura
 	double ming;            // minutos de altura
 
-	char*  cu2;			    // Culminaci¢n
+	char*  cu2;			    // Culminaciï¿½n
 	int    ho2;             // hora entera de paso
 	double mi2;             // minutos de paso
 	char   si2;             // signo de la altura
@@ -113,8 +113,8 @@ struct TDetPuntoAproximado {
 
 struct TLatitudCalculada {
 	char*  nom;			    // Nombre del astro
-        char*  mag;	  		    // Magnitud
-	char*  cul;			    // Culminaci¢n
+    char*  mag;	  		    // Magnitud
+	char*  cul;			    // Culminaciï¿½n
 	int    hor;             // hora entera de paso
 	double min;             // minutos de paso
 //	char   sig;             // signo de la altura

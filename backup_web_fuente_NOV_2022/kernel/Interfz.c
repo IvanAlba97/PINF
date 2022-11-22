@@ -48,11 +48,11 @@ static struct TDetPuntoAproximado dpa =
 static struct Tbanderas {
   int bla, blo, bel, bfe, bzh, bpo;
 } banderas;
-static struct Tcomper {// a¤os de inicio y fin de validez
+static struct Tcomper {// aï¿½os de inicio y fin de validez
   int ain, afi;
 } comper;
 static struct Tcomfec {// Fecha de la observaciones
-	int dia, mes, ano; 	// d¡a, mes y a¤o
+	int dia, mes, ano; 	// dï¿½a, mes y aï¿½o
 } comfec;
 static struct Tcomlon { // Longitud
 	char   slo;		// Este u oeste
@@ -247,7 +247,8 @@ if (bandesol) {
 
 /*==============================
    FENOMENOS DE LUNA
-================================*/
+================================
+*/
 
 struct Tcomfel* c_fenlun ( void ) {
   double az, al, aux, cor, alm;
@@ -267,7 +268,8 @@ if (bandelun) {
 	comfel.mpm = -1;
 	comfel.gam = -1;
 // distancia cenital a 0/24h, para ver si Luna encima del horizonte
-	acimaltu (104, comdj-cohuso, comrla, comrlo, nom, mag, &az, &alm);	 
+	acimaltu (104, comdj-cohuso, comrla, comrlo, nom, mag, &az, &alm);
+	 
 	alm += dzoroclu (comdj-cohuso, comdho) - 90.*GRADOS;//av+(DH+SD+ref+par)
 	acimaltu (104, comdj-cohuso+1., comrla, comrlo, nom, mag, &az, &al);
 	al += dzoroclu (comdj-cohuso+1., comdho) - 90.*GRADOS;//av+DH+SD+rf+par
@@ -290,7 +292,8 @@ if (bandelun) {
 // ORTO
   aux = fenolun (comdj-cohuso, comrla, comrlo, 1, comdho);
  if (aux > 0.) {
-	acimaltu (104, aux, comrla, comrlo, nom, mag, &az, &al);	
+	acimaltu (104, aux, comrla, comrlo, nom, mag, &az, &al);
+	
 	grami(az, &comfel.gzs, &comfel.mzs, erroan);
 	horaminu (aux+cohuso-comdj, &comfel.hsa, &comfel.msa, 10*erroan); // a 1'
 	}
@@ -498,7 +501,7 @@ void salvaPos (void) {
 
 
 /*******************************************************************\
-  lee situaci¢n actual (lat, lon, fecha, zona horaria, elev)
+  lee situaciï¿½n actual (lat, lon, fecha, zona horaria, elev)
   y los introduce en el registro 'pos'
   ?????????????????????????????????????????????????????????????????
 \*******************************************************************/
@@ -519,7 +522,7 @@ void leerPosicionCommon (struct TPosicion* pos)
 }
 
 /************************************************************************\
-  pasa al kernel la posici¢n (lat, lon, fecha, zona horaria, elev)
+  pasa al kernel la posiciï¿½n (lat, lon, fecha, zona horaria, elev)
   introducida en el registro 'pos'. Activa banderas en su caso
   ?????????????????????????????????????????????????????????????????????
 \************************************************************************/
@@ -545,7 +548,7 @@ void escribirPosicionCommon (const struct TPosicion* pos)
 		comfec.mes = pos->mes;
 		comfec.ano = pos->ano;
 		banderas.bfe = 1;
-		banderas.bpo = 1;      // Si cambia mes o a¤o, calculo polinomios
+		banderas.bpo = 1;      // Si cambia mes o aï¿½o, calculo polinomios
 	  }
 	if ( comfec.dia != pos->dia ) {
 		comfec.dia = pos->dia;
@@ -794,7 +797,7 @@ struct TLatitudCalculada*
 
 struct TLatitudPolar*
 	   latitudPolar ( int aho, double mhp, int agr, double map )
-{  //*** C lculo de la latitud por la polar
+{  //*** Cï¿½lculo de la latitud por la polar
   redualto (1, agr, map, aho, mhp, &lap.gra, &lap.min); // alt. verd.
   mhp = (aho + mhp/60.)/24. + comdj - cohuso; // hora en DJ
   map = (agr + map/60.)*GRADOS; // altura verdadera en radianes
@@ -817,7 +820,7 @@ struct TLatitudPolar*
 //=========================================
 struct TCircunmeridi* latitudCircun ( int n, int li, char cu,
 									  int g, double m, int ho, double mi )
-{  //*** C lculo de la latitud por observacion circunmeridiana
+{  //*** Cï¿½lculo de la latitud por observacion circunmeridiana
   double ut, ar, de, av;
 
 //	horaminu (ut+cohuso-comdj, &lat.hor, &lat.min, erroan); // a 1'/10
