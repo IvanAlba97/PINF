@@ -1,17 +1,17 @@
 #Makefile para cgi de ANdi
 
-OBJETOS=princ_luna.o catalog.o funj2000.o grados.o Interfz.o ocaorsol.o Otrocalc.o  pasomeri.o Polis.o Reduc.o variasfu.o ortocalu.o
+OBJETOS=principal.o catalog.o funj2000.o grados.o Interfz.o ocaorsol.o Otrocalc.o  pasomeri.o Polis.o Reduc.o variasfu.o ortocalu.o
 
 CC=g++
 
 CFLAGS=-O -W
 
-all: enfechaluna
+all: enfecha
 
-enfechaluna: ${OBJETOS}
-	${CC} -o enfechaluna.cgi ${CFLAGS} ${OBJETOS}  
+enfecha: ${OBJETOS}
+	${CC} -Wall -pedantic -o enfecha.cgi ${CFLAGS} ${OBJETOS}  
 
-princ_luna.o: princ_luna.c ../kernel/externos.h
+princ_luna.o: principal.c ../kernel/externos.h
     
 #catalog.o: ../kernel/catalog.c
 

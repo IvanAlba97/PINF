@@ -248,7 +248,7 @@ void rellenarListaLuna(struct TFecha* fecIni) {
     printf("\"Luna\": {");
     comfel = c_fenlun();
 
-    printf("\"edad0h\": %.1lf", comfel->eda);
+    printf("\"edad0h\": %.1lf,", comfel->eda);
     // printf("<TABLE><TR><TD><B>Edad (a 0h):</B> %.1lf d&iacute;as</TD>", comfel->eda);
 
     // fase((int)comfel->eda);
@@ -282,7 +282,7 @@ void rellenarListaLuna(struct TFecha* fecIni) {
 
             // Si hay puesta de la luna mandamos los datos
             if (comfel->hpu != -1) {
-                printf("\"hPuesta\" %2i, \"mPuesta\": %2.0lf, ", comfel->hpu, comfel->mpu);
+                printf("\"hPuesta\": %2i, \"mPuesta\": %2.0lf, ", comfel->hpu, comfel->mpu);
                 printf("\"gAcimutPuesta\": %3i, \"mAcimutPuesta\":%4.1lf, ", comfel->gzp, comfel->mzp);
             } 
             // else {
