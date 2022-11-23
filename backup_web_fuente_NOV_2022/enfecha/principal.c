@@ -95,7 +95,7 @@ int main(void) {
 
     preferen(latgra, minutos_lat, latsig, longra, minutos_lon, lonsig, horut);
 
-    printf("{\"tabla1\":{\"diai\":%i,\"mesi\":%i,\"anoi\":%i,\"horut\":%i, \"latgra\":%i, \"minutos_lat\": %4.1lf, \"latsig\":\'%c\', \"longra\":%i, \"minutos_lon\": %4.1lf, \"lonsig\":\'%c\'},", diai, mesi, anoi, horut, latgra, minutos_lat, latsig, longra, minutos_lon, lonsig);
+    printf("{\"tabla1\":{\"diai\":%i,\"mesi\":%i,\"anoi\":%i,\"horut\":%i, \"latgra\":%i, \"minutos_lat\": %4.1lf, \"latsig\":\"%c\", \"longra\":%i, \"minutos_lon\": %4.1lf, \"lonsig\":\"%c\"},", diai, mesi, anoi, horut, latgra, minutos_lat, latsig, longra, minutos_lon, lonsig);
 
     rellenarListaSol(fecIni);
 
@@ -348,7 +348,7 @@ void strcatHora(char* dest, const char* msg, int* hora, double* min, int num) {
         strcat(dest, cad);
 
         if (num == 2 && hora[1] != -1) {
-            sprintf(cad, "\"hora2\": %2i, \"minutos2\": %2.0f", hora[1], float(min[1]));
+            sprintf(cad, "\"hora2\": %2i, \"minutos2\": %2.0f,", hora[1], float(min[1]));
             strcat(dest, cad);
         }
     }
