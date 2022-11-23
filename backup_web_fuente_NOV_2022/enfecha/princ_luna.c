@@ -96,7 +96,7 @@ int main(void) {
 
     // printf("<BR><CENTER><TABLE BORDER=0 CELLSPACING=0 BGCOLOR=\"#CCFFFF\">");
 
-    printf("{\"tabla1\":{\"diai\":%i,\"mesi\":%i,\"anoi\":%i,\"horut\":%i, \"latgra\":%i, \"minutos_lat\": %4.1lf, \"latsig\":\'%c\', \"longra\":%i, \"minutos_lon\": %4.1lf, \"lonsig\":\'%c\'},", diai, mesi, anoi, horut, latgra, minutos_lat, latsig, longra, minutos_lon, lonsig);
+    printf("{\"tabla1\":{\"diai\":%i,\"mesi\":%i,\"anoi\":%i,\"horut\":%i, \"latgra\":%i, \"minutos_lat\": %4.1lf, \"latsig\":\"%c\", \"longra\":%i, \"minutos_lon\": %4.1lf, \"lonsig\":\"%c\"},", diai, mesi, anoi, horut, latgra, minutos_lat, latsig, longra, minutos_lon, lonsig);
 
     rellenarListaLuna(fecIni);
 
@@ -283,7 +283,7 @@ void rellenarListaLuna(struct TFecha* fecIni) {
             // Si hay puesta de la luna mandamos los datos
             if (comfel->hpu != -1) {
                 printf("\"hPuesta\": %2i, \"mPuesta\": %2.0lf, ", comfel->hpu, comfel->mpu);
-                printf("\"gAcimutPuesta\": %3i, \"mAcimutPuesta\":%4.1lf, ", comfel->gzp, comfel->mzp);
+                printf("\"gAcimutPuesta\": %3i, \"mAcimutPuesta\":%4.1lf, }", comfel->gzp, comfel->mzp);
             } 
             // else {
             //     printf("<TR><TD><B>Puesta...............:</B> ---------- </TD>");

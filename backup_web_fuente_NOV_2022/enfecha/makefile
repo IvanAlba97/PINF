@@ -13,10 +13,10 @@ enfecha: ${OBJETOS}
 
 principal.o: principal.c ../kernel/externos.h
 
-enfechaluna: ${OBJETOS}
+enfechaluna: ${OBJETOSL}
 	${CC} -Wall -pedantic -o enfechaluna.cgi ${CFLAGS} ${OBJETOSL}  
 
-princ_luna.o: principal.c ../kernel/externos.h
+princ_luna.o: princ_luna.c ../kernel/externos.h
     
 #catalog.o: ../kernel/catalog.c
 
