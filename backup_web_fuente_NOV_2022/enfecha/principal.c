@@ -24,8 +24,8 @@ int main(void) {
 
     // printf("<BODY leftmargin=0 frameborder: marginwidth=0 marginleft=0 marginheight=0 topmargin=0");
 
-    printf("%s%c%c\n", "Content-Type:application/json;charset=UTF-8", 13, 10);
-
+    printf("%s%c%c\n", "Content-type:application/json;charset=UTF-8\nAccess-Control-Allow-Origin: *", 13, 10);
+ 
     data = getenv("QUERY_STRING");
     if (data == NULL) {
         printf("{\"ERROR\":\"Los datos introducidos no son válidos.\"}");
