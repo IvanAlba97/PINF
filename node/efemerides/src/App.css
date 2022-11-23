@@ -14,12 +14,18 @@
     font-display: swap;
 }
 
-body {
-    h1 {
-        font-family: Verdana, sans-serif;
-        color: red;
-        p {
-            color: black;
-        }
+h1 {
+    font-family: Verdana, sans-serif;
+    color: red;
+    p {
+        font-size: medium;
+        color: black;
     }
+}
+
+.cds--btn--primary {
+    &:hover {
+        background-color: green;
+    }
+    background-color: red;
 }

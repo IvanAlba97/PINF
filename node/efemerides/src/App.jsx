@@ -1,13 +1,13 @@
 import './App.css'
+import { Button } from '@carbon/react';
 
 function App() {
   return (
     <>
-    <div className="App">
       <h1>Esto es una prueba
         <p>Css anidado</p>
       </h1>
-    </div>
+    <Button>Hola</Button>
     </>
   )
 }
