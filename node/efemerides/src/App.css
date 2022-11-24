@@ -1,31 +1,9 @@
-@font-face {
-    font-family: Verdana;
-    src: url("/Verdana.woff2") format("woff");
-    font-style: normal;
-    font-weight: 400;
-    font-display: swap;
+body {
+    font-family:  Verdana, 'Bitstream Vera Sans', 'VerdanaLinux',  sans-serif;
 }
 
-@font-face {
-    font-family: Verdana Bold;
-    src: url("/Verdana Bold.woff2") format("woff");
-    font-style: normal;
-    font-weight: 700;
-    font-display: swap;
-}
-
-h1 {
-    font-family: Verdana, sans-serif;
-    color: red;
-    p {
-        font-size: medium;
-        color: black;
+div {
+    h1 {
+        font-size: 3em;
     }
-}
-
-.cds--btn--primary {
-    &:hover {
-        background-color: green;
-    }
-    background-color: red;
 }
