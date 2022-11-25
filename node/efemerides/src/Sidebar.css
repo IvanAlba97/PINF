@@ -17,11 +17,18 @@
         margin-bottom: 10vh;
     }
 
-    div {
-        button {
+    nav {
+        a {
             font-size: 1.2vw;
             margin-bottom: 3.5vh;
             display: block;
+            cursor: pointer;
+            transition: opacity 200ms;
+
+            &:hover {
+                transition: opacity 200ms;
+                
+            }
         }
     }
 
