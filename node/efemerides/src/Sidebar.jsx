@@ -3,36 +3,34 @@ import './Sidebar.css'
 import { Link } from "react-router-dom"
 
 export default function SideBar() {
-    const [seleccion, setSeleccion] = useState(-1);
-
+    const [seleccion, setSeleccion] = useState(-1)
     const tipos = [
         "Sol",
         "Luna",
         "Eclipses de Sol y Luna",
         "Ocultaciones",
-        "Miscelánea",
+        "Miscelánea"
     ]
 
     useEffect(() => {
         switch (window.location.pathname) {
             case "/Sol":
                 setSeleccion(0)
-                break;
+                break
             case "/Luna":
                 setSeleccion(1)
-                break;
+                break
             case "/Eclipses":
                 setSeleccion(2)
-                break;
+                break
             case "/Ocultaciones":
                 setSeleccion(3)
-                break;
-            case "/Miselanea":
+                break
+            case "/Miscelánea":
                 setSeleccion(4)
-                break;
+                break
             default:
-                setSeleccion(-1)
-                break;
+                break
         }
     })
 
