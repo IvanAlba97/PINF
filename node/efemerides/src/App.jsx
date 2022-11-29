@@ -14,7 +14,7 @@ function App() {
           <Route path="/Luna" element={<Contenido estado={"luna"}></Contenido>}/>
           <Route path="/Eclipses" element={<Contenido estado={"eclipses"}></Contenido>}/>
           <Route path="/Ocultaciones" element={<Contenido estado={"ocultaciones"}></Contenido>}/>
-          <Route path="/Miscelanea" element={<Contenido estado={"miscelanea"}></Contenido>}/>
+          <Route path="/Miscelánea" element={<Contenido estado={"miscelanea"}></Contenido>}/>
         </Routes>
       </div>
     </>
