@@ -3,6 +3,7 @@ import './Sidebar.css'
 import { Link } from "react-router-dom"
 
 export default function SideBar() {
+
     const [seleccion, setSeleccion] = useState(-1)
     const tipos = [
         "Sol",
@@ -16,21 +17,21 @@ export default function SideBar() {
         switch (window.location.pathname) {
             case "/Sol":
                 setSeleccion(0)
-                break
+                break;
             case "/Luna":
                 setSeleccion(1)
-                break
+                break;
             case "/Eclipses":
                 setSeleccion(2)
-                break
+                break;
             case "/Ocultaciones":
                 setSeleccion(3)
-                break
-            case "/Miscelánea":
+                break;
+            case "/Miscelanea":
                 setSeleccion(4)
-                break
+                break;
             default:
-                break
+                break;
         }
     })
 
@@ -39,13 +40,14 @@ export default function SideBar() {
             return "Eclipses"
         }
         else {
-            return tipo.replace(/\s+/g, '')
+            const quitarAcentos = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            return quitarAcentos(tipo.replace(/\s+/g, ''))
         }
     }
 
     const listItems = tipos.map((tipo, key) => (
         <li>
-            <Link to={enlace(tipo)} onClick={() => setSeleccion(key)} style={{ opacity: key == seleccion ? '1' : '0.5' }}>{tipo}</Link>
+            <Link to={enlace(tipo)} onClick={() => setSeleccion()} style={{ opacity: key == seleccion ? '1' : '0.5' }}>{tipo}</Link>
         </li>
     ))
 
