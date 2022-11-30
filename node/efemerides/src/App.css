@@ -2,7 +2,7 @@ body {
     font-family:  Verdana, 'Bitstream Vera Sans', 'VerdanaLinux',  sans-serif;
 }
 
-h1 {
+h1, h2 {
     font-family:  Verdana, 'Bitstream Vera Sans', 'VerdanaLinux',  sans-serif;
     font-weight: 700;
 }
