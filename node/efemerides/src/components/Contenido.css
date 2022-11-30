@@ -1,0 +1,7 @@
+.contenido {
+    grid-column-start: 3;
+    grid-column-end: 11;
+    display: flex;
+    justify-content: center;
+    margin-top: 8vh;
+}

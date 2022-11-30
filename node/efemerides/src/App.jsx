@@ -1,7 +1,7 @@
 import './App.css'
-import Sidebar from "./Sidebar"
+import Sidebar from "./components/Sidebar"
 import { Routes, Route } from "react-router-dom"
-import Contenido from "./Contenido"
+import Contenido from "./components/Contenido"
 
 function App() {
   return (

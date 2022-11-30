@@ -33,7 +33,9 @@ export default function SideBar() {
             default:
                 break;
         }
-    })
+    },
+        []
+    )
 
     function enlace(tipo) {
         if (tipo.replace(/\s+/g, '') == "EclipsesdeSolyLuna") {
@@ -47,7 +49,9 @@ export default function SideBar() {
 
     const listItems = tipos.map((tipo, key) => (
         <li>
-            <Link to={enlace(tipo)} onClick={() => setSeleccion()} style={{ opacity: key == seleccion ? '1' : '0.5' }}>{tipo}</Link>
+            <Link to={enlace(tipo)} onClick={() => setSeleccion(key)} style={{ opacity: key == seleccion ? '1' : '0.5' }}>
+                {tipo}
+            </Link>
         </li>
     ))
 

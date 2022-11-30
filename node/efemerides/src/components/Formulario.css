@@ -1,0 +1,15 @@
+.titulo {
+    font-size: xx-large;
+    color: #173763;
+}
+
+input {
+    width: 5em;
+    background-color: #f4f4f4;
+    border-bottom: 2px solid #8d8d8d;
+    padding: 0.5em 1em;
+    margin-right: 2em;
+    &::placeholder {
+        color: #a8a8a8;
+    }
+}

@@ -1,7 +1,7 @@
 .fondo {
     position: sticky;
     top: 0;
-    padding-top: 3vw;
+    padding-top: 8vh;
     height: 100vh;
     background-color: #173763;
     grid-column-start: 1;
@@ -23,12 +23,6 @@
             margin-bottom: 3.5vh;
             display: block;
             cursor: pointer;
-            transition: opacity 200ms;
-
-            &:hover {
-                transition: opacity 200ms;
-                
-            }
         }
     }
 
