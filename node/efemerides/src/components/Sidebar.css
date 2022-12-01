@@ -20,7 +20,6 @@
     nav {
         a {
             font-size: 1.2vw;
-            margin-bottom: 3.5vh;
             display: block;
             cursor: pointer;
         }
@@ -29,5 +28,17 @@
     img {
         width: 20%;
         margin-bottom: 10vh;
+    }
+}
+
+.seleccion {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3.5vh;
+    div {
+        margin-right: 1vw;
+        background-color: #C7C7C7;
+        width: 0.25vw;
+        height: 1.2vw;
     }
 }

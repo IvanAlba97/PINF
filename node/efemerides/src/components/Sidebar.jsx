@@ -48,11 +48,14 @@ export default function SideBar() {
     }
 
     const listItems = tipos.map((tipo, key) => (
+        <div className="seleccion">
+            <div style={{ opacity: key == seleccion ? '1' : '0' }}></div>
         <li>
             <Link to={enlace(tipo)} onClick={() => setSeleccion(key)} style={{ opacity: key == seleccion ? '1' : '0.5' }}>
                 {tipo}
             </Link>
         </li>
+        </div>
     ))
 
     return (

@@ -38,7 +38,7 @@ function Radio(props) {
     return (
         <div className='radioContainer'>
             <input type="radio" name={props.name} value={props.valor} />
-            <label for={props.name}>{props.valor}</label>
+            <label htmlFor={props.name}>{props.valor}</label>
         </div>
     )
 }
