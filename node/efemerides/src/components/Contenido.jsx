@@ -6,9 +6,9 @@ export default function Contenido(props) {
     function contenedor() {
         switch (props.estado) {
             case "sol":
-                return <Formulario tipo={props.estado}/>
+                return <Formulario tipo={props.estado} nombre = 'Sol'/>
             case "luna":
-                return <p>Estás en luna</p>
+                return <Formulario tipo={props.estado} nombre = 'Luna'/>
             case "eclipses":
                 return <p>Estás en eclipses</p>
             case "ocultaciones":

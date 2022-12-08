@@ -1,30 +1,31 @@
 import { useState } from 'react'
 import './Formulario.css'
 
-export default function Formulario(props) {
+export default function Formulario({nombre, enlace}) {
 
     const [datos, setDatos] = useState(
         {
-            latitud: 0,
-            longitud: 0,
+
             gradosLat: 0,
             minutosLat: 0,
+            segundosLat:0,
+            segundosLong:0,
             gradosLong: 0, 
             minutosLong: 0,
-            fecha: null,
+            fecha: '',
             hora: 0,
-            norteSur: null, // 0 Norte, 1 Sur
-            esteOeste: null, //0 Este, 1 Oeste
+            norteSur: undefined, // 0 Norte, 1 Sur
+            esteOeste: undefined, //0 Este, 1 Oeste
             
         }
     )
 
-    const actualizarLatitud = (estado) => { setDatos({...datos, latitud: estado}) }
-    const actualizarLongitud = (estado) => { setDatos({...datos, longitud: estado}) }
     const actualizarGradosLat = (estado) => { setDatos({...datos, gradosLat: estado}) }
     const actualizarMinutosLat = (estado) => { setDatos({...datos, minutos: estado}) }
+    const actualizarSegundosLat = (estado) => { setDatos({...datos, segundosLat: estado}) }
     const actualizarGradosLong = (estado) => { setDatos({...datos, gradosLong: estado}) }
     const actualizarMinutosLong = (estado) => { setDatos({...datos, minutosLong: estado}) }
+    const actualaizarSegundosLong = (estado) => { setDatos({...datos, segundosLong: estado}) }
     const actualizarFecha = (estado) => { setDatos({...datos, fecha:estado}) }
     const actualizarHora = (estado) => { setDatos({...datos, hora: estado}) }
     const actualizarNorteSur = (estado) => { setDatos({...datos, norteSur: estado}) }
@@ -32,45 +33,52 @@ export default function Formulario(props) {
 
     return (
         <div className="formulario">
-            <h1 className='titulo'>Fenómenos de Sol para una fecha</h1>
+            <h1 className='titulo'>Fenómenos de {nombre} para una fecha</h1>
             <form>
                 <div className='apartado'>
                     <h2 className='posicion'>Posición</h2>
+                    <h4 className='posicion'>Latitud</h4>
                     <div className='elementos'>
-                        <InputNumber label="Latitud" value={datos.latitud} onChange={actualizarLatitud} />
                         <InputNumber label="Grados" value={datos.gradosLat} onChange={actualizarGradosLat} />
                         <InputNumber label="Minutos" value={datos.minutosLat} onChange={actualizarMinutosLat} />
+                        <InputNumber label="Segundos" value={datos.segundosLat} onChange={actualizarSegundosLat} />
                         <div>
                             <label className='inputLabel'>Orientación</label>
                             <div className='radioGroup'>
-                                <Radio valor="Norte" name="Nortesur" />
-                                <Radio valor="Sur" name="Nortesur" />
+                                <Radio valor="N" name="NorteSur" etiqueta = 'Norte' onSelect={actualizarNorteSur} />
+                                <Radio valor="S" name="NorteSur" etiqueta = 'Sur' onSelect={actualizarNorteSur}/>
                             </div>
                         </div>
                     </div>
+
+                    <h4 className='posicion'>Longitud</h4>
                     <div className="elementos">
-                        <InputNumber label="Longitud" value={datos.longitud} onChange={actualizarLongitud} />
                         <InputNumber label="Grados" value={datos.gradosLong} onChange={actualizarGradosLong} />
                         <InputNumber label="Minutos" value={datos.longitud} onChange={actualizarMinutosLong} />
+                        <InputNumber label="Segundos" value={datos.segundosLong} onChange={actualaizarSegundosLong} />
                         <div>
                             <label className='inputLabel'>Orientación</label>
                             <div className='radioGroup'>
-                                <Radio valor="Este" name="EsteOeste" />
-                                <Radio valor="Oeste" name="EsteOeste" />
+                                <Radio valor="E" name="EsteOeste" etiqueta = 'Este' onSelect={actualizarEsteOeste}/>
+                                <Radio valor="W" name="EsteOeste" etiqueta = 'Oeste'onSelect={actualizarEsteOeste}/>
                             </div>
                         </div>
 
                     </div>
+                        <InputHoraUTC label={'Hora UTC'} onChange = {actualizarHora}/>
                     <div className='apartado'>
                         <h2 className='posicion'>Fecha y Hora</h2>
-                        <DatePicker />
+                        <div className="elementos">
+                        <DatePicker onChange={actualizarFecha}/>
+
+                        </div>
                     </div>
                 </div>
             </form>
         </div>
     )
 }
-function InputNumber({ label, value, onChange }) {
+function InputNumber({ label, onChange }) {
     const [valor, setValor] = useState('')
     const handleChange = (event) => {
         if (!isNaN(event.target.value) && event.target.value !== '') {
@@ -91,24 +99,94 @@ function InputNumber({ label, value, onChange }) {
     )
 }
 
-function InputHoraUTC({ label }) {
-    <div>
-        <label className='inputLabel'>{label}</label>
-        <input className='input' type="number" min="-11" max="12"></input>
-    </div>
-}
+function InputHoraUTC({ label, onChange }) {
+    const [valor, setValor] = useState('')
+    const handleChange = (event) => {
+        if (!isNaN(event.target.value) && event.target.value !== '') {
+            if(event.target.value > 12)
+            {
+                setValor(12)
+                onChange(parseInt(event.target.value))
 
-function DatePicker({ label }) {
+            }
+            else if(event.target.value < -11)
+            {
+                setValor(-11)
+                onChange(parseInt(event.target.value))
+
+            }
+            else
+            {
+                setValor(event.target.value)
+                onChange(parseInt(event.target.value))
+            }
+
+        }
+        else if (event.target.value === '') {
+            setValor('')
+            onChange(0)
+        }
+    }
     return (<div>
         <label className='inputLabel'>{label}</label>
-        <input type="date" ></input>
+        <input className='input' placeholder='0' value = {valor} type="number" onChange={handleChange} min="-11" max="12"></input>
     </div>)
 }
-function Radio({ name, valor }) {
+
+function DatePicker({ label, onChange }) {
+    const [valor, setValor] = useState('')
+    const maxDate = "2020-12-31"
+    const minDate = "2010-01-01"
+
+    const handleChange = (event) => {
+        if (event.target.value > event.target.max )
+        {
+            setValor(maxDate)
+            onChange(maxDate)
+        }
+        else
+        {
+            setValor(event.target.value)
+            onChange(event.target.value)
+        }
+
+    }
+    return (<div>
+        <label className='inputLabel'>{label}</label>
+        <input type="date" max = {maxDate} min ={minDate} value={valor} onChange = {handleChange} />
+    </div>)
+}
+function Radio({ name, valor, onSelect, etiqueta }) {
+
+    const handleSelect = (event) =>
+    {
+        if (name === 'NorteSur')
+        {
+            if( valor === 'Norte')
+            {
+                onSelect(N)
+            }
+            else if( valor === 'Sur')
+            {
+                onSelect(S)
+            }
+        }
+        else if(name === 'EsteOeste')
+        {
+            if( valor === 'Este')
+            {
+                onSelect(E)
+            }
+            else if( valor === 'Oeste')
+            {
+                onSelect(W)
+            }
+        }
+    }
     return (
         <div className='radioContainer'>
-            <input type="radio" name={name} value={valor} />
-            <label htmlFor={name}>{valor}</label>
+            <input type="radio" name={name} value={valor} onSelect = {handleSelect} />
+            <label htmlFor={name}>{etiqueta}</label>
         </div>
     )
 }
