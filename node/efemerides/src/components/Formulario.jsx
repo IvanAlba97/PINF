@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import './Formulario.css'
-import './spinner.css'
+import './Spinner.css'
 //http://www2.roa.es/Efemerides/fenomfecha.html
 
 export default function Formulario({ nombre, enlace, }) {
@@ -25,13 +25,12 @@ export default function Formulario({ nombre, enlace, }) {
     const [loading, setLoading] = useState(false)
     const [respuesta, setRespuesta] = useState(undefined)
 
-    useEffect(() => 
-    {
+    useEffect(() => {
         if (loading)
-        setLoading(false)
-        if(respuesta)
-        setRespuesta(null)
-    },[nombre])
+            setLoading(false)
+        if (respuesta)
+            setRespuesta(null)
+    }, [nombre])
     async function fetchingData() {
         const fecha = new Date(datos.fecha)
         const dia = fecha.getDate()
@@ -49,10 +48,10 @@ export default function Formulario({ nombre, enlace, }) {
         fetchingData().then((res) => {
             setRespuesta(res)
             setLoading(false)
-        }).catch((err) => {setLoading(false)})
+        }).catch((err) => { setLoading(false) })
     }
 
-    const handleBorrar = () => {setDatos(estadoInicial)}
+    const handleBorrar = () => { setDatos(estadoInicial) }
     const actualizarGradosLat = (estado) => { setDatos({ ...datos, gradosLat: estado }) }
     const actualizarMinutosLat = (estado) => { setDatos({ ...datos, minutosLat: estado }) }
     const actualizarSegundosLat = (estado) => { setDatos({ ...datos, segundosLat: estado }) }
@@ -78,15 +77,14 @@ export default function Formulario({ nombre, enlace, }) {
                 <div className='error'>{respuesta.ERROR}</div>
             )
         }
-        else
-        {
+        else {
             return (
                 <table>
                     <thead>
                         <tr>
                             RESPUESTA
                         </tr>
-                    </thead>      
+                    </thead>
                 </table>
             )
         }
@@ -104,7 +102,7 @@ export default function Formulario({ nombre, enlace, }) {
                         <InputNumber label="Minutos" value={datos.minutosLat} onChange={actualizarMinutosLat} />
                         <InputNumber label="Segundos" value={datos.segundosLat} onChange={actualizarSegundosLat} />
                         <div>
-                            <label className='inputLabel'>Orientación</label>
+                            <label className='radioLabel'>Orientación</label>
                             <div className='radioContainer'>
                                 <Radio valor="N" name="NorteSur" dato={datos.norteSur} etiqueta='Norte' onSelect={actualizarNorteSur} />
                                 <Radio valor="S" name="NorteSur" dato={datos.norteSur} etiqueta='Sur' onSelect={actualizarNorteSur} />
@@ -118,7 +116,7 @@ export default function Formulario({ nombre, enlace, }) {
                         <InputNumber label="Minutos" value={datos.minutosLong} onChange={actualizarMinutosLong} />
                         <InputNumber label="Segundos" value={datos.segundosLong} onChange={actualizarSegundosLong} />
                         <div>
-                            <label className='inputLabel'>Orientación</label>
+                            <label className='radioLabel'>Orientación</label>
                             <div className='radioContainer'>
                                 <Radio valor="E" name="EsteOeste" etiqueta='Este' dato={datos.esteOeste} onSelect={actualizarEsteOeste} />
                                 <Radio valor="W" name="EsteOeste" etiqueta='Oeste' dato={datos.esteOeste} onSelect={actualizarEsteOeste} />
@@ -130,11 +128,11 @@ export default function Formulario({ nombre, enlace, }) {
                         <h2 className='apartado'>Fecha y Hora</h2>
                         <div className="linea">
                             <InputHoraUTC label={'Hora UTC'} onChange={actualizarHora} value={datos.hora} />
-                            <DatePicker label={"Fecha"} onChange={actualizarFecha} value={datos.fecha}/>
+                            <DatePicker label={"Fecha"} onChange={actualizarFecha} value={datos.fecha} />
                         </div>
                     </div>
                     <div className='linea botones'>
-                        <input type="reset" value='Borrar' className='boton botonSecundario' onClick={handleBorrar}/>
+                        <input type="reset" value='Borrar' className='boton botonSecundario' onClick={handleBorrar} />
                         <input type='submit' value='Calcular' className='boton botonPrimario'></input>
                     </div>
                 </div>
@@ -143,7 +141,7 @@ export default function Formulario({ nombre, enlace, }) {
     )
 }
 
-function InputNumber({ label, onChange,value }) {
+function InputNumber({ label, onChange, value }) {
 
 
     const handleChange = (event) => {
@@ -165,7 +163,7 @@ function InputNumber({ label, onChange,value }) {
     )
 }
 
-function InputHoraUTC({ label, onChange,value }) {
+function InputHoraUTC({ label, onChange, value }) {
 
     const handleChange = (event) => {
         if (!isNaN(event.target.value) && event.target.value !== '') {
@@ -194,7 +192,7 @@ function InputHoraUTC({ label, onChange,value }) {
     return (
         <div className='inputContainer'>
             <label>{label}</label>
-            <input className='input' placeholder='0' value={value} type="number" onChange={handleChange} min="-11" max="12" required/>
+            <input className='input' placeholder='0' value={value} type="number" onChange={handleChange} min="-11" max="12" required />
         </div>
     )
 }
@@ -216,7 +214,7 @@ function DatePicker({ label, onChange, value }) {
     return (
         <div className='inputContainer'>
             <label>{label}</label>
-            <input className='input datepicker' type="date" max={maxDate} min={minDate} value={value} onChange={handleChange} required/>
+            <input className='input datepicker' type="date" max={maxDate} min={minDate} value={value} onChange={handleChange} required />
         </div>
     )
 }
@@ -228,7 +226,7 @@ function Radio({ name, valor, dato, onSelect, etiqueta }) {
 
     return (
         <div className='radio'>
-            <input type="radio" name={name} value={valor} onChange={handleSelect} checked={dato === valor} required/>
+            <input type="radio" name={name} value={valor} onChange={handleSelect} checked={dato === valor} required />
             <label htmlFor={name}>{etiqueta}</label>
         </div>
     )

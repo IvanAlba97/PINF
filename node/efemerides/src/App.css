@@ -1,19 +1,27 @@
 body {
-    font-family:  Verdana, 'Bitstream Vera Sans', 'VerdanaLinux',  sans-serif;
+  font-family: Verdana, 'Bitstream Vera Sans', 'VerdanaLinux', sans-serif;
 }
 
-h1, h2 {
-    font-family:  Verdana, 'Bitstream Vera Sans', 'VerdanaLinux',  sans-serif;
-    font-weight: 700;
+h1,
+h2 {
+  font-family: Verdana, 'Bitstream Vera Sans', 'VerdanaLinux', sans-serif;
+  font-weight: 700;
 }
 
 .container {
-    display: grid;
-    grid-template-columns: repeat(9, 1fr);
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
 }
+
 .ejemplo {
-    height: 2000px;
-    font-size: xx-large;
-    grid-column-start: 3;
-    grid-column-end: 10;
+  height: 2000px;
+  font-size: xx-large;
+  grid-column-start: 3;
+  grid-column-end: 10;
+}
+
+@media (max-width: 1279px) {
+  .container {
+    display: block;
+  }
 }

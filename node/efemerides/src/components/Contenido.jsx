@@ -6,9 +6,9 @@ export default function Contenido(props) {
     function contenedor() {
         switch (props.estado) {
             case "sol":
-                return <Formulario tipo={props.estado} nombre = 'Sol'/>
+                return <Formulario tipo={props.estado} nombre='Sol' />
             case "luna":
-                return <Formulario tipo={props.estado} nombre = 'Luna'/>
+                return <Formulario tipo={props.estado} nombre='Luna' />
             case "eclipses":
                 return <p>Estás en eclipses</p>
             case "ocultaciones":
@@ -22,6 +22,7 @@ export default function Contenido(props) {
     return (
         <div className='contenido'>
             {contenedor()}
+            <img src="observatorio.webp" alt="observatorio" />
         </div>
     )
 

@@ -6,16 +6,15 @@
 .formulario {
   display: flex;
   justify-content: center;
+  color: #161616;
 }
 
 .apartado {
-  color: #161616;
   font-size: 1.25em;
   margin: 2em 0;
 }
 
 .subapartado {
-  color: #161616;
   font-size: 1.1em;
   margin: 1.5em 0;
 }
@@ -40,6 +39,10 @@
   }
 }
 
+.radioLabel {
+  color: #525252;
+}
+
 .radioContainer {
   margin-top: 1.25em;
   display: flex;
@@ -48,7 +51,7 @@
 }
 
 .input {
-  width: 6em;
+  width: 7em;
   background-color: #f4f4f4;
   border: 2px solid #ffffff00;
   border-bottom: 2px solid #8d8d8d;
@@ -68,6 +71,10 @@
 
 .botones {
   margin-top: 3em;
+
+  input {
+    cursor: pointer;
+  }
 }
 
 .boton {
@@ -83,11 +90,17 @@
 .botonPrimario {
   background-color: #173763;
   color: #f4f4f4;
+  &:hover {
+    background-color: #1d457c;
+  }
 }
 
 .botonSecundario {
   background-color: #393939;
   color: #f4f4f4;
+  &:hover {
+    background-color: hsl(0, 0%, 30%);
+  }
 }
 
 .datepicker {

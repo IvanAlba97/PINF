@@ -1,24 +1,24 @@
 @keyframes spinner {
-    0% {
-        transform: translate3d(-50%, -50%, 0) rotate(0deg);
-    }
+  0% {
+    transform: translate3d(-50%, -50%, 0) rotate(0deg);
+  }
 
-    100% {
-        transform: translate3d(-50%, -50%, 0) rotate(360deg);
-    }
+  100% {
+    transform: translate3d(-50%, -50%, 0) rotate(360deg);
+  }
 }
 
 .spinner::before {
-    animation: 1.5s linear infinite spinner;
-    animation-play-state: inherit;
-    border: solid 5px #cfd0d1;
-    border-bottom-color: #1c87c9;
-    border-radius: 50%;
-    content: "";
-    height: 60px;
-    width: 60px;
-    position: absolute;
-    top: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    will-change: transform;
+  animation: 1.5s linear infinite spinner;
+  animation-play-state: inherit;
+  border: solid 5px #c7c7c780;
+  border-bottom-color: #173763;
+  border-radius: 50%;
+  content: "";
+  height: 60px;
+  width: 60px;
+  position: absolute;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform;
 }
