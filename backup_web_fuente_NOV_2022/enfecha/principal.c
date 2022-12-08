@@ -265,7 +265,7 @@ void strcatSol(Tcomsol *sol)
 
             if (!primero)
             {
-                printf(',');
+                printf(",");
                 primero = 0;
             }
 
@@ -279,7 +279,7 @@ void strcatSol(Tcomsol *sol)
             {
                 if (!primero)
                 {
-                    printf(',');
+                    printf(",");
                     primero = 0;
                 }
                 if (sol->hss[1] != -1)
@@ -288,7 +288,7 @@ void strcatSol(Tcomsol *sol)
                 }
                 if (!primero)
                 {
-                    printf(',');
+                    printf(",");
                     primero = 0;
                 }
                 if (sol->hsi[1] != -1)
@@ -301,7 +301,7 @@ void strcatSol(Tcomsol *sol)
             // Acimutes de puesta 1er fenomeno
             if (!primero)
             {
-                printf(',');
+                printf(",");
                 primero = 0;
             }
 
@@ -312,7 +312,7 @@ void strcatSol(Tcomsol *sol)
 
             if (!primero)
             {
-                printf(',');
+                printf(",");
                 primero = 0;
             }
 
@@ -327,7 +327,7 @@ void strcatSol(Tcomsol *sol)
 
                 if (!primero)
                 {
-                    printf(',');
+                    printf(",");
                     primero = 0;
                 }
                 if (sol->hps[1] != -1)
@@ -337,10 +337,10 @@ void strcatSol(Tcomsol *sol)
 
                 if (!primero)
                 {
-                    printf(',');
+                    printf(",");
                     primero = 0;
                 }
-                
+
                 if (sol->hpi[1] != -1)
                 {
                     printf("\"gPuestaInferior2\":%3i,\"mAPuestaInferior2\":%4.1f, \"hPuestaInferior2\":%2i, \"mTPuestaInferior2\": %2.0f", sol->pig[1], sol->pim[1], sol->hpi[1], sol->mpi[1]);
