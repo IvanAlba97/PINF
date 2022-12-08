@@ -3,34 +3,48 @@
   color: #173763;
 }
 
-.posicion {
-  color: #161616;
-  font-size: 1.25em;
-  margin: 2.5em 0;
+.formulario {
+  display: flex;
+  justify-content: center;
 }
 
-.elementos {
+.apartado {
+  color: #161616;
+  font-size: 1.25em;
+  margin: 2em 0;
+}
+
+.subapartado {
+  color: #161616;
+  font-size: 1.1em;
+  margin: 1.5em 0;
+}
+
+.linea {
   display: flex;
   align-items: flex-start;
 }
 
-.radioContainer {
+.inputContainer {
+  label {
+    display: block;
+    margin-bottom: 10px;
+    color: #525252;
+  }
+}
+
+.radio {
   label {
     color: #161616;
     margin-left: 0.5em;
   }
 }
-.radioGroup {
-    margin-top: 1.25em;
-    display: flex;
-    justify-content: space-between;
-    width: 140px;
-}
 
-.inputLabel {
-  display: block;
-  margin-bottom: 10px;
-  color: #525252;
+.radioContainer {
+  margin-top: 1.25em;
+  display: flex;
+  justify-content: space-between;
+  width: 140px;
 }
 
 .input {
@@ -45,8 +59,37 @@
   &::placeholder {
     color: #a8a8a8;
   }
+
   &:focus {
     border: 2px solid #173763;
     outline: none;
   }
+}
+
+.botones {
+  margin-top: 3em;
+}
+
+.boton {
+  background-color: #161616;
+  color: #f4f4f4;
+  display: block;
+  width: 150px;
+  text-align: start;
+  padding: 12px 0 12px 16px;
+  margin-right: 30px;
+}
+
+.botonPrimario {
+  background-color: #173763;
+  color: #f4f4f4;
+}
+
+.botonSecundario {
+  background-color: #393939;
+  color: #f4f4f4;
+}
+
+.datepicker {
+  width: fit-content;
 }
