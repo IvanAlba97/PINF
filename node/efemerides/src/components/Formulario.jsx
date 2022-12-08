@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './Formulario.css'
 import './spinner.css'
 //http://www2.roa.es/Efemerides/fenomfecha.html
@@ -24,6 +24,14 @@ export default function Formulario({ nombre, enlace, }) {
 
     const [loading, setLoading] = useState(false)
     const [respuesta, setRespuesta] = useState(undefined)
+
+    useEffect(() => 
+    {
+        if (loading)
+        setLoading(false)
+        if(respuesta)
+        setRespuesta(null)
+    },[nombre])
     async function fetchingData() {
         const fecha = new Date(datos.fecha)
         const dia = fecha.getDate()
@@ -39,8 +47,8 @@ export default function Formulario({ nombre, enlace, }) {
         event.preventDefault()
         setLoading(true)
         fetchingData().then((res) => {
-            setLoading(false)
             setRespuesta(res)
+            setLoading(false)
         }).catch((err) => {setLoading(false)})
     }
 
