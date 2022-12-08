@@ -259,7 +259,7 @@ void strcatSol(Tcomsol *sol)
             // Acimutes de salida 1er fenomeno
             if (sol->hss[0] != -1)
             {
-                printf("\"gSalidaSuperior\":%3i,\"mASalidaSuperior\":%4.1f, \"hSalidaSuperior\":%2i \"mTSalidaSuperior\": %2.0f", sol->ssg[0], sol->ssm[0], sol->hss[0], sol->mss[0]);
+                printf("\"gSalidaSuperior\":%3i,\"mASalidaSuperior\":%4.1f, \"hSalidaSuperior\":%2i, \"mTSalidaSuperior\": %2.0f", sol->ssg[0], sol->ssm[0], sol->hss[0], sol->mss[0]);
                 primero = 0;
             }
 
@@ -271,7 +271,7 @@ void strcatSol(Tcomsol *sol)
 
             if (sol->hsi[0] != -1)
             {
-                printf("\"gSalidaInferior\":%3i, \"mASalidaInferior\":%4.1f,\"hSalidaInferior\":%2i \"mTSalidaInferior\": %2.0f", sol->sig[0], sol->sim[0], sol->hsi[0], sol->msi[0]);
+                printf("\"gSalidaInferior\":%3i, \"mASalidaInferior\":%4.1f,\"hSalidaInferior\":%2i, \"mTSalidaInferior\": %2.0f", sol->sig[0], sol->sim[0], sol->hsi[0], sol->msi[0]);
             }
 
             // Acimutes de salida 2� fenomeno, si los hay
