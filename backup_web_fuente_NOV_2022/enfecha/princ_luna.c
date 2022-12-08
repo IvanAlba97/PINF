@@ -219,11 +219,11 @@ void strcatHora(char* dest, const char* msg, int* hora, double* min, int num) {
     if (hora[0] == -1)
         strcat(dest, "\"error\": -1");
     else {
-        sprintf(cad, "{\"hora1\": %2i, \"minutos1\": %2.0f,", hora[0], float(min[0]));
+        sprintf(cad, "{\"hora1\": %2i, \"minutos1\": %2.0f", hora[0], float(min[0]));
         strcat(dest, cad);
 
         if (num == 2 && hora[1] != -1) {
-            sprintf(cad, "\"hora2\": %2i, \"minutos2\": %2.0f", hora[1], float(min[1]));
+            sprintf(cad, ",\"hora2\": %2i, \"minutos2\": %2.0f", hora[1], float(min[1]));
             strcat(dest, cad);
         }
     }

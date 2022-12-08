@@ -6,79 +6,97 @@
 #include "../kernel/externos.h"
 
 int fecha_valida(int ano, int mes, int dia);
-void rellenarListaSol(struct TFecha* fecIni);
-void strcatSol(struct Tcomsol* sol);
-TFecha& operator++(TFecha& f, int);
-int operator<=(TFecha& fi, TFecha& ff);
-int operator-(TFecha& ff, TFecha& fi);
-void strcatHora(char* dest, const char* msg, int* hora, double* min, int num = 1);
+void rellenarListaSol(struct TFecha *fecIni);
+void strcatSol(struct Tcomsol *sol);
+TFecha &operator++(TFecha &f, int);
+int operator<=(TFecha &fi, TFecha &ff);
+int operator-(TFecha &ff, TFecha &fi);
+void strcatHora(char *dest, const char *msg, int *hora, double *min, int num = 1);
 
-struct TFecha* fecIni;
+struct TFecha *fecIni;
 
-int main(void) {
+int main(void)
+{
     int latgra, latmin, latseg, longra, lonmin, lonseg, horut, anoi, mesi, diai;
     double minutos_lat, minutos_lon;
     char latsig, lonsig;
 
-    char* data = (char*)calloc(sizeof(char), 40);
+    char *data = (char *)calloc(sizeof(char), 40);
 
     // printf("<BODY leftmargin=0 frameborder: marginwidth=0 marginleft=0 marginheight=0 topmargin=0");
 
     printf("%s%c%c\n", "Content-type:application/json;charset=UTF-8\nAccess-Control-Allow-Origin: *", 13, 10);
- 
+
     data = getenv("QUERY_STRING");
-    if (data == NULL) {
+    if (data == NULL)
+    {
         printf("{\"ERROR\":\"Los datos introducidos no son válidos.\"}");
         exit(EXIT_FAILURE);
-    } else if (sscanf(data, "latgra=%i&latmin=%i&latseg=%i&latsig=%c&longra=%i&lonmin=%i&lonseg=%i&lonsig=%c&horut=%i&anoi=%i&mesi=%i&diai=%i", &latgra, &latmin, &latseg, &latsig, &longra, &lonmin, &lonseg, &lonsig, &horut, &anoi, &mesi, &diai) != 12) {
+    }
+    else if (sscanf(data, "latgra=%i&latmin=%i&latseg=%i&latsig=%c&longra=%i&lonmin=%i&lonseg=%i&lonsig=%c&horut=%i&anoi=%i&mesi=%i&diai=%i", &latgra, &latmin, &latseg, &latsig, &longra, &lonmin, &lonseg, &lonsig, &horut, &anoi, &mesi, &diai) != 12)
+    {
         printf("{\"ERROR\":\"Los datos introducidos no son válidos.\"}");
         exit(EXIT_FAILURE);
-    } else {
-        if ((latgra < 0) || (latgra > 90)) {
+    }
+    else
+    {
+        if ((latgra < 0) || (latgra > 90))
+        {
             printf("{\"ERROR\":\"Los grados deben estar entre 0� y 90�.\"}");
             exit(EXIT_FAILURE);
         }
-        if ((latmin < 0) || (latmin > 59)) {
+        if ((latmin < 0) || (latmin > 59))
+        {
             printf("{\"ERROR\":\"Los minutos deben estar entre 0' y 59'.\"}");
             exit(EXIT_FAILURE);
         }
-        if ((latseg < 0) || (latseg > 59)) {
+        if ((latseg < 0) || (latseg > 59))
+        {
             printf("{\"ERROR\":\"Los segundos deben estar entre 0'' y 59''.\"}");
             exit(EXIT_FAILURE);
         }
-        if ((longra < 0) || (longra > 180)) {
+        if ((longra < 0) || (longra > 180))
+        {
             printf("{\"ERROR\":\"Los grados deben estar entre 0� y 180�.\"}");
             exit(EXIT_FAILURE);
         }
-        if ((lonmin < 0) || (lonmin > 59)) {
+        if ((lonmin < 0) || (lonmin > 59))
+        {
             printf("{\"ERROR\":\"Los minutos deben estar entre 0' y 59'.\"}");
             exit(EXIT_FAILURE);
         }
-        if ((lonseg < 0) || (lonseg > 59)) {
+        if ((lonseg < 0) || (lonseg > 59))
+        {
             printf("{\"ERROR\":\"Los segundos deben estar entre 0'' y 59''.\"}");
             exit(EXIT_FAILURE);
         }
-        if ((latsig != 'N') && (latsig != 'S')) {
+        if ((latsig != 'N') && (latsig != 'S'))
+        {
             printf("{\"ERROR\":\"La latitud debe ser Norte o Sur.\"}");
             exit(EXIT_FAILURE);
         }
-        if ((lonsig != 'W') && (lonsig != 'E')) {
+        if ((lonsig != 'W') && (lonsig != 'E'))
+        {
             printf("{\"ERROR\":\"La longitud debe ser Este u Oeste.\"}");
             exit(EXIT_FAILURE);
         }
-        if ((latgra == 90) && ((latmin > 0) || (latseg > 0))) {
+        if ((latgra == 90) && ((latmin > 0) || (latseg > 0)))
+        {
             printf("{\"ERROR\":\"La latitud debe ser menor o igual a 90�\"}");
             exit(EXIT_FAILURE);
         }
-        if ((longra == 180) && ((lonmin > 0) || (lonseg > 0))) {
+        if ((longra == 180) && ((lonmin > 0) || (lonseg > 0)))
+        {
             printf("{\"ERROR\":\"La longitud debe ser menor o igual a 180�\"}");
             exit(EXIT_FAILURE);
         }
-        if (!(fecha_valida(anoi, mesi, diai))) {
+        if (!(fecha_valida(anoi, mesi, diai)))
+        {
             printf("{\"ERROR\":\"La fecha debe estar dentro del intervalo de fechas v&aacute;lidas\"}");
             exit(EXIT_FAILURE);
         }
-        if ((horut < -11) || (horut > 12)) {
+        if ((horut < -11) || (horut > 12))
+        {
             printf("{\"ERROR\":\"La diferencia horaria (Hora - UT) debe estar entre -11 y 12\"}");
             exit(EXIT_FAILURE);
         }
@@ -87,7 +105,7 @@ int main(void) {
     minutos_lat = latmin + latseg / 60.;
     minutos_lon = lonmin + lonseg / 60.;
 
-    fecIni = (struct TFecha*)calloc(sizeof(struct TFecha), 1);
+    fecIni = (struct TFecha *)calloc(sizeof(struct TFecha), 1);
 
     fecIni->dia = diai;
     fecIni->mes = mesi;
@@ -103,39 +121,42 @@ int main(void) {
     return 0;
 }
 
-int fecha_valida(int ano, int mes, int dia) {
+int fecha_valida(int ano, int mes, int dia)
+{
     int ain = 2010, afi = 2020;
 
-    if ((ano < ain) || (ano > afi)) {
+    if ((ano < ain) || (ano > afi))
+    {
         return 0;
     }
     if ((mes < 1) || (mes > 12))
         return 0;
     if ((dia < 1) || (dia > 31))
         return 0;
-    switch (mes) {
-        case 1:
-        case 3:
-        case 5:
-        case 7:
-        case 8:
-        case 10:
-        case 12:
-            return (dia <= 31);
-        case 4:
-        case 6:
-        case 9:
-        case 11:
-            return (dia <= 30);
-        case 2:
-            if ((ano % 4) != 0)
-                return (dia <= 28);
-            else if ((ano % 100) != 0)
-                return (dia <= 29);
-            else if ((ano % 400) != 0)
-                return (dia <= 28);
-            else
-                return (dia <= 29);
+    switch (mes)
+    {
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 8:
+    case 10:
+    case 12:
+        return (dia <= 31);
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+        return (dia <= 30);
+    case 2:
+        if ((ano % 4) != 0)
+            return (dia <= 28);
+        else if ((ano % 100) != 0)
+            return (dia <= 29);
+        else if ((ano % 400) != 0)
+            return (dia <= 28);
+        else
+            return (dia <= 29);
     }
     return EXIT_FAILURE;
 }
@@ -144,14 +165,15 @@ int fecha_valida(int ano, int mes, int dia) {
 |*** Rellenar la lista con los datos         ***|
 \***********************************************/
 
-void rellenarListaSol(struct TFecha* fecIni) {
-    struct Tcomsol* sol;
+void rellenarListaSol(struct TFecha *fecIni)
+{
+    struct Tcomsol *sol;
     struct TPosicion posIni, pos;
     struct TFecha fec;
-    char* cad = (char*)calloc(sizeof(char), 70);
+    char *cad = (char *)calloc(sizeof(char), 70);
 
     fec = *fecIni;
-    leerPosicionCommon(&posIni);  // Leer situacion inicial
+    leerPosicionCommon(&posIni); // Leer situacion inicial
     leerPosicionCommon(&pos);
     pos.dia = fec.dia;
     pos.mes = fec.mes;
@@ -169,30 +191,40 @@ void rellenarListaSol(struct TFecha* fecIni) {
 |*** Corresponde a cada una de las l�neas del listBox.  ***|
 \**********************************************************/
 
-void strcatSol(Tcomsol* sol) {
-    char* cad = (char*)calloc(sizeof(char), 500);
+void strcatSol(Tcomsol *sol)
+{
+    char *cad = (char *)calloc(sizeof(char), 500);
 
     // Si se observa el paso por el meridiano
-    if (sol->bpm) {
+    if (sol->bpm)
+    {
         printf("\"Sol\": {");
 
-        printf("\"hPasoMeridiano\":%2i,\"mPasoMeridiano\": %4.1lf,", sol->hpm, sol->mpm);  // hora paso por meridiano, minuros paso por meridiano
-        printf("\"gAlturaSol\":%2i, \"mAlturaSol\":%4.1lf,", sol->gra, sol->mia);          // grados de altura sol, minutos de altura sol
+        printf("\"hPasoMeridiano\":%2i,\"mPasoMeridiano\": %4.1lf,", sol->hpm, sol->mpm); // hora paso por meridiano, minuros paso por meridiano
+        printf("\"gAlturaSol\":%2i, \"mAlturaSol\":%4.1lf,", sol->gra, sol->mia);         // grados de altura sol, minutos de altura sol
         printf("\"culminacion\":%s},", sol->cul == 'N' ? "\"Norte\"" : "\"Sur\"");
     }
 
     // Comenzamos a chequear los casos negativos
-    if (sol->hss[0] == 99) {
+    if (sol->hss[0] == 99)
+    {
         printf("\"sinFenomeno\": \"Sol siempre por encima del horizonte\"}, ");
-    } else if (sol->hpc[0] == 99) {
+    }
+    else if (sol->hpc[0] == 99)
+    {
         printf("\"sinFenomeno\": \"Crepusculo civil contínuo\"}, ");
-    } else if (sol->hpn[0] == 88) {
+    }
+    else if (sol->hpn[0] == 88)
+    {
         printf("\"sinFenomeno\": \"Sol siempre con distancia cenital z > 102\"}, ");
-    } else if (sol->hpn[0] == 99) {
+    }
+    else if (sol->hpn[0] == 99)
+    {
         printf("\"sinFenomeno\": \"Crepúsculo náutico contínuo\"}, ");
     }
     //********** Fin de los casos negativos *************
-    else {
+    else
+    {
         // Si antes no puse este texto, lo pongo ahora
         /*	  if (!sol->bpm){
                     printf("<CENTER><TABLE BORDER=0 CELLSPACING=0 BGCOLOR=\"#CCFFFF\">");
@@ -220,42 +252,98 @@ void strcatSol(Tcomsol* sol) {
         printf("%s", cad);
 
         // Si hay salida o puesta, muestro 'acimutes'
-        if (sol->hss[0] != -1 || sol->hps[0] != -1) {
+        if (sol->hss[0] != -1 || sol->hps[0] != -1)
+        {
+            int primero = 1;
             printf("\"Acimutes\": {");
             // Acimutes de salida 1er fenomeno
-            if (sol->hss[0] != -1) {
-                printf("\"gSalidaSuperior\":%3i,\"mASalidaSuperior\":%4.1f, \"hSalidaSuperior\":%2i, \"mTSalidaSuperior\": %2.0f,", sol->ssg[0], sol->ssm[0], sol->hss[0], sol->mss[0]);
+            if (sol->hss[0] != -1)
+            {
+                printf("\"gSalidaSuperior\":%3i,\"mASalidaSuperior\":%4.1f, \"hSalidaSuperior\":%2i \"mTSalidaSuperior\": %2.0f", sol->ssg[0], sol->ssm[0], sol->hss[0], sol->mss[0]);
+                primero = 0;
             }
-            if (sol->hsi[0] != -1) {
-                printf("\"gSalidaInferior\":%3i, \"mASalidaInferior\":%4.1f,\"hSalidaInferior\":%2i, \"mTSalidaInferior\": %2.0f,", sol->sig[0], sol->sim[0], sol->hsi[0], sol->msi[0]);
+
+            if (!primero)
+            {
+                printf(',');
+                primero = 0;
+            }
+
+            if (sol->hsi[0] != -1)
+            {
+                printf("\"gSalidaInferior\":%3i, \"mASalidaInferior\":%4.1f,\"hSalidaInferior\":%2i \"mTSalidaInferior\": %2.0f", sol->sig[0], sol->sim[0], sol->hsi[0], sol->msi[0]);
             }
 
             // Acimutes de salida 2� fenomeno, si los hay
-            if ((sol->hss[0] != -1 && sol->hss[1] != -1) || (sol->hsi[0] != -1 && sol->hsi[1] != -1)) {
-                if (sol->hss[1] != -1) {
-                    printf("\"gSalidaSuperior2\":%3i,\"mASalidaSuperior2\":%4.1f, \"hSalidaSuperior2\":%2i, \"mTSalidaSuperior2\": %2.0f,", sol->ssg[1], sol->ssm[1], sol->hss[1], sol->mss[1]);
+            if ((sol->hss[0] != -1 && sol->hss[1] != -1) || (sol->hsi[0] != -1 && sol->hsi[1] != -1))
+            {
+                if (!primero)
+                {
+                    printf(',');
+                    primero = 0;
                 }
-                if (sol->hsi[1] != -1) {
-                    printf("\"gSalidaInferior2\"%3i, \"mASalidaInferior2\":%4.1f,\"hSalidaInferior2\":%2i, \"mTSalidaInferior2\": %2.0f,", sol->sig[1], sol->sim[1], sol->hsi[1], sol->msi[1]);
+                if (sol->hss[1] != -1)
+                {
+                    printf("\"gSalidaSuperior2\":%3i,\"mASalidaSuperior2\":%4.1f, \"hSalidaSuperior2\":%2i, \"mTSalidaSuperior2\": %2.0f", sol->ssg[1], sol->ssm[1], sol->hss[1], sol->mss[1]);
+                }
+                if (!primero)
+                {
+                    printf(',');
+                    primero = 0;
+                }
+                if (sol->hsi[1] != -1)
+                {
+                    printf("\"gSalidaInferior2\"%3i, \"mASalidaInferior2\":%4.1f,\"hSalidaInferior2\":%2i, \"mTSalidaInferior2\": %2.0f", sol->sig[1], sol->sim[1], sol->hsi[1], sol->msi[1]);
+                    primero = 0;
                 }
             }
 
             // Acimutes de puesta 1er fenomeno
-            if (sol->hps[0] != -1) {
-                printf("\"gPuestaSuperior\":%3i,\"mAPuestaSuperior\":%4.1f, \"hPuestaSuperior\":%2i, \"mTPuestaSuperior\": %2.0f,", sol->psg[0], sol->psm[0], sol->hps[0], sol->mps[0]);
-			}
-            if (sol->hpi[0] != -1) {
-                printf("\"gPuestaInferior\":%3i,\"mAPuestaInferior\":%4.1f, \"hPuestaInferior\":%2i, \"mTPuestaInferior\": %2.0f,", sol->pig[0], sol->pim[0], sol->hpi[0], sol->mpi[0]);
-            } 
+            if (!primero)
+            {
+                printf(',');
+                primero = 0;
+            }
+
+            if (sol->hps[0] != -1)
+            {
+                printf("\"gPuestaSuperior\":%3i,\"mAPuestaSuperior\":%4.1f, \"hPuestaSuperior\":%2i, \"mTPuestaSuperior\": %2.0f", sol->psg[0], sol->psm[0], sol->hps[0], sol->mps[0]);
+            }
+
+            if (!primero)
+            {
+                printf(',');
+                primero = 0;
+            }
+
+            if (sol->hpi[0] != -1)
+            {
+                printf("\"gPuestaInferior\":%3i,\"mAPuestaInferior\":%4.1f, \"hPuestaInferior\":%2i, \"mTPuestaInferior\": %2.0f", sol->pig[0], sol->pim[0], sol->hpi[0], sol->mpi[0]);
+            }
 
             // Acimutes de puesta 2� fenomeno, si los hay
-            if ((sol->hps[0] != -1 && sol->hps[1] != -1) || (sol->hpi[0] != -1 && sol->hpi[1] != -1)) {
+            if ((sol->hps[0] != -1 && sol->hps[1] != -1) || (sol->hpi[0] != -1 && sol->hpi[1] != -1))
+            {
 
-                if (sol->hps[1] != -1) {
-                    printf("\"gPuestaSuperior2\":%3i,\"mAPuestaSuperior2\":%4.1f, \"hPuestaSuperior2\":%2i, \"mTPuestaSuperior2\": %2.0f,", sol->psg[1], sol->psm[1], sol->hps[1], sol->mps[1]);
+                if (!primero)
+                {
+                    printf(',');
+                    primero = 0;
                 }
-                if (sol->hpi[1] != -1) {
-                    printf("\"gPuestaInferior2\":%3i,\"mAPuestaInferior2\":%4.1f, \"hPuestaInferior2\":%2i, \"mTPuestaInferior2\": %2.0f,", sol->pig[1], sol->pim[1], sol->hpi[1], sol->mpi[1]);
+                if (sol->hps[1] != -1)
+                {
+                    printf("\"gPuestaSuperior2\":%3i,\"mAPuestaSuperior2\":%4.1f, \"hPuestaSuperior2\":%2i, \"mTPuestaSuperior2\": %2.0f", sol->psg[1], sol->psm[1], sol->hps[1], sol->mps[1]);
+                }
+
+                if (!primero)
+                {
+                    printf(',');
+                    primero = 0;
+                }
+                
+                if (sol->hpi[1] != -1)
+                {
+                    printf("\"gPuestaInferior2\":%3i,\"mAPuestaInferior2\":%4.1f, \"hPuestaInferior2\":%2i, \"mTPuestaInferior2\": %2.0f", sol->pig[1], sol->pim[1], sol->hpi[1], sol->mpi[1]);
                 }
             }
             printf("}}} ");
@@ -269,7 +357,8 @@ void strcatSol(Tcomsol* sol) {
 |*** Operaciones con fechas                           ***|
 \********************************************************/
 
-TFecha& operator++(TFecha& f, int) {
+TFecha &operator++(TFecha &f, int)
+{
     const int dias[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     int max;
 
@@ -278,19 +367,22 @@ TFecha& operator++(TFecha& f, int) {
     else
         max = dias[f.mes - 1];
 
-    if (++f.dia > max) {  // Pasar al d�a siguiente
+    if (++f.dia > max)
+    { // Pasar al d�a siguiente
         f.dia = 1;
-        f.mes++;  // Pasar al mes siguiente
-        if (f.mes > 12) {
+        f.mes++; // Pasar al mes siguiente
+        if (f.mes > 12)
+        {
             f.mes = 1;
-            f.ano++;  // Pasar al a�o siguiente
+            f.ano++; // Pasar al a�o siguiente
         }
     }
 
     return f;
 }
 
-int operator<=(TFecha& fi, TFecha& ff) {
+int operator<=(TFecha &fi, TFecha &ff)
+{
     int siMenor = 0;
     if (fi.ano < ff.ano)
         siMenor = 1;
@@ -304,7 +396,8 @@ int operator<=(TFecha& fi, TFecha& ff) {
     return siMenor;
 }
 
-int operator-(TFecha& ff, TFecha& fi) {
+int operator-(TFecha &ff, TFecha &fi)
+{
     struct tm tmi, tmf;
     time_t timei, timef;
     double dif;
@@ -337,18 +430,21 @@ int operator-(TFecha& ff, TFecha& fi) {
 |*** dos hora, segun se especifique en 'num'.           ***|
 \**********************************************************/
 
-void strcatHora(char* dest, const char* msg, int* hora, double* min, int num) {
+void strcatHora(char *dest, const char *msg, int *hora, double *min, int num)
+{
     char cad[80];
 
     strcpy(dest, msg);
     if (hora[0] == -1)
         strcat(dest, "\"error\": -1");
-    else {
-        sprintf(cad, "{\"hora1\": %2i, \"minutos1\": %2.0f,", hora[0], float(min[0]));
+    else
+    {
+        sprintf(cad, "{\"hora1\": %2i, \"minutos1\": %2.0f", hora[0], float(min[0]));
         strcat(dest, cad);
 
-        if (num == 2 && hora[1] != -1) {
-            sprintf(cad, "\"hora2\": %2i, \"minutos2\": %2.0f,", hora[1], float(min[1]));
+        if (num == 2 && hora[1] != -1)
+        {
+            sprintf(cad, "\"hora2\": %2i, \"minutos2\": %2.0f", hora[1], float(min[1]));
             strcat(dest, cad);
         }
     }
