@@ -1,38 +1,93 @@
 import { useState } from 'react'
 import './Formulario.css'
+import './spinner.css'
+//http://www2.roa.es/Efemerides/fenomfecha.html
 
-export default function Formulario({ nombre, enlace }) {
+export default function Formulario({ nombre, enlace, }) {
+
+    const estadoInicial = {
+        gradosLat: '',
+        minutosLat: '',
+        segundosLat: '',
+        segundosLong: '',
+        gradosLong: '',
+        minutosLong: '',
+        fecha: '',
+        hora: '',
+        norteSur: '', // 0 Norte, 1 Sur
+        esteOeste: '', //0 Este, 1 Oeste
+
+    }
     const [datos, setDatos] = useState(
-        {
-            gradosLat: 0,
-            minutosLat: 0,
-            segundosLat: 0,
-            segundosLong: 0,
-            gradosLong: 0,
-            minutosLong: 0,
-            fecha: '',
-            hora: 0,
-            norteSur: undefined, // 0 Norte, 1 Sur
-            esteOeste: undefined, //0 Este, 1 Oeste
-
-        }
+        estadoInicial
     )
 
+    const [loading, setLoading] = useState(false)
+    const [respuesta, setRespuesta] = useState(undefined)
+    async function fetchingData() {
+        const fecha = new Date(datos.fecha)
+        const dia = fecha.getDate()
+        const mes = fecha.getMonth() + 1
+        const año = fecha.getFullYear()
+        let url = `http://192.168.0.8/cgi-bin/enfecha.cgi?latgra=${datos.gradosLat}&latmin=${datos.minutosLat}&latseg=${datos.segundosLat}&latsig=${datos.norteSur}&longra=${datos.gradosLong}&lonmin=${datos.minutosLong}&lonseg=${datos.segundosLong}&lonsig=${datos.esteOeste}&horut=${datos.hora}&anoi=${año}&mesi=${mes}&diai=${dia}`
+        let resultado = await fetch(url)
+        resultado = await resultado.json()
+        return resultado;
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        setLoading(true)
+        fetchingData().then((res) => {
+            setLoading(false)
+            setRespuesta(res)
+        })
+    }
+
+    const handleBorrar = () => {setDatos(estadoInicial)}
     const actualizarGradosLat = (estado) => { setDatos({ ...datos, gradosLat: estado }) }
-    const actualizarMinutosLat = (estado) => { setDatos({ ...datos, minutos: estado }) }
+    const actualizarMinutosLat = (estado) => { setDatos({ ...datos, minutosLat: estado }) }
     const actualizarSegundosLat = (estado) => { setDatos({ ...datos, segundosLat: estado }) }
     const actualizarGradosLong = (estado) => { setDatos({ ...datos, gradosLong: estado }) }
     const actualizarMinutosLong = (estado) => { setDatos({ ...datos, minutosLong: estado }) }
-    const actualaizarSegundosLong = (estado) => { setDatos({ ...datos, segundosLong: estado }) }
+    const actualizarSegundosLong = (estado) => { setDatos({ ...datos, segundosLong: estado }) }
     const actualizarFecha = (estado) => { setDatos({ ...datos, fecha: estado }) }
     const actualizarHora = (estado) => { setDatos({ ...datos, hora: estado }) }
-    const actualizarNorteSur = (estado) => { setDatos({ ...datos, norteSur: estado }) }
-    const actualizarEsteOeste = (estado) => { setDatos({ ...datos, esteOeste: estado }) }
+    const actualizarNorteSur = (estado) => {
+        setDatos({ ...datos, norteSur: estado })
+    }
+    const actualizarEsteOeste = (estado) => {
+        setDatos({ ...datos, esteOeste: estado })
+    }
+
+    if (loading) {
+        return (<div className='spinner' />)
+    }
+
+    if (respuesta) {
+        if (respuesta.ERROR) {
+            return (
+                <div className='error'>{respuesta.ERROR}</div>
+            )
+        }
+        else
+        {
+            return (
+                <table>
+                    <thead>
+                        <tr>
+                            RESPUESTA
+                        </tr>
+                    </thead>      
+                </table>
+            )
+        }
+    }
 
     return (
         <>
             <h1 className='titulo'>Fenómenos de {nombre} para una fecha</h1>
-            <form className='formulario'>
+            <form className='formulario' onSubmit={handleSubmit} >
                 <div>
                     <h2 className='apartado'>Posición</h2>
                     <h4 className='subapartado'>Latitud</h4>
@@ -43,8 +98,8 @@ export default function Formulario({ nombre, enlace }) {
                         <div>
                             <label className='inputLabel'>Orientación</label>
                             <div className='radioContainer'>
-                                <Radio valor="N" name="NorteSur" etiqueta='Norte' onSelect={actualizarNorteSur} />
-                                <Radio valor="S" name="NorteSur" etiqueta='Sur' onSelect={actualizarNorteSur} />
+                                <Radio valor="N" name="NorteSur" dato={datos.norteSur} etiqueta='Norte' onSelect={actualizarNorteSur} />
+                                <Radio valor="S" name="NorteSur" dato={datos.norteSur} etiqueta='Sur' onSelect={actualizarNorteSur} />
                             </div>
                         </div>
                     </div>
@@ -52,13 +107,13 @@ export default function Formulario({ nombre, enlace }) {
                     <h4 className='subapartado'>Longitud</h4>
                     <div className="linea">
                         <InputNumber label="Grados" value={datos.gradosLong} onChange={actualizarGradosLong} />
-                        <InputNumber label="Minutos" value={datos.longitud} onChange={actualizarMinutosLong} />
-                        <InputNumber label="Segundos" value={datos.segundosLong} onChange={actualaizarSegundosLong} />
+                        <InputNumber label="Minutos" value={datos.minutosLong} onChange={actualizarMinutosLong} />
+                        <InputNumber label="Segundos" value={datos.segundosLong} onChange={actualizarSegundosLong} />
                         <div>
                             <label className='inputLabel'>Orientación</label>
                             <div className='radioContainer'>
-                                <Radio valor="E" name="EsteOeste" etiqueta='Este' onSelect={actualizarEsteOeste} />
-                                <Radio valor="W" name="EsteOeste" etiqueta='Oeste' onSelect={actualizarEsteOeste} />
+                                <Radio valor="E" name="EsteOeste" etiqueta='Este' dato={datos.esteOeste} onSelect={actualizarEsteOeste} />
+                                <Radio valor="W" name="EsteOeste" etiqueta='Oeste' dato={datos.esteOeste} onSelect={actualizarEsteOeste} />
                             </div>
                         </div>
 
@@ -66,13 +121,13 @@ export default function Formulario({ nombre, enlace }) {
                     <div>
                         <h2 className='apartado'>Fecha y Hora</h2>
                         <div className="linea">
-                            <InputHoraUTC label={'Hora UTC'} onChange={actualizarHora} />
-                            <DatePicker label={"Fecha"} onChange={actualizarFecha} />
+                            <InputHoraUTC label={'Hora UTC'} onChange={actualizarHora} value={datos.hora} />
+                            <DatePicker label={"Fecha"} onChange={actualizarFecha} value={datos.fecha}/>
                         </div>
                     </div>
-                    <div className='linea botones'> 
-                        <button className='boton botonSecundario'>Borrar</button>
-                        <button className='boton botonPrimario'>Calcular</button>
+                    <div className='linea botones'>
+                        <input type="reset" value='Borrar' className='boton botonSecundario' onClick={handleBorrar}/>
+                        <input type='submit' value='Calcular' className='boton botonPrimario'></input>
                     </div>
                 </div>
             </form>
@@ -80,16 +135,16 @@ export default function Formulario({ nombre, enlace }) {
     )
 }
 
-function InputNumber({ label, onChange }) {
-    const [valor, setValor] = useState('')
+function InputNumber({ label, onChange,value }) {
+
 
     const handleChange = (event) => {
         if (!isNaN(event.target.value) && event.target.value !== '') {
-            setValor(event.target.value)
+
             onChange(parseInt(event.target.value))
         }
         else if (event.target.value === '') {
-            setValor('')
+
             onChange(0)
         }
     }
@@ -97,33 +152,33 @@ function InputNumber({ label, onChange }) {
     return (
         <div className='inputContainer'>
             <label>{label}</label>
-            <input type="number" className='input' value={valor} min="0" placeholder="0" onChange={handleChange}></input>
+            <input type="number" className='input' value={value} min="0" placeholder="0" onChange={handleChange} required></input>
         </div>
     )
 }
 
-function InputHoraUTC({ label, onChange }) {
-    const [valor, setValor] = useState('')
+function InputHoraUTC({ label, onChange,value }) {
+
     const handleChange = (event) => {
         if (!isNaN(event.target.value) && event.target.value !== '') {
             if (event.target.value > 12) {
-                setValor(12)
-                onChange(parseInt(event.target.value))
+
+                onChange(12)
 
             }
             else if (event.target.value < -11) {
-                setValor(-11)
-                onChange(parseInt(event.target.value))
+
+                onChange(-11)
 
             }
             else {
-                setValor(event.target.value)
+
                 onChange(parseInt(event.target.value))
             }
 
         }
         else if (event.target.value === '') {
-            setValor('')
+
             onChange(0)
         }
     }
@@ -131,59 +186,41 @@ function InputHoraUTC({ label, onChange }) {
     return (
         <div className='inputContainer'>
             <label>{label}</label>
-            <input className='input' placeholder='0' value={valor} type="number" onChange={handleChange} min="-11" max="12"></input>
+            <input className='input' placeholder='0' value={value} type="number" onChange={handleChange} min="-11" max="12" required/>
         </div>
     )
 }
 
-function DatePicker({ label, onChange }) {
-    const [valor, setValor] = useState('')
+function DatePicker({ label, onChange, value }) {
     const maxDate = "2020-12-31"
     const minDate = "2010-01-01"
 
     const handleChange = (event) => {
         if (event.target.value > event.target.max) {
-            setValor(maxDate)
             onChange(maxDate)
         }
         else {
-            setValor(event.target.value)
             onChange(event.target.value)
         }
 
     }
 
     return (
-    <div className='inputContainer'>
-        <label>{label}</label>
-        <input className='input datepicker' type="date" max={maxDate} min={minDate} value={valor} onChange={handleChange} />
-    </div>
+        <div className='inputContainer'>
+            <label>{label}</label>
+            <input className='input datepicker' type="date" max={maxDate} min={minDate} value={value} onChange={handleChange} required/>
+        </div>
     )
 }
 
-function Radio({ name, valor, onSelect, etiqueta }) {
+function Radio({ name, valor, dato, onSelect, etiqueta }) {
     const handleSelect = (event) => {
-        if (name === 'NorteSur') {
-            if (valor === 'Norte') {
-                onSelect(N)
-            }
-            else if (valor === 'Sur') {
-                onSelect(S)
-            }
-        }
-        else if (name === 'EsteOeste') {
-            if (valor === 'Este') {
-                onSelect(E)
-            }
-            else if (valor === 'Oeste') {
-                onSelect(W)
-            }
-        }
+        onSelect(event.target.value)
     }
 
     return (
         <div className='radio'>
-            <input type="radio" name={name} value={valor} onSelect={handleSelect} />
+            <input type="radio" name={name} value={valor} onChange={handleSelect} checked={dato === valor} required/>
             <label htmlFor={name}>{etiqueta}</label>
         </div>
     )
