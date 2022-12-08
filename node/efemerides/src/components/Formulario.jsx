@@ -41,7 +41,7 @@ export default function Formulario({ nombre, enlace, }) {
         fetchingData().then((res) => {
             setLoading(false)
             setRespuesta(res)
-        })
+        }).catch((err) => {setLoading(false)})
     }
 
     const handleBorrar = () => {setDatos(estadoInicial)}
