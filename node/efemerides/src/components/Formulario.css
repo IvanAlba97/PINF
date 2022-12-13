@@ -1,12 +1,14 @@
 .titulo {
   font-size: xx-large;
   color: #173763;
+  padding: 0 1rem;
 }
 
 .formulario {
   display: flex;
   justify-content: center;
   color: #161616;
+  padding: 0 1em;
 }
 
 .apartado {
@@ -22,25 +24,32 @@
 .linea {
   display: flex;
   align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 .inputContainer {
   label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 1em;
     color: #525252;
   }
+  margin: 1em 0;
+}
+
+.radioGroup {
+  margin: 1em 0;
 }
 
 .radio {
   label {
     color: #161616;
-    margin-left: 0.5em;
+    margin: 0.5em;
   }
 }
 
 .radioLabel {
   color: #525252;
+  display: block;
 }
 
 .radioContainer {
@@ -70,7 +79,7 @@
 }
 
 .botones {
-  margin-top: 3em;
+  margin-top: 2.3em;
 
   input {
     cursor: pointer;
@@ -84,12 +93,13 @@
   width: 150px;
   text-align: start;
   padding: 12px 0 12px 16px;
-  margin-right: 30px;
+  margin: 20px 30px 0 0;
 }
 
 .botonPrimario {
   background-color: #173763;
   color: #f4f4f4;
+
   &:hover {
     background-color: #1d457c;
   }
@@ -98,11 +108,12 @@
 .botonSecundario {
   background-color: #393939;
   color: #f4f4f4;
+
   &:hover {
-    background-color: hsl(0, 0%, 30%);
+    background-color: #4d4d4d;
   }
 }
 
 .datepicker {
-  width: fit-content;
+  width: 11em;
 }

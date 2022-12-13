@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import './Formulario.css'
 import './Spinner.css'
-//http://www2.roa.es/Efemerides/fenomfecha.html
 
 export default function Formulario({ nombre, enlace, }) {
 
@@ -76,8 +75,7 @@ export default function Formulario({ nombre, enlace, }) {
             return (
                 <div className='error'>{respuesta.ERROR}</div>
             )
-        }
-        else {
+        } else {
             return (
                 <table>
                     <thead>
@@ -101,7 +99,7 @@ export default function Formulario({ nombre, enlace, }) {
                         <InputNumber label="Grados" value={datos.gradosLat} onChange={actualizarGradosLat} />
                         <InputNumber label="Minutos" value={datos.minutosLat} onChange={actualizarMinutosLat} />
                         <InputNumber label="Segundos" value={datos.segundosLat} onChange={actualizarSegundosLat} />
-                        <div>
+                        <div className='radioGroup'>
                             <label className='radioLabel'>Orientación</label>
                             <div className='radioContainer'>
                                 <Radio valor="N" name="NorteSur" dato={datos.norteSur} etiqueta='Norte' onSelect={actualizarNorteSur} />
@@ -115,7 +113,7 @@ export default function Formulario({ nombre, enlace, }) {
                         <InputNumber label="Grados" value={datos.gradosLong} onChange={actualizarGradosLong} />
                         <InputNumber label="Minutos" value={datos.minutosLong} onChange={actualizarMinutosLong} />
                         <InputNumber label="Segundos" value={datos.segundosLong} onChange={actualizarSegundosLong} />
-                        <div>
+                        <div className='radioGroup'>
                             <label className='radioLabel'>Orientación</label>
                             <div className='radioContainer'>
                                 <Radio valor="E" name="EsteOeste" etiqueta='Este' dato={datos.esteOeste} onSelect={actualizarEsteOeste} />
@@ -143,14 +141,11 @@ export default function Formulario({ nombre, enlace, }) {
 
 function InputNumber({ label, onChange, value }) {
 
-
     const handleChange = (event) => {
         if (!isNaN(event.target.value) && event.target.value !== '') {
-
             onChange(parseInt(event.target.value))
         }
         else if (event.target.value === '') {
-
             onChange(0)
         }
     }
@@ -168,23 +163,16 @@ function InputHoraUTC({ label, onChange, value }) {
     const handleChange = (event) => {
         if (!isNaN(event.target.value) && event.target.value !== '') {
             if (event.target.value > 12) {
-
                 onChange(12)
-
             }
             else if (event.target.value < -11) {
-
                 onChange(-11)
-
             }
             else {
-
                 onChange(parseInt(event.target.value))
             }
-
         }
         else if (event.target.value === '') {
-
             onChange(0)
         }
     }
