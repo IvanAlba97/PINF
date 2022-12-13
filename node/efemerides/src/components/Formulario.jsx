@@ -3,13 +3,14 @@ import './Formulario.css';
 import './Spinner.css';
 
 export default function Formulario({ nombre, enlace }) {
+  console.ignoreRedBox = true;
   const estadoInicial = {
-    gradosLat: '',
-    minutosLat: '',
-    segundosLat: '',
-    segundosLong: '',
-    gradosLong: '',
-    minutosLong: '',
+    gradosLat: NaN,
+    minutosLat: NaN,
+    segundosLat: NaN,
+    segundosLong: NaN,
+    gradosLong: NaN,
+    minutosLong: NaN,
     fecha: '',
     hora: '',
     norteSur: '', // 0 Norte, 1 Sur
@@ -29,7 +30,7 @@ export default function Formulario({ nombre, enlace }) {
     const dia = fecha.getDate();
     const mes = fecha.getMonth() + 1;
     const año = fecha.getFullYear();
-    let url = `http://192.168.0.8/cgi-bin/enfecha.cgi?latgra=${datos.gradosLat}&latmin=${datos.minutosLat}&latseg=${datos.segundosLat}&latsig=${datos.norteSur}&longra=${datos.gradosLong}&lonmin=${datos.minutosLong}&lonseg=${datos.segundosLong}&lonsig=${datos.esteOeste}&horut=${datos.hora}&anoi=${año}&mesi=${mes}&diai=${dia}`;
+    let url = `http://192.168.69.175/cgi-bin/enfecha.cgi?latgra=${datos.gradosLat}&latmin=${datos.minutosLat}&latseg=${datos.segundosLat}&latsig=${datos.norteSur}&longra=${datos.gradosLong}&lonmin=${datos.minutosLong}&lonseg=${datos.segundosLong}&lonsig=${datos.esteOeste}&horut=${datos.hora}&anoi=${año}&mesi=${mes}&diai=${dia}`;
     let resultado = await fetch(url);
     resultado = await resultado.json();
     return resultado;
@@ -111,6 +112,8 @@ export default function Formulario({ nombre, enlace }) {
             <InputNumber
               label='Grados'
               value={datos.gradosLat}
+              max={90}
+              min={0}
               onChange={actualizarGradosLat}
             />
             <InputNumber
@@ -215,12 +218,15 @@ export default function Formulario({ nombre, enlace }) {
   );
 }
 
-function InputNumber({ label, onChange, value }) {
+function InputNumber({ label, onChange, value, max }) {
   const handleChange = (event) => {
-    if (!isNaN(event.target.value) && event.target.value !== '') {
+    if (!isNaN(parseInt(event.target.value))) {
+      if (event.target.value > 90) {
+        onChange(90);
+      }
       onChange(parseInt(event.target.value));
-    } else if (event.target.value === '') {
-      onChange(0);
+    } else if (event.target.value == '') {
+      onChange(NaN);
     }
   };
 
@@ -228,10 +234,11 @@ function InputNumber({ label, onChange, value }) {
     <div className='inputContainer'>
       <label>{label}</label>
       <input
-        type='number'
         className='input'
+        type='number'
         value={value}
         min='0'
+        max={max}
         placeholder='0'
         onChange={handleChange}
         required
@@ -242,32 +249,56 @@ function InputNumber({ label, onChange, value }) {
 
 function InputHoraUTC({ label, onChange, value }) {
   const handleChange = (event) => {
-    if (!isNaN(event.target.value) && event.target.value !== '') {
-      if (event.target.value > 12) {
-        onChange(12);
-      } else if (event.target.value < -11) {
-        onChange(-11);
-      } else {
-        onChange(parseInt(event.target.value));
-      }
-    } else if (event.target.value === '') {
-      onChange(0);
+    if (!isNaN(parseInt(event.target.value))) {
+      onChange(parseInt(event.target.value));
     }
   };
 
+  let horas = [
+    '--',
+    -11,
+    -10,
+    -9,
+    -8,
+    -7,
+    -6,
+    -5,
+    -4,
+    -3,
+    -2,
+    -1,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+  ];
   return (
     <div className='inputContainer'>
       <label>{label}</label>
-      <input
+      <select
         className='input'
+        type='select'
         placeholder='0'
         value={value}
-        type='number'
         onChange={handleChange}
-        min='-11'
-        max='12'
-        required
-      />
+      >
+        {horas.map((valor) => {
+          return (
+            <option key={valor} value={valor}>
+              {valor}
+            </option>
+          );
+        })}
+      </select>
     </div>
   );
 }
