@@ -8,6 +8,7 @@
     "devhost": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
+    "serve": "vite build && vite preview",
     "servehost": "vite build && vite preview --host"
   },
   "dependencies": {

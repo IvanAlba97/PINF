@@ -1,3 +1,9 @@
+:root {
+  --primary-color: #173763;
+  --primary-fg-color: #c7c7c7;
+  --fg-color: #161616;
+}
+
 @font-face {
   font-family: 'VerdanaLinux';
   src: url('/Bitstream Vera Sans.woff2') format('woff');
@@ -77,6 +83,7 @@ html {
 body {
   margin: 0; /* 1 */
   line-height: inherit; /* 2 */
+  color: var(--fg-color);
 }
 
 /*

@@ -1,13 +1,13 @@
 .titulo {
   font-size: xx-large;
-  color: #173763;
+  color: var(--primary-color);
   padding: 0 1rem;
 }
 
 .formulario {
   display: flex;
   justify-content: center;
-  color: #161616;
+  color: var(--fg-color);
   padding: 0 1em;
 }
 
@@ -33,7 +33,7 @@
     margin-bottom: 1em;
     color: #525252;
   }
-  margin: 1em 0;
+  margin: 0.5em 0;
 }
 
 .radioGroup {
@@ -56,7 +56,7 @@
   margin-top: 1.25em;
   display: flex;
   justify-content: space-between;
-  width: 140px;
+  width: 146px;
 }
 
 .input {
@@ -79,7 +79,7 @@
 }
 
 .botones {
-  margin-top: 2.3em;
+  margin: 1em 0;
 
   input {
     cursor: pointer;
@@ -87,8 +87,8 @@
 }
 
 .boton {
-  background-color: #161616;
-  color: #f4f4f4;
+  background-color: var(--fg-color);
+  color: var(--primary-fg-color);
   display: block;
   width: 150px;
   text-align: start;
@@ -97,8 +97,7 @@
 }
 
 .botonPrimario {
-  background-color: #173763;
-  color: #f4f4f4;
+  background-color: var(--primary-color);
 
   &:hover {
     background-color: #1d457c;
@@ -107,7 +106,6 @@
 
 .botonSecundario {
   background-color: #393939;
-  color: #f4f4f4;
 
   &:hover {
     background-color: #4d4d4d;

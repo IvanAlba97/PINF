@@ -12,6 +12,9 @@ export default function SideBar() {
     'Miscelánea',
   ];
 
+  const [height, width] = useWindowSize();
+  const [menu, setMenu] = useState(false);
+
   useEffect(() => {
     switch (window.location.pathname) {
       case '/Sol':
@@ -32,7 +35,8 @@ export default function SideBar() {
       default:
         break;
     }
-  }, []);
+    setMenu(false);
+  }, [seleccion]);
 
   function enlace(tipo) {
     if (tipo.replace(/\s+/g, '') == 'EclipsesdeSolyLuna') {
@@ -51,7 +55,9 @@ export default function SideBar() {
         <Link
           to={enlace(tipo)}
           onClick={() => setSeleccion(key)}
-          style={{ opacity: key == seleccion ? '1' : '0.5' }}
+          style={{
+            color: key == seleccion ? 'var(--primary-fg-color)' : '#c7c7c780',
+          }}
         >
           {tipo}
         </Link>
@@ -59,15 +65,59 @@ export default function SideBar() {
     </div>
   ));
 
-  return (
-    <div className='fondo'>
-      <div className='textoSidebar'>
-        <h1>Efemérides</h1>
-        <nav>
-          <ul>{listItems}</ul>
-        </nav>
+  let activado;
+
+  if (menu == true) {
+    activado = (
+      <nav className='menuDesplegable'>
+        <ul>{listItems}</ul>
+      </nav>
+    );
+  }
+
+  if (width > 1280) {
+    return (
+      <div className='fondo'>
+        <div className='textoSidebar'>
+          <h1>Efemérides</h1>
+          <nav>
+            <ul>{listItems}</ul>
+          </nav>
+        </div>
+        <img src='/escudoArmada.webp' />
       </div>
-      <img src='/escudoArmada.webp' />
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className='desplegable'>
+        <header>
+          <h1>Efemérides</h1>
+          <button
+            onClick={() => {
+              setMenu(!menu);
+            }}
+          >
+            Mostrar
+          </button>
+        </header>
+        {activado}
+      </div>
+    );
+  }
+}
+
+function useWindowSize() {
+  const [size, setSize] = useState([window.innerHeight, window.innerWidth]);
+  useEffect(() => {
+    const handleResize = () => {
+      setSize([window.innerHeight, window.innerWidth]);
+    };
+    window.addEventListener('resize', handleResize);
+    // Clean up!
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  console.log(size);
+  return size;
 }
