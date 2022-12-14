@@ -17,6 +17,7 @@
 
 @media (max-width: 1366px) {
   .contenido {
+    margin-top: 3vh;
     img {
       position: relative;
       margin: 10vh;

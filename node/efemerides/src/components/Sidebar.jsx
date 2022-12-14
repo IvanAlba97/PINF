@@ -91,13 +91,14 @@ export default function SideBar() {
     return (
       <div className='desplegable'>
         <header>
+          <img className='logo' src='/escudoArmada.webp' />
           <h1>Efemérides</h1>
           <button
             onClick={() => {
               setMenu(!menu);
             }}
           >
-            Mostrar
+            <img src='/menu.svg' alt='' />
           </button>
         </header>
         {activado}
@@ -118,6 +119,5 @@ function useWindowSize() {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-  console.log(size);
   return size;
 }
