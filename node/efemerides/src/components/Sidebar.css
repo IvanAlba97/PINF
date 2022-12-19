@@ -58,20 +58,22 @@
 header {
   display: none;
   justify-content: space-between;
+  align-items: center;
   background-color: var(--primary-color);
   color: var(--primary-fg-color);
   padding: 1rem;
   top: 0;
   .logo {
     height: 2.8em;
-    margin: 0 9.695px;
+    margin: 0 0.6059375em;
   }
   h1 {
     font-size: 1.5em;
   }
   button {
+    height: 2.8em;
+    width: 2.8em;
     img {
-      height: 2.8em;
       filter: invert(99%) sepia(0%) saturate(1509%) hue-rotate(328deg)
         brightness(81%) contrast(92%);
     }
@@ -90,13 +92,12 @@ header {
   }
 }
 
-@media (max-width: 1279px) {
+@media (max-width: 1280px) {
   .fondo {
     display: none;
   }
   header {
     display: flex;
-    align-items: center;
   }
   .seleccion {
     div {
