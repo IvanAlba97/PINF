@@ -61,10 +61,11 @@
 
 .input {
   width: 7em;
+  height: 3em;
   background-color: #f4f4f4;
   border: 2px solid #ffffff00;
   border-bottom: 2px solid #8d8d8d;
-  padding: 0.5em 1em;
+  padding: 0em 1em;
   margin-right: 2em;
   color: #161616;
 
