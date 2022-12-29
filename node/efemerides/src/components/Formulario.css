@@ -116,3 +116,11 @@
 .datepicker {
   width: 11em;
 }
+
+.checkbox {
+  margin-bottom: 1em;
+  label {
+    color: #161616;
+    margin: 0.5em;
+  }
+}

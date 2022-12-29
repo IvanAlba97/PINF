@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import Respuesta from './Respuesta';
 import './Formulario.css';
 import './Spinner.css';
-import Respuesta from './Respuesta';
+
 export default function Formulario({ nombre, enlace }) {
   console.ignoreRedBox = true;
   const estadoInicial = {
@@ -16,8 +17,10 @@ export default function Formulario({ nombre, enlace }) {
     norteSur: '', // 0 Norte, 1 Sur
     esteOeste: '', //0 Este, 1 Oeste
   };
+
   const [datos, setDatos] = useState(estadoInicial);
 
+  const [intervalo, setIntervalo] = useState(false);
   const [loading, setLoading] = useState(false);
   const [respuesta, setRespuesta] = useState(undefined);
 
@@ -89,17 +92,56 @@ export default function Formulario({ nombre, enlace }) {
 
   if (respuesta) {
     return <Respuesta datos={respuesta} />;
-    /*if (respuesta.ERROR) {
-      return <div className='error'>{respuesta.ERROR}</div>;
+  }
+
+  function Fecha() {
+    if (!intervalo) {
+      return (
+        <div className='linea'>
+          <InputHoraUTC
+            label={'Hora UTC'}
+            onChange={actualizarHora}
+            value={datos.hora}
+          />
+          <DatePicker
+            label={'Fecha'}
+            onChange={actualizarFecha}
+            value={datos.fecha}
+          />
+        </div>
+      );
     } else {
       return (
-        <table>
-          <thead>
-            <tr>RESPUESTA</tr>
-          </thead>
-        </table>
+        <>
+          <h4 className='subapartado'>Inicio</h4>
+          <div className='linea'>
+            <InputHoraUTC
+              label={'Hora UTC'}
+              onChange={actualizarHora}
+              value={datos.hora}
+            />
+            <DatePicker
+              label={'Fecha'}
+              onChange={actualizarFecha}
+              value={datos.fecha}
+            />
+          </div>
+          <h4 className='subapartado'>Final</h4>
+          <div className='linea'>
+            <InputHoraUTC
+              label={'Hora UTC'}
+              onChange={actualizarHora}
+              value={datos.hora}
+            />
+            <DatePicker
+              label={'Fecha'}
+              onChange={actualizarFecha}
+              value={datos.fecha}
+            />
+          </div>
+        </>
       );
-    }*/
+    }
   }
 
   return (
@@ -187,18 +229,14 @@ export default function Formulario({ nombre, enlace }) {
           </div>
           <div>
             <h2 className='apartado'>Fecha y Hora</h2>
-            <div className='linea'>
-              <InputHoraUTC
-                label={'Hora UTC'}
-                onChange={actualizarHora}
-                value={datos.hora}
-              />
-              <DatePicker
-                label={'Fecha'}
-                onChange={actualizarFecha}
-                value={datos.fecha}
-              />
+            <div className='checkbox'>
+              <input
+                onChange={() => setIntervalo(!intervalo)}
+                type='checkbox'
+              ></input>
+              <label>Intervalo</label>
             </div>
+            <Fecha />
           </div>
           <div className='linea botones'>
             <input

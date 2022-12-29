@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-
 export default function respuesta({ datos }) {
   let tabla = datos.tabla1;
   let Sol = datos.Sol;
