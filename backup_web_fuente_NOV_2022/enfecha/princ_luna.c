@@ -325,6 +325,8 @@ void rellenarListaLuna(struct TFecha *fecIni)
                 printf("\"hPuesta\": %2i, \"mPuesta\": %2.0lf, ", comfel->hpu, comfel->mpu);
                 printf("\"gAcimutPuesta\": %3i, \"mAcimutPuesta\":%4.1lf }", comfel->gzp, comfel->mzp);
             }
+            printf("}");
+
             // else {
             //     printf("<TR><TD><B>Puesta...............:</B> ---------- </TD>");
             //     printf("<TD><B>Acimut:</B> --------- </TD></TR>");
