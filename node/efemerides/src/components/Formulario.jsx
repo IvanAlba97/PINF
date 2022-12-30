@@ -33,7 +33,16 @@ export default function Formulario({ nombre, enlace }) {
     const dia = fecha.getDate();
     const mes = fecha.getMonth() + 1;
     const año = fecha.getFullYear();
-    let url = `http://192.168.0.8/cgi-bin/enfecha.cgi?latgra=${datos.gradosLat}&latmin=${datos.minutosLat}&latseg=${datos.segundosLat}&latsig=${datos.norteSur}&longra=${datos.gradosLong}&lonmin=${datos.minutosLong}&lonseg=${datos.segundosLong}&lonsig=${datos.esteOeste}&horut=${datos.hora}&anoi=${año}&mesi=${mes}&diai=${dia}`;
+    let url;
+    if(nombre === 'Sol')
+    {
+      url = `http://192.168.0.8/cgi-bin/enfecha.cgi?latgra=${datos.gradosLat}&latmin=${datos.minutosLat}&latseg=${datos.segundosLat}&latsig=${datos.norteSur}&longra=${datos.gradosLong}&lonmin=${datos.minutosLong}&lonseg=${datos.segundosLong}&lonsig=${datos.esteOeste}&horut=${datos.hora}&anoi=${año}&mesi=${mes}&diai=${dia}`;
+    
+    }
+    else if(nombre === 'Luna')
+    {
+      url = `http://192.168.0.8/cgi-bin/enfechaluna.cgi?latgra=${datos.gradosLat}&latmin=${datos.minutosLat}&latseg=${datos.segundosLat}&latsig=${datos.norteSur}&longra=${datos.gradosLong}&lonmin=${datos.minutosLong}&lonseg=${datos.segundosLong}&lonsig=${datos.esteOeste}&horut=${datos.hora}&anoi=${año}&mesi=${mes}&diai=${dia}`;
+    }
     let resultado = await fetch(url);
     resultado = await resultado.json();
     return resultado;
@@ -91,7 +100,7 @@ export default function Formulario({ nombre, enlace }) {
   }
 
   if (respuesta) {
-    return <Respuesta datos={respuesta} />;
+    return <Respuesta datos={respuesta} nombre={nombre} />;
   }
 
   function Fecha() {
