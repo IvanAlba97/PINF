@@ -6,86 +6,103 @@
 #include "../kernel/externos.h"
 
 int fecha_valida(int ano, int mes, int dia);
-void rellenarListaLuna(struct TFecha* fecIni);
-TFecha& operator++(TFecha& f, int);
-int operator<=(TFecha& fi, TFecha& ff);
-int operator-(TFecha& ff, TFecha& fi);
-void strcatHora(char* dest, const char* msg, int* hora, double* min, int num = 1);
+void rellenarListaLuna(struct TFecha *fecIni);
+TFecha &operator++(TFecha &f, int);
+int operator<=(TFecha &fi, TFecha &ff);
+int operator-(TFecha &ff, TFecha &fi);
+void strcatHora(char *dest, const char *msg, int *hora, double *min, int num = 1);
 void fase(int edad);
 
-struct TFecha* fecIni;
+struct TFecha *fecIni;
 
-int main(void) {
+int main(void)
+{
     int latgra, latmin, latseg, longra, lonmin, lonseg, horut, anoi, mesi, diai;
     double minutos_lat, minutos_lon;
     char latsig, lonsig;
 
-    char* data = (char*)calloc(sizeof(char), 40);
+    char *data = (char *)calloc(sizeof(char), 40);
 
     printf("%s%c%c\n", "Content-Type:application/json;charset=UTF-8\nAccess-Control-Allow-Origin: *", 13, 10);
     data = getenv("QUERY_STRING");
-    if (data == NULL) {
+    if (data == NULL)
+    {
         printf("{\"ERROR\":\"Los datos introducidos no son válidos.\"}");
         exit(EXIT_FAILURE);
-    } else if (sscanf(data, "latgra=%i&latmin=%i&latseg=%i&latsig=%c&longra=%i&lonmin=%i&lonseg=%i&lonsig=%c&horut=%i&anoi=%i&mesi=%i&diai=%i", &latgra, &latmin, &latseg, &latsig, &longra, &lonmin, &lonseg, &lonsig, &horut, &anoi, &mesi, &diai) != 12) {
+    }
+    else if (sscanf(data, "latgra=%i&latmin=%i&latseg=%i&latsig=%c&longra=%i&lonmin=%i&lonseg=%i&lonsig=%c&horut=%i&anoi=%i&mesi=%i&diai=%i", &latgra, &latmin, &latseg, &latsig, &longra, &lonmin, &lonseg, &lonsig, &horut, &anoi, &mesi, &diai) != 12)
+    {
         printf("{\"ERROR\":\"Los datos introducidos no son válidos.\"}");
         exit(EXIT_FAILURE);
-    } else {
-        if ((latgra < 0) || (latgra > 90)) {
+    }
+    else
+    {
+        if ((latgra < 0) || (latgra > 90))
+        {
             printf("{\"ERROR\":\"Los grados deben estar entre 0� y 90�.\"}");
             exit(EXIT_FAILURE);
         }
-        if ((latmin < 0) || (latmin > 59)) {
+        if ((latmin < 0) || (latmin > 59))
+        {
             printf("{\"ERROR\":\"Los minutos deben estar entre 0' y 59'\"}");
             exit(EXIT_FAILURE);
         }
-        if ((latseg < 0) || (latseg > 59)) {
+        if ((latseg < 0) || (latseg > 59))
+        {
             printf("{\"ERROR\":\"Los segundos deben estar entre 0'' y 59''\"}");
             exit(EXIT_FAILURE);
         }
-        if ((longra < 0) || (longra > 180)) {
+        if ((longra < 0) || (longra > 180))
+        {
             printf("{\"ERROR\":\"Los grados deben estar entre 0� y 180�\"}");
             exit(EXIT_FAILURE);
         }
-        if ((lonmin < 0) || (lonmin > 59)) {
+        if ((lonmin < 0) || (lonmin > 59))
+        {
             printf("{\"ERROR\":\"Los minutos deben estar entre 0' y 59'\"}");
             exit(EXIT_FAILURE);
         }
-        if ((lonseg < 0) || (lonseg > 59)) {
+        if ((lonseg < 0) || (lonseg > 59))
+        {
             printf("{\"ERROR\":\"Los segundos deben estar entre 0'' y 59''\"}");
             exit(EXIT_FAILURE);
         }
-        if ((latsig != 'N') && (latsig != 'S')) {
+        if ((latsig != 'N') && (latsig != 'S'))
+        {
             printf("{\"ERROR\":\"La latitud debe ser Norte o Sur\"}");
             exit(EXIT_FAILURE);
         }
-        if ((lonsig != 'W') && (lonsig != 'E')) {
+        if ((lonsig != 'W') && (lonsig != 'E'))
+        {
             printf("{\"ERROR\":\"La longitud debe ser Este u Oeste\"}");
             exit(EXIT_FAILURE);
         }
-        if ((latgra == 90) && ((latmin > 0) || (latseg > 0))) {
+        if ((latgra == 90) && ((latmin > 0) || (latseg > 0)))
+        {
             printf("{\"ERROR\":\"La latitud debe ser menor o igual a 90�\"}");
             exit(EXIT_FAILURE);
         }
-        if ((longra == 180) && ((lonmin > 0) || (lonseg > 0))) {
+        if ((longra == 180) && ((lonmin > 0) || (lonseg > 0)))
+        {
             printf("{\"ERROR\":\"La longitud debe ser menor o igual a 180�\"}");
             exit(EXIT_FAILURE);
         }
-        if (!(fecha_valida(anoi, mesi, diai))) {
+        if (!(fecha_valida(anoi, mesi, diai)))
+        {
             printf("{\"ERROR\":\"La fecha debe estar dentro del intervalo de fechas v&aacute;lidas\"}");
             exit(EXIT_FAILURE);
         }
-        if ((horut < -11) || (horut > 12)) {
+        if ((horut < -11) || (horut > 12))
+        {
             printf("{\"ERROR\":\"La diferencia horaria (Hora - UT) debe estar entre -11 y 12\"}");
             exit(EXIT_FAILURE);
         }
     }
 
-
     minutos_lat = latmin + latseg / 60.;
     minutos_lon = lonmin + lonseg / 60.;
 
-    fecIni = (struct TFecha*)calloc(sizeof(struct TFecha), 1);
+    fecIni = (struct TFecha *)calloc(sizeof(struct TFecha), 1);
 
     fecIni->dia = diai;
     fecIni->mes = mesi;
@@ -103,39 +120,42 @@ int main(void) {
     return 0;
 }
 
-int fecha_valida(int ano, int mes, int dia) {
+int fecha_valida(int ano, int mes, int dia)
+{
     int ain = 2010, afi = 2020;
 
-    if ((ano < ain) || (ano > afi)) {
+    if ((ano < ain) || (ano > afi))
+    {
         return 0;
     }
     if ((mes < 1) || (mes > 12))
         return 0;
     if ((dia < 1) || (dia > 31))
         return 0;
-    switch (mes) {
-        case 1:
-        case 3:
-        case 5:
-        case 7:
-        case 8:
-        case 10:
-        case 12:
-            return (dia <= 31);
-        case 4:
-        case 6:
-        case 9:
-        case 11:
-            return (dia <= 30);
-        case 2:
-            if ((ano % 4) != 0)
-                return (dia <= 28);
-            else if ((ano % 100) != 0)
-                return (dia <= 29);
-            else if ((ano % 400) != 0)
-                return (dia <= 28);
-            else
-                return (dia <= 29);
+    switch (mes)
+    {
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 8:
+    case 10:
+    case 12:
+        return (dia <= 31);
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+        return (dia <= 30);
+    case 2:
+        if ((ano % 4) != 0)
+            return (dia <= 28);
+        else if ((ano % 100) != 0)
+            return (dia <= 29);
+        else if ((ano % 400) != 0)
+            return (dia <= 28);
+        else
+            return (dia <= 29);
     }
     return EXIT_FAILURE;
 }
@@ -144,7 +164,8 @@ int fecha_valida(int ano, int mes, int dia) {
 |*** Operaciones con fechas                           ***|
 \********************************************************/
 
-TFecha& operator++(TFecha& f, int) {
+TFecha &operator++(TFecha &f, int)
+{
     const int dias[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     int max;
 
@@ -153,19 +174,22 @@ TFecha& operator++(TFecha& f, int) {
     else
         max = dias[f.mes - 1];
 
-    if (++f.dia > max) {  // Pasar al d�a siguiente
+    if (++f.dia > max)
+    { // Pasar al d�a siguiente
         f.dia = 1;
-        f.mes++;  // Pasar al mes siguiente
-        if (f.mes > 12) {
+        f.mes++; // Pasar al mes siguiente
+        if (f.mes > 12)
+        {
             f.mes = 1;
-            f.ano++;  // Pasar al a�o siguiente
+            f.ano++; // Pasar al a�o siguiente
         }
     }
 
     return f;
 }
 
-int operator<=(TFecha& fi, TFecha& ff) {
+int operator<=(TFecha &fi, TFecha &ff)
+{
     int siMenor = 0;
     if (fi.ano < ff.ano)
         siMenor = 1;
@@ -179,7 +203,8 @@ int operator<=(TFecha& fi, TFecha& ff) {
     return siMenor;
 }
 
-int operator-(TFecha& ff, TFecha& fi) {
+int operator-(TFecha &ff, TFecha &fi)
+{
     struct tm tmi, tmf;
     time_t timei, timef;
     double dif;
@@ -212,17 +237,20 @@ int operator-(TFecha& ff, TFecha& fi) {
 |*** dos hora, segun se especifique en 'num'.           ***|
 \**********************************************************/
 
-void strcatHora(char* dest, const char* msg, int* hora, double* min, int num) {
+void strcatHora(char *dest, const char *msg, int *hora, double *min, int num)
+{
     char cad[80];
 
     strcpy(dest, msg);
     if (hora[0] == -1)
         strcat(dest, "\"error\": -1");
-    else {
+    else
+    {
         sprintf(cad, "{\"hora1\": %2i, \"minutos1\": %2.0f", hora[0], float(min[0]));
         strcat(dest, cad);
 
-        if (num == 2 && hora[1] != -1) {
+        if (num == 2 && hora[1] != -1)
+        {
             sprintf(cad, ",\"hora2\": %2i, \"minutos2\": %2.0f", hora[1], float(min[1]));
             strcat(dest, cad);
         }
@@ -231,13 +259,14 @@ void strcatHora(char* dest, const char* msg, int* hora, double* min, int num) {
     strcat(dest, cad);
 }
 
-void rellenarListaLuna(struct TFecha* fecIni) {
-    struct Tcomfel* comfel;
+void rellenarListaLuna(struct TFecha *fecIni)
+{
+    struct Tcomfel *comfel;
     struct TPosicion posIni, pos;
     struct TFecha fec;
 
     fec = *fecIni;
-    leerPosicionCommon(&posIni);  // Leer situacion inicial
+    leerPosicionCommon(&posIni); // Leer situacion inicial
     leerPosicionCommon(&pos);
     pos.dia = fec.dia;
     pos.mes = fec.mes;
@@ -251,9 +280,11 @@ void rellenarListaLuna(struct TFecha* fecIni) {
     // printf("<TABLE><TR><TD><B>Edad (a 0h):</B> %.1lf d&iacute;as</TD>", comfel->eda);
 
     // fase((int)comfel->eda);
-    if (comfel->bpm != -99 && (comfel->bpm != 99 || comfel->hpm != -1)) {
+    if (comfel->bpm != -99 && (comfel->bpm != 99 || comfel->hpm != -1))
+    {
 
-        if (comfel->hpm != -1) {
+        if (comfel->hpm != -1)
+        {
             printf("\"hPasoMeridiano\":%2i,\"mPasoMeridiano\": %4.1lf, ", comfel->hpm, comfel->mpm);
             printf("\"gAlturaMeridiano\": %i, \"mAlturaMeridiano\": %.1lf, ", comfel->gam, comfel->mam);
 
@@ -266,34 +297,47 @@ void rellenarListaLuna(struct TFecha* fecIni) {
         //     printf("<BR>&nbsp;&nbsp;&nbsp;&nbsp;<B>Culminaci&oacute;n......:</B> --------- </TD></TR>");
         // }
 
-        if (comfel->bpm != 99) {  /////////////********
+        if (comfel->bpm != 99)
+        { /////////////********
+            int primero = 1;
+            printf("\"Acimutes\": {");
 
             // Si hay salida de la luna mandamos los datos
-            if (comfel->hsa != -1) {
+            if (comfel->hsa != -1)
+            {
                 printf("\"hSalida\": %2i, \"mSalida\": %2.0lf, ", comfel->hsa, comfel->msa);
-                printf("\"gAcimutSalida\": %3i, \"mAcimutSalida\":%4.1lf, ", comfel->gzs, comfel->mzs);
-
-            } 
+                printf("\"gAcimutSalida\": %3i, \"mAcimutSalida\":%4.1lf ", comfel->gzs, comfel->mzs);
+                primero = 0;
+            }
             // else {
             //     printf("<TR><TD><B>Salida...............:</B> --------- </TD>");
             //     printf("<TD><B>Acimut:</B> --------- </TD></TR>");
             // }
 
             // Si hay puesta de la luna mandamos los datos
-            if (comfel->hpu != -1) {
+            if (comfel->hpu != -1)
+            {
+                if (!primero)
+                {
+                    printf(",");
+                    primero = 0;
+                }
                 printf("\"hPuesta\": %2i, \"mPuesta\": %2.0lf, ", comfel->hpu, comfel->mpu);
-                printf("\"gAcimutPuesta\": %3i, \"mAcimutPuesta\":%4.1lf, }", comfel->gzp, comfel->mzp);
-            } 
+                printf("\"gAcimutPuesta\": %3i, \"mAcimutPuesta\":%4.1lf }", comfel->gzp, comfel->mzp);
+            }
             // else {
             //     printf("<TR><TD><B>Puesta...............:</B> ---------- </TD>");
             //     printf("<TD><B>Acimut:</B> --------- </TD></TR>");
             // }
-        } else {
-            printf("\"sinFenomeno\":\"Luna siempre por encima del horizonte\",}, ");
+        }
+        else
+        {
+            printf("\"sinFenomeno\":\"Luna siempre por encima del horizonte\"} ");
         }
     }
     // Si no hay fenomenos, indicar la causa
-    else {
+    else
+    {
         if (comfel->bpm == 99)
             printf("\"sinFenomeno\":\"Luna siempre por encima del horizonte\",}, ");
         else
