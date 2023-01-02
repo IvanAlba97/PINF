@@ -275,9 +275,9 @@ void strcatHora(char *dest, int hor, double min, int siDec)
     else
     {
         if (siDec)
-            sprintf(cad, "{\"hora\": %2i, \"minutos\": %4.1lf }, ", hor, min);
+            sprintf(cad, "{\"hora\": %2i, \"minutos\": %4.1lf }", hor, min);
         else
-            sprintf(cad, "{\"hora\": %2i, \"minutos\": %2.0lf }, ", hor, min);
+            sprintf(cad, "{\"hora\": %2i, \"minutos\": %2.0lf }", hor, min);
         strcat(dest, cad);
     }
 }
@@ -390,7 +390,7 @@ void strcatLun(char *dest, TFecha f, Tcomfel *lun)
         /*strcat (dest, "     ");*/
     }
     char cad[15];
-    printf("\"edad\":%4.1lf,", lun->eda);
+    printf("\"edad\":%4.1lf}", lun->eda);
     /*strcat (dest, cad);*/
     // printf("<TD><font face=\"Arial\"><font size=-1>%s</font></font></TD>", cad);
     /*	fase((int) lun->eda); */
