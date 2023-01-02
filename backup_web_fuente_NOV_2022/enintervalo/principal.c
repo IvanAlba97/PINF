@@ -129,6 +129,8 @@ int main(void)
 
     printf("\"tabla1\":{\"horut\":%i, \"latgra\":%i, \"minutos_lat\": %4.1lf, \"latsig\":\"%c\", \"longra\":%i, \"minutos_lon\": %4.1lf, \"lonsig\":\"%c\"},", horut, latgra, minutos_lat, latsig, longra, minutos_lon, lonsig);
     rellenarListaSol(fecIni, fecFin);
+    printf("}");
+
     free(fecIni);
     free(fecFin);
     return 0;
