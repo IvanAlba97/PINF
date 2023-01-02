@@ -228,7 +228,7 @@ int operator<=(TFecha &fi, TFecha &ff)
 int operator==(TFecha &fi, TFecha &ff)
 {
     int igual = 0;
-    if (fi.ano == ff.ano && fi.mes == ff.mes && fi.dia == fi.dia)
+    if (fi.ano == ff.ano && fi.mes == ff.mes && fi.dia == ff.dia)
         igual = 1;
     return igual;
 }
@@ -317,7 +317,8 @@ void rellenarListaLuna(struct TFecha *fecIni, struct TFecha *fecFin)
         lun = c_fenlun();
         /*cad = new (char[70]);*/
         strcatLun(cad, fec, lun);
-        printf(",");
+        if(fec != *fecFin)
+            printf(",");
         /*printf("%s\n", cad);*/
         strcpy(cad, "");
         /*lista->insert (cad);*/
