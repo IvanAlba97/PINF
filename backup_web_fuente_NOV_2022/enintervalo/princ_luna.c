@@ -26,7 +26,7 @@ int main(void) {
 
     data = getenv("QUERY_STRING");
     if (data == NULL) {
-        printf("\"ERROR\":\"Los datos introducidos no son válidos\"}");
+        printf("{\"ERROR\":\"Los datos introducidos no son válidos\"}");
         exit(EXIT_FAILURE);
     } else if (sscanf(data, "latgra=%i&latmin=%i&latseg=%i&latsig=%c&longra=%i&lonmin=%i&lonseg=%i&lonsig=%c&horut=%i&anoi=%i&mesi=%i&diai=%i&anof=%i&mesf=%i&diaf=%i", &latgra, &latmin, &latseg, &latsig, &longra, &lonmin, &lonseg, &lonsig, &horut, &anoi, &mesi, &diai, &anof, &mesf, &diaf) != 15) {
         printf("{\"ERROR\":\"Los datos introducidos no son válidos\"}");
@@ -74,7 +74,7 @@ int main(void) {
             exit(EXIT_FAILURE);
         }
         if ((anof - anoi) > 1) {
-            printf("{\"ERROR\":\"No debe haber dos a&ntilde;os o m&aacute;s para realizar los c&aacute;lculos\"}");
+            printf("{\"ERROR\":\"No debe haber dos años o más para realizar los cálculos\"}");
             exit(EXIT_FAILURE);
         }
         if (!(fecha_valida(anoi, mesi, diai)) || !(fecha_valida(anof, mesf, diaf))) {
