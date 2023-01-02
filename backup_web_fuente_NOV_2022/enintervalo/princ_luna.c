@@ -275,9 +275,9 @@ void strcatHora(char *dest, int hor, double min, int siDec)
     else
     {
         if (siDec)
-            sprintf(cad, "{\"hora\": %2i, \"minutos\": %4.1lf }, ", hor, min);
+            sprintf(cad, "\"hora\": %2i, \"minutos\": %4.1lf }, ", hor, min);
         else
-            sprintf(cad, "{\"hora\": %2i, \"minutos\": %2.0lf }, ", hor, min);
+            sprintf(cad, "\"hora\": %2i, \"minutos\": %2.0lf }, ", hor, min);
         strcat(dest, cad);
     }
 }
