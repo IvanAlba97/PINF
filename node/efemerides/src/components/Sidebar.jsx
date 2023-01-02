@@ -47,10 +47,10 @@ export default function SideBar() {
   // REACCIÓN AL CAMBIO DE SECCIÓN
   useEffect(() => {
     switch (window.location.pathname) {
-      case '/Sol':
+      case '/sol':
         setSeleccion(0);
         break;
-      case '/Luna':
+      case '/luna':
         setSeleccion(1);
       default:
         break;
