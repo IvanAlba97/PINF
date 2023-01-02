@@ -227,11 +227,18 @@ int operator<=(TFecha &fi, TFecha &ff)
 }
 int operator==(TFecha &fi, TFecha &ff)
 {
-    return (fi.ano == ff.ano && fi.mes == ff.mes && fi.dia == fi.dia);
+    int igual = 0;
+    if(fi.ano == ff.ano && fi.mes == ff.mes && fi.dia == fi.dia)
+    igual = 1;
+    return igual;
 }
 int operator!=(TFecha &fi, TFecha &ff)
 {
-    return !(fi == ff);
+    int distinto = 1;
+    if (fi == ff)
+        distinto = 0;
+
+    return distinto;
 }
 int operator-(TFecha &ff, TFecha &fi)
 {
@@ -298,7 +305,7 @@ void rellenarListaLuna(struct TFecha *fecIni, struct TFecha *fecFin)
     leerPosicionCommon(&posIni); // Leer situacion inicial
     // printf("<center><TABLE BORDER=0 CELLSPACING=0 COLS=5 WIDTH=\"500\" BGCOLOR=\"#CCFFFF\">");
     // printf("<TR BGCOLOR=\"#3333FF\"><TD><font color=\"#FFFF33\"><font face=\"Arial\"><font size=+0><B>FECHA</B></font></font></font></TD><TD><font face=\"Arial\"><font size=+0><font color=\"#FFFF33\"><B>ORTO</B></font></font></font></TD><TD><font face=\"Arial\"><font size=+0><font color=\"#FFFF33\"><B>MERIDIANO</B></font></font></font></TD><TD><font face=\"Arial\"><font size=+0><font color=\"#FFFF33\"><B>OCASO</font></B></font></font></TD><TD><font face=\"Arial\"><font color=\"#FFFF33\"><font size=+0><B>EDAD</B></font></font></font></TD></TR>");
-    printf("DatosFecha: [");
+    printf("\"DatosFecha\": [");
     while (fec <= *fecFin)
     {
         leerPosicionCommon(&pos);
@@ -335,7 +342,7 @@ void rellenarListaLuna(struct TFecha *fecIni, struct TFecha *fecFin)
 
 void strcatLun(char *dest, TFecha f, Tcomfel *lun)
 {
-    printf("{ \"dia\":%2i, \"mes\": %02i, \"ano\":%4i,", f.dia, f.mes, f.ano);
+    printf("{ \"dia\":%2i, \"mes\": %2i, \"ano\":%4i,", f.dia, f.mes, f.ano);
 
     if (lun->bpm == -99)
     {
@@ -365,25 +372,25 @@ void strcatLun(char *dest, TFecha f, Tcomfel *lun)
         {
             char cad[60];
 
-            printf("\"hPasoMeridiano\":%2i, \"mPasoMeridiano\": %4.1lf", lun->hpm, lun->mpm);
+            printf("\"hPasoMeridiano\":%i, \"mPasoMeridiano\": %4.1lf", lun->hpm, lun->mpm);
             // printf("<TD><font face=\"Arial\"><font size=-1>%s</font></font></TD>", cad);
         }
         /*siMsgLun = True;*/
     }
     else
     {
-        strcpy(dest, "\"Salida\"");
+        strcpy(dest, "\"Salida\":");
         /*strcat (dest, "   ");*/
         strcatHora(dest, lun->hsa, lun->msa);
         // printf("<TD><font face=\"Arial\"><font size=-1>%s</font></font></TD>", dest);
         printf("%s,", dest);
         /*strcat (dest, "   ");*/
-        strcpy(dest, "\"PasoMeridiano\"");
+        strcpy(dest, "\"PasoMeridiano\":");
         strcatHora(dest, lun->hpm, lun->mpm);
         // printf("<TD><font face=\"Arial\"><font size=-1>%s</font></font></TD>", dest);
         printf("%s,", dest);
         /* strcat (dest, "   ");*/
-        strcpy(dest, "\"Puesta\"");
+        strcpy(dest, "\"Puesta\":");
         strcatHora(dest, lun->hpu, lun->mpu);
         // printf("<TD><font face=\"Arial\"><font size=-1>%s</font></font></TD>", dest);
         printf("%s,", dest);
