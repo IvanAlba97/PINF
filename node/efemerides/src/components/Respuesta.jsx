@@ -1,6 +1,14 @@
-export default function respuesta({ datos }) {
+export default function respuesta({ datos, intervalo }) {
   let tabla = datos.tabla1;
   console.log(datos);
+
+  if(intervalo)
+  {
+    console.log(datos);
+    return <h1>Petición a Intervalo</h1>
+  }
+
+
   if (datos.ERROR) {
     return <h1>Error: {datos.ERROR}</h1>;
   }
