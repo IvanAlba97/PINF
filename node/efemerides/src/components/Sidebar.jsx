@@ -7,30 +7,14 @@ export default function SideBar() {
   const [desplegado, setDesplegado] = useState(false);
   const [windowHeight, windowWidth] = useWindowSize();
 
-  const tipos = [
-    'Sol',
-    'Luna',
-    'Eclipses de Sol y Luna',
-    'Ocultaciones',
-    'Miscelánea',
-  ];
-
-  function enlace(tipo) {
-    if (tipo.replace(/\s+/g, '') == 'EclipsesdeSolyLuna') {
-      return 'Eclipses';
-    } else {
-      const quitarAcentos = (str) =>
-        str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-      return quitarAcentos(tipo.replace(/\s+/g, ''));
-    }
-  }
+  let tipos = ['Sol', 'Luna'];
 
   const listItems = tipos.map((tipo, key) => (
     <div className='seleccion'>
       <div style={{ opacity: key == seleccion ? '1' : '0' }}></div>
       <li>
         <Link
-          to={enlace(tipo)}
+          to={tipo.toLowerCase()}
           onClick={() => setSeleccion(key)}
           style={{
             color: key == seleccion ? 'var(--primary-fg-color)' : '#c7c7c780',
@@ -68,16 +52,6 @@ export default function SideBar() {
         break;
       case '/Luna':
         setSeleccion(1);
-        break;
-      case '/Eclipses':
-        setSeleccion(2);
-        break;
-      case '/Ocultaciones':
-        setSeleccion(3);
-        break;
-      case '/Miscelanea':
-        setSeleccion(4);
-        break;
       default:
         break;
     }
@@ -89,13 +63,13 @@ export default function SideBar() {
   if (windowWidth > 1280) {
     return (
       <div className='fondo'>
-        <div className='textoSidebar'>
-          <h1>Efemérides</h1>
-          <nav>
-            <ul>{listItems}</ul>
-          </nav>
+        <h1>Almanaque naútico</h1>
+        <nav>
+          <ul>{listItems}</ul>
+        </nav>
+        <div className='escudoArmada'>
+          <img src='/escudoArmada.webp' />
         </div>
-        <img src='/escudoArmada.webp' />
       </div>
     );
   } else {
@@ -103,7 +77,7 @@ export default function SideBar() {
       <div className='desplegable'>
         <header>
           <img className='logo' src='/escudoArmada.webp' />
-          <h1>Efemérides</h1>
+          <h1>Almanaque naútico</h1>
           <button
             onClick={() => {
               setDesplegado(!desplegado);

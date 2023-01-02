@@ -1,8 +1,10 @@
 .fondo {
   position: sticky;
   top: 0;
-  padding-top: 8vh;
+  padding: 8vh 0 8vh 3vw;
   height: 100vh;
+  width: 20vw;
+  max-width: 33em;
   background-color: var(--primary-color);
   grid-column-start: 1;
   grid-column-end: 3;
@@ -10,36 +12,38 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
-
-  .textoSidebar {
-    width: 100%;
-    padding: 0 0 0 3vw;
-  }
 
   h1 {
     font-size: clamp(1.1em, 2vw, 3em);
-    margin-bottom: 10vh;
   }
 
   nav {
+    ul {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 3vw;
+    }
     a {
-      font-size: clamp(1.1em, 1.3vw, 1.6em);
+      font-size: clamp(1.1em, 1.5vw, 2em);
       display: block;
       cursor: pointer;
     }
   }
 
-  img {
-    width: 20%;
-    margin-bottom: 10vh;
+  .escudoArmada {
+    display: flex;
+    justify-content: center;
+    margin-right: 3vw;
+    img {
+      width: 30%;
+    }
   }
 }
 
 .seleccion {
   display: flex;
   align-items: center;
-  margin-bottom: 3.5vh;
 
   div {
     margin-right: 1vw;
@@ -68,7 +72,9 @@ header {
     margin: 0 0.6059375em;
   }
   h1 {
-    font-size: 1.5em;
+    padding: 0 2em;
+    font-size: 1.2em;
+    text-align: center;
   }
   button {
     height: 2.8em;
@@ -83,9 +89,15 @@ header {
 .menuDesplegable {
   background-color: var(--primary-color);
   color: var(--primary-fg-color);
-  padding: 1em 2em;
+  padding: 1em 0 2em 0;
   font-size: 1.1em;
   top: 2em;
+  ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2em;
+  }
   .seleccion {
     display: block;
     text-align: center;

@@ -10,22 +10,10 @@ function App() {
         <Sidebar />
         <Routes>
           <Route path='/' element={<Contenido estado={'nada'}></Contenido>} />
-          <Route path='/Sol' element={<Contenido estado={'sol'}></Contenido>} />
+          <Route path='/sol' element={<Contenido estado={'sol'}></Contenido>} />
           <Route
-            path='/Luna'
+            path='/luna'
             element={<Contenido estado={'luna'}></Contenido>}
-          />
-          <Route
-            path='/Eclipses'
-            element={<Contenido estado={'eclipses'}></Contenido>}
-          />
-          <Route
-            path='/Ocultaciones'
-            element={<Contenido estado={'ocultaciones'}></Contenido>}
-          />
-          <Route
-            path='/Miscelanea'
-            element={<Contenido estado={'miscelanea'}></Contenido>}
           />
         </Routes>
       </div>
