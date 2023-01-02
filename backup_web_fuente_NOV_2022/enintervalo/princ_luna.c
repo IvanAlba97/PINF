@@ -227,18 +227,11 @@ int operator<=(TFecha &fi, TFecha &ff)
 }
 int operator==(TFecha &fi, TFecha &ff)
 {
-    int igual = 0;
-    if (fi.ano == ff.ano && fi.mes == ff.mes && fi.dia == ff.dia)
-        igual = 1;
-    return igual;
+    return (fi.ano == ff.ano && fi.mes == ff.mes && fi.dia == ff.dia);
 }
 int operator!=(TFecha &fi, TFecha &ff)
 {
-    int distinto = 1;
-    if (fi == ff)
-        distinto = 0;
-
-    return distinto;
+    return !(fi == ff);
 }
 int operator-(TFecha &ff, TFecha &fi)
 {
@@ -278,7 +271,7 @@ void strcatHora(char *dest, int hor, double min, int siDec)
 {
     char cad[80];
     if (hor == -1)
-        strcat(dest, "{},");
+        strcat(dest, "{}");
     else
     {
         if (siDec)
@@ -317,7 +310,7 @@ void rellenarListaLuna(struct TFecha *fecIni, struct TFecha *fecFin)
         lun = c_fenlun();
         /*cad = new (char[70]);*/
         strcatLun(cad, fec, lun);
-        if(fec != *fecFin)
+        if (fec != *fecFin)
             printf(",");
         /*printf("%s\n", cad);*/
         strcpy(cad, "");
