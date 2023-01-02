@@ -1,4 +1,4 @@
-export default function respuesta({ datos, intervalo }) {
+export default function Respuesta({ datos, intervalo }) {
   let tabla = datos.tabla1;
   console.log(datos);
 
