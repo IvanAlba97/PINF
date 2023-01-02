@@ -275,9 +275,9 @@ void strcatHora(char *dest, int hor, double min, int siDec)
     else
     {
         if (siDec)
-            sprintf(cad, "\"hora\": %2i, \"minutos\": %4.1lf }, ", hor, min);
+            sprintf(cad, "{\"hora\": %2i, \"minutos\": %4.1lf }, ", hor, min);
         else
-            sprintf(cad, "\"hora\": %2i, \"minutos\": %2.0lf }, ", hor, min);
+            sprintf(cad, "{\"hora\": %2i, \"minutos\": %2.0lf }, ", hor, min);
         strcat(dest, cad);
     }
 }
@@ -372,21 +372,21 @@ void strcatLun(char *dest, TFecha f, Tcomfel *lun)
     }
     else
     {
-        strcpy(dest, "");
+        strcpy(dest, "\"Salida\"");
         /*strcat (dest, "   ");*/
         strcatHora(dest, lun->hsa, lun->msa);
         // printf("<TD><font face=\"Arial\"><font size=-1>%s</font></font></TD>", dest);
-        printf("%s", dest);
+        printf("%s,", dest);
         /*strcat (dest, "   ");*/
-        strcpy(dest, "");
+        strcpy(dest, "\"PasoMeridiano\"");
         strcatHora(dest, lun->hpm, lun->mpm);
         // printf("<TD><font face=\"Arial\"><font size=-1>%s</font></font></TD>", dest);
-        printf("%s", dest);
+        printf("%s,", dest);
         /* strcat (dest, "   ");*/
-        strcpy(dest, "");
+        strcpy(dest, "\"Puesta\"");
         strcatHora(dest, lun->hpu, lun->mpu);
         // printf("<TD><font face=\"Arial\"><font size=-1>%s</font></font></TD>", dest);
-        printf("%s", dest);
+        printf("%s,", dest);
         /*strcat (dest, "     ");*/
     }
     char cad[15];
