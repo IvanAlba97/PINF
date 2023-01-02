@@ -127,7 +127,7 @@ int main(void)
 
     preferen(latgra, minutos_lat, latsig, longra, minutos_lon, lonsig, horut);
 
-    printf("{\"tabla1\":{\"horut\":%i, \"latgra\":%i, \"minutos_lat\": %4.1lf, \"latsig\":\'%c\', \"longra\":%i, \"minutos_lon\": %4.1lf, \"lonsig\":\'%c\'},", horut, latgra, minutos_lat, latsig, longra, minutos_lon, lonsig);
+    printf("\"tabla1\":{\"horut\":%i, \"latgra\":%i, \"minutos_lat\": %4.1lf, \"latsig\":\"%c\", \"longra\":%i, \"minutos_lon\": %4.1lf, \"lonsig\":\"%c\"},", horut, latgra, minutos_lat, latsig, longra, minutos_lon, lonsig);
     rellenarListaSol(fecIni, fecFin);
     free(fecIni);
     free(fecFin);
@@ -187,6 +187,7 @@ void rellenarListaSol(struct TFecha *fecIni, struct TFecha *fecFin)
     /*mostrarMsgEsperar ();*/
     fec = *fecIni;
     leerPosicionCommon(&posIni); // Leer situacion inicial
+    printf("\"DatosFecha\": [");
 
     while (fec <= *fecFin)
     {
@@ -204,6 +205,7 @@ void rellenarListaSol(struct TFecha *fecIni, struct TFecha *fecFin)
         strcpy(cad, "");
         fec++; // Pasar al siguiente d�a
     };
+    printf("]");
 
     /*	borrarMsgEsperar ();
             listBox->newList (lista);
