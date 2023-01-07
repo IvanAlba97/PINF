@@ -3,6 +3,34 @@ import './Respuesta.css'
 export default function Respuesta({ datos, intervalo }) {
   let tabla = datos.tabla1;
 
+  if (datos.ERROR) {
+    return (
+      <div id="contenedor">
+         {/* <div className="fecha">
+          Fecha: {tabla.diai}/{tabla.mesi}/{tabla.anoi}
+        </div>
+        <table id="coordenadas">
+          <tr>
+            <th id="header">Hora-UT</th>
+            <td>{tabla.horut}h</td>
+          </tr>
+          <tr>
+            <th id="header">Latitud</th>
+            <td>
+              {tabla.latgra}º {tabla.minutos_lat}' {tabla.latsig}
+            </td>
+          </tr>
+          <tr>
+            <th id="header">Longitud</th>
+            <td>
+              {tabla.longra}º {tabla.minutos_lon}' {tabla.lonsig}
+            </td>
+          </tr>
+        </table>  */}
+        <h1 className="ERROR">{datos.ERROR}</h1>
+      </div>
+    );
+  }
   if (intervalo) {
     let interval = datos.DatosFecha;
     console.log(interval);
@@ -127,34 +155,7 @@ export default function Respuesta({ datos, intervalo }) {
     }
   }
 
-  if (datos.ERROR) {
-    return (
-      <div id="contenedor">
-        <div className="fecha">
-          Fecha: {tabla.diai}/{tabla.mesi}/{tabla.anoi}
-        </div>
-        <table id="coordenadas">
-          <tr>
-            <th id="header">Hora-UT</th>
-            <td>{tabla.horut}h</td>
-          </tr>
-          <tr>
-            <th id="header">Latitud</th>
-            <td>
-              {tabla.latgra}º {tabla.minutos_lat}' {tabla.latsig}
-            </td>
-          </tr>
-          <tr>
-            <th id="header">Longitud</th>
-            <td>
-              {tabla.longra}º {tabla.minutos_lon}' {tabla.lonsig}
-            </td>
-          </tr>
-        </table>
-        <h1 className="ERROR">{datos.ERROR}</h1>
-      </div>
-    );
-  }
+  
   if (datos.Sol) {
     let Sol = datos.Sol;
     let Fenomenos = datos.fenomenoSol;
