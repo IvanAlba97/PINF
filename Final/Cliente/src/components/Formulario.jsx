@@ -175,11 +175,15 @@ export default function Formulario({ nombre, enlace }) {
               label='Minutos'
               value={datos.minutosLat}
               onChange={actualizarMinutosLat}
+              max={60}
+
             />
             <InputNumber
               label='Segundos'
               value={datos.segundosLat}
               onChange={actualizarSegundosLat}
+              max={60}
+
             />
             <div className='radioGroup'>
               <label className='radioLabel'>Orientación</label>
@@ -208,16 +212,22 @@ export default function Formulario({ nombre, enlace }) {
               label='Grados'
               value={datos.gradosLong}
               onChange={actualizarGradosLong}
+              max={90}
+
             />
             <InputNumber
               label='Minutos'
               value={datos.minutosLong}
               onChange={actualizarMinutosLong}
+              max={60}
+
             />
             <InputNumber
               label='Segundos'
               value={datos.segundosLong}
               onChange={actualizarSegundosLong}
+              max={60}
+              
             />
             <div className='radioGroup'>
               <label className='radioLabel'>Orientación</label>
@@ -280,8 +290,8 @@ export default function Formulario({ nombre, enlace }) {
 function InputNumber({ label, onChange, value, max }) {
   const handleChange = (event) => {
     if (!isNaN(parseInt(event.target.value))) {
-      if (event.target.value > 90) {
-        onChange(90);
+      if (event.target.value > max) {
+        onChange(max);
       }
       onChange(parseInt(event.target.value));
     } else if (event.target.value == '') {

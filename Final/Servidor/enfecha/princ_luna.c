@@ -243,7 +243,7 @@ void strcatHora(char *dest, const char *msg, int *hora, double *min, int num)
 
     strcpy(dest, msg);
     if (hora[0] == -1)
-        strcat(dest, "\"error\": -1");
+        strcat(dest, "{}");
     else
     {
         sprintf(cad, "{\"hora1\": %2i, \"minutos1\": %2.0f", hora[0], float(min[0]));
