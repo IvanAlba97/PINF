@@ -23,7 +23,7 @@ int main(void)
 
     char *data = (char *)calloc(sizeof(char), 40);
 
-    printf("%s%c%c\n", "Content-Type:application/json;charset=UTF-8\n Access-Control-Allow-Origin: *", 13, 10);
+    printf("%s%c%c\n", "Content-Type:application/json;charset=UTF-8\n", 13, 10);
     data = getenv("QUERY_STRING");
     if (data == NULL)
     {
