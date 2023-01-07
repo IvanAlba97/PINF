@@ -375,19 +375,19 @@ export default function Respuesta({ datos, intervalo }) {
           <tr>
             <th id="header">Salida</th>
             <td>
-              {datos.gAcimutSalida}º {datos.mAcimutSalida}'
+              {datos.Acimutes.gAcimutSalida}º {datos.Acimutes.mAcimutSalida}'
             </td>
             <td>
-              {datos.hSalida}:{datos.mSalida}h
+              {datos.Acimutes.hSalida}:{datos.Acimutes.mSalida}h
             </td>
           </tr>
           <tr>
             <th id="header">Puesta</th>
             <td>
-              {datos.gAcimutPuesta}º {datos.mAcimutPuesta}'
+              {datos.Acimutes.gAcimutPuesta}º {datos.Acimutes.mAcimutPuesta}'
             </td>
             <td>
-              {datos.hPuesta}:{datos.mPuesta}h
+              {datos.Acimutes.hPuesta}:{datos.Acimutes.mPuesta}h
             </td>
           </tr>
         </table>
