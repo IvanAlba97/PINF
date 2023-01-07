@@ -1,0 +1,45 @@
+
+th {
+  background-color: var(--primary-color);
+  color: var(--primary-fg-color);
+  padding-top: 2%;
+  height: 4vh;
+}
+
+td {
+  background-color: var(--primary-fg-color);
+  padding-top: 2%;
+  height: 4vh;
+
+}
+
+table {
+  width: 100%;
+  border-spacing: 0px;
+  width: 30vw;
+  text-align: center;
+  color: var(--fg-color);
+}
+
+#header {
+  width: 10vw;
+}
+
+#contenedor {
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  gap: 2vh;
+}
+
+#doble {
+  width: 100%;
+}
+
+.ERROR {
+    text-align: center;
+}
+
+.intervalo{
+    margin-bottom: 7vh;
+}
