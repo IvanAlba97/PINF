@@ -24,8 +24,8 @@ int main(void)
     char *data = (char *)calloc(sizeof(char), 40);
 
     // printf("<BODY leftmargin=0 frameborder: marginwidth=0 marginleft=0 marginheight=0 topmargin=0");
-
-    printf("%s%c%c\n", "Content-type:application/json;charset=UTF-8\nAccess-Control-Allow-Origin: *", 13, 10);
+    //Access-Control-Allow-Origin: *
+    printf("%s%c%c\n", "Content-type:application/json;charset=UTF-8\n", 13, 10);
 
     data = getenv("QUERY_STRING");
     if (data == NULL)
