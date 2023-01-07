@@ -25,8 +25,8 @@ int main(void)
     double minutos_lat, minutos_lon;
     char latsig, lonsig;
     char *data = (char *)calloc(sizeof(char), 40);
-
-    printf("%s%c%c\n", "Content-Type:application/json;charset=UTF-8\nAccess-Control-Allow-Origin: *", 13, 10);
+//Access-Control-Allow-Origin: *
+    printf("%s%c%c\n", "Content-Type:application/json;charset=UTF-8\n", 13, 10);
 
     data = getenv("QUERY_STRING");
     if (data == NULL)

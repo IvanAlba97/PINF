@@ -14,7 +14,7 @@ void strcatHora(char *dest, const char *msg, int *hora, double *min, int num = 1
 void fase(int edad);
 
 struct TFecha *fecIni;
-
+// Access-Control-Allow-Origin: *
 int main(void)
 {
     int latgra, latmin, latseg, longra, lonmin, lonseg, horut, anoi, mesi, diai;
@@ -23,7 +23,7 @@ int main(void)
 
     char *data = (char *)calloc(sizeof(char), 40);
 
-    printf("%s%c%c\n", "Content-Type:application/json;charset=UTF-8\nAccess-Control-Allow-Origin: *", 13, 10);
+    printf("%s%c%c\n", "Content-Type:application/json;charset=UTF-8\n", 13, 10);
     data = getenv("QUERY_STRING");
     if (data == NULL)
     {
