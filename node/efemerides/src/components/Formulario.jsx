@@ -44,16 +44,16 @@ export default function Formulario({ nombre, enlace }) {
     console.log(nombre);
     if (!intervalo) {
       if (nombre === 'sol') {
-        url = `http://192.168.0.28/cgi-bin/enfecha.cgi?latgra=${datos.gradosLat}&latmin=${datos.minutosLat}&latseg=${datos.segundosLat}&latsig=${datos.norteSur}&longra=${datos.gradosLong}&lonmin=${datos.minutosLong}&lonseg=${datos.segundosLong}&lonsig=${datos.esteOeste}&horut=${datos.hora}&anoi=${año}&mesi=${mes}&diai=${dia}`;
+        url = `http://192.168.0.23/cgi-bin/enfecha.cgi?latgra=${datos.gradosLat}&latmin=${datos.minutosLat}&latseg=${datos.segundosLat}&latsig=${datos.norteSur}&longra=${datos.gradosLong}&lonmin=${datos.minutosLong}&lonseg=${datos.segundosLong}&lonsig=${datos.esteOeste}&horut=${datos.hora}&anoi=${año}&mesi=${mes}&diai=${dia}`;
       } else if (nombre === 'luna') {
-        url = `http://192.168.0.28/cgi-bin/enfechaluna.cgi?latgra=${datos.gradosLat}&latmin=${datos.minutosLat}&latseg=${datos.segundosLat}&latsig=${datos.norteSur}&longra=${datos.gradosLong}&lonmin=${datos.minutosLong}&lonseg=${datos.segundosLong}&lonsig=${datos.esteOeste}&horut=${datos.hora}&anoi=${año}&mesi=${mes}&diai=${dia}`;
+        url = `http://192.168.0.23/cgi-bin/enfechaluna.cgi?latgra=${datos.gradosLat}&latmin=${datos.minutosLat}&latseg=${datos.segundosLat}&latsig=${datos.norteSur}&longra=${datos.gradosLong}&lonmin=${datos.minutosLong}&lonseg=${datos.segundosLong}&lonsig=${datos.esteOeste}&horut=${datos.hora}&anoi=${año}&mesi=${mes}&diai=${dia}`;
       }
     } else {
       if (nombre === 'sol') {
         console.log('Dentro');
-        url = `http://192.168.0.28/cgi-bin/andi.cgi?latgra=${datos.gradosLat}&latmin=${datos.minutosLat}&latseg=${datos.segundosLat}&latsig=${datos.norteSur}&longra=${datos.gradosLong}&lonmin=${datos.minutosLong}&lonseg=${datos.segundosLong}&lonsig=${datos.esteOeste}&horut=${datos.hora}&anoi=${año}&mesi=${mes}&diai=${dia}&anof=${añof}&mesf=${mesf}&diaf=${diaf}`;
+        url = `http://192.168.0.23/cgi-bin/andi.cgi?latgra=${datos.gradosLat}&latmin=${datos.minutosLat}&latseg=${datos.segundosLat}&latsig=${datos.norteSur}&longra=${datos.gradosLong}&lonmin=${datos.minutosLong}&lonseg=${datos.segundosLong}&lonsig=${datos.esteOeste}&horut=${datos.hora}&anoi=${año}&mesi=${mes}&diai=${dia}&anof=${añof}&mesf=${mesf}&diaf=${diaf}`;
       } else if (nombre === 'luna') {
-        url = `http://192.168.0.28/cgi-bin/andiluna.cgi?latgra=${datos.gradosLat}&latmin=${datos.minutosLat}&latseg=${datos.segundosLat}&latsig=${datos.norteSur}&longra=${datos.gradosLong}&lonmin=${datos.minutosLong}&lonseg=${datos.segundosLong}&lonsig=${datos.esteOeste}&horut=${datos.hora}&anoi=${año}&mesi=${mes}&diai=${dia}&anof=${añof}&mesf=${mesf}&diaf=${diaf}`;
+        url = `http://192.168.0.23/cgi-bin/andiluna.cgi?latgra=${datos.gradosLat}&latmin=${datos.minutosLat}&latseg=${datos.segundosLat}&latsig=${datos.norteSur}&longra=${datos.gradosLong}&lonmin=${datos.minutosLong}&lonseg=${datos.segundosLong}&lonsig=${datos.esteOeste}&horut=${datos.hora}&anoi=${año}&mesi=${mes}&diai=${dia}&anof=${añof}&mesf=${mesf}&diaf=${diaf}`;
       }
     }
     console.log(url);
@@ -126,11 +126,6 @@ export default function Formulario({ nombre, enlace }) {
     if (!intervalo) {
       return (
         <div className='linea'>
-          <InputHoraUTC
-            label={'Hora UTC'}
-            onChange={actualizarHora}
-            value={datos.hora}
-          />
           <DatePicker
             label={'Fecha'}
             onChange={actualizarFecha}
@@ -141,28 +136,16 @@ export default function Formulario({ nombre, enlace }) {
     } else {
       return (
         <>
-          <h4 className='subapartado'>Inicio</h4>
           <div className='linea'>
-            <InputHoraUTC
-              label={'Hora UTC'}
-              onChange={actualizarHora}
-              value={datos.hora}
-            />
             <DatePicker
-              label={'Fecha'}
+              label={'Fecha inicial'}
               onChange={actualizarFecha}
               value={datos.fecha}
             />
           </div>
-          <h4 className='subapartado'>Final</h4>
           <div className='linea'>
-            <InputHoraUTC
-              label={'Hora UTC'}
-              onChange={actualizarHora}
-              value={datos.hora}
-            />
             <DatePicker
-              label={'Fecha'}
+              label={'Fecha final'}
               onChange={actualizarFechaF}
               value={datos.fechaF}
             />
@@ -256,7 +239,7 @@ export default function Formulario({ nombre, enlace }) {
             </div>
           </div>
           <div>
-            <h2 className='apartado'>Fecha y Hora</h2>
+            <h2 className='apartado'>Tiempo</h2>
             <div className='checkbox'>
               <input
                 onChange={() => setIntervalo(!intervalo)}
@@ -265,7 +248,14 @@ export default function Formulario({ nombre, enlace }) {
               ></input>
               <label>Intervalo</label>
             </div>
-            <Fecha />
+            <div className='linea'>
+              <Fecha />
+              <InputHoraUTC
+                onChange={actualizarHora}
+                value={datos.hora}
+                label='Hora UTC'
+              />
+            </div>
           </div>
           <div className='linea botones'>
             <input

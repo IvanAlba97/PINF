@@ -1,13 +1,13 @@
 th {
   background-color: var(--primary-color);
   color: var(--primary-fg-color);
-  padding-top: 2%;
+  padding: 2% 0;
   height: 4vh;
 }
 
 td {
-  background-color: var(--primary-fg-color);
-  padding-top: 2%;
+  background-color: #f4f4f4;
+  padding: 2% 0;
   height: 4vh;
 }
 
@@ -20,12 +20,12 @@ table {
   color: var(--fg-color);
 }
 
-@media (max-width: 1800px) {
+@media (max-width: 1280px) {
   table {
-    width: 80vw;
+    width: 100%;
   }
   #header {
-    min-width: 40vw;
+    min-width: 30vw;
   }
 }
 

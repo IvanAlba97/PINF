@@ -27,6 +27,15 @@
   flex-wrap: wrap;
 }
 
+.hora {
+  align-items: center;
+
+  .checkbox {
+    position: relative;
+    top: 24px;
+  }
+}
+
 .inputContainer {
   label {
     display: block;
