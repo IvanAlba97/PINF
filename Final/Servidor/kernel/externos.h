@@ -1,0 +1,190 @@
+/********************************************************************\
+|***           Real Instituto y Observatorio de la Armada         ***|
+|***                  Almanaque N�utico en Disquete               ***|
+|***                     Ezequiel Fuentes, 1998                   ***|
+\********************************************************************/
+
+#ifndef __FORTRAN_H__
+#define __FORTRAN_H__
+
+enum TsiCalcular {opSol, opLuna, opCrepusculo};
+
+struct Tcomsol {
+	int    hpm;			// hora paso meridiano
+	int    hpn[2];
+	int    hpc[2];
+	int    hss[2];		// hora salida limbo superior
+	int    hps[2];		// hora puesta limbo superior
+	int    hsi[2];		// hora salida limbo inferior
+	int    hpi[2];		// hora puesta limbo inferior
+	int    hfc[2];
+	int    hfn[2];
+	double ssd;
+	double mpm;          // minutos paso meridiano
+	double mpn[2];
+	double mpc[2];
+	double mss[2];		//minutos salida limbo superior / hh:mm
+	double mps[2];		//minutos puesta limbo superior / hh:mm
+	double msi[2];		//minutos salida limbo inferior / hh:mm
+	double mpi[2];		//minutos puesta limbo inferior / hh:mm
+	double mfc[2];	
+	double mfn[2];
+	int    ssg[2];		//grados salida limbo superior 
+	int    sig[2];		//grados salida limbo inferior
+	int    psg[2];		//grados puesta limbo superior
+	int    pig[2];		//grados puesta limbo inferior
+	double ssm[2];		//minutos salida limbo superior	/ º:"
+	double sim[2];		//minutos salida limbo inferior	/ º:"
+	double psm[2];		//minutos puesta limbo superior	/ º:"
+	double pim[2];		//minutos puesta limbo inferior	/ º:"
+	int    bpm;			// bandera de paso por el meridiano
+	int    gra;
+	double mia;
+	char   cul;
+};
+
+struct Tcomfel {
+	int    hpm;				// Hora de paso meridiano
+	double mpm;				// Minutos paso meridiano
+	int    gam;				// Grados de altura paso meridiano
+	double mam;				// Minutos de altura paso meridiano
+	char   cul;             // Culminacion N/S
+	int    bpm;				// bandera de paso por el meridiano
+	int    hsa;				// Hora de salida
+	double msa;				// Minutos salida
+	int    gzs;				// Grados acimut salida
+	double mzs;				// Minutos acimut salida
+	int    hpu;				// Hora de puesta
+	double mpu;				// Minutos puesta
+	int    gzp;				// Grados acimut puesta
+	double mzp;				// Minutos acimut puesta
+	double lsd;				// Semidi�metro
+	double eda;				// Edad de la luna
+};
+
+struct TFecha {
+	int dia, mes, ano;
+};
+/********************************************************************\
+|*** 'TPosicion' la usaremos para pasar del front-end al kernel   ***|
+|*** los nuevos datos de la posicion, o al reves.                 ***|
+\********************************************************************/
+
+struct TPosicion {
+	int    gla;				// Grados de la latitud
+	double mla;				// Minutos de la latitud
+	char   sla;				// (N/S) Norte o sur
+	int    glo;				// Grados de la longitud
+	double mlo;				// Minutos de la longitud
+	char   slo;				// (E/W) Este u oeste
+	int    dia, mes, ano;	// D�a, mes y a�o de la fecha
+	int    zhe;				// Zona horaria
+	double ele;				// Elevaci�n
+};
+
+struct TMeridiano {
+	char*  nom;			    // Nombre del astro
+	char*  mag;	  		    // Magnitud
+	char*  cul;			    // Culminaci�n
+	int    hor;             // hora entera de paso
+	double min;             // minutos de paso
+	char   sig;             // signo de la altura
+	int    gra;             // grados de altura
+	double ming;            // minutos de altura
+
+	char*  cu2;			    // Culminaci�n
+	int    ho2;             // hora entera de paso
+	double mi2;             // minutos de paso
+	char   si2;             // signo de la altura
+	int    gr2;             // grados de altura
+	double ma2;             // minutos de altura
+};
+
+struct TDetPuntoAproximado {
+  char *nom;
+  char *mag;
+  int gav;
+  double mav;
+  int gac;
+  double mac;
+  double da;
+};
+
+
+struct TLatitudCalculada {
+	char*  nom;			    // Nombre del astro
+    char*  mag;	  		    // Magnitud
+	char*  cul;			    // Culminaci�n
+	int    hor;             // hora entera de paso
+	double min;             // minutos de paso
+//	char   sig;             // signo de la altura
+	int    gra;             // grados de altura
+	double ming;            // minutos de altura
+	int    grl;             // grados de latitud calculada
+	double mil;             // minutos de latitud calculada
+	char   sil;             // signo de latitud calculada
+};
+
+struct TLatitudPolar {
+	int    gra;  			// Grados de altura verdadera
+	double min;				// Minutos de altura verdadera
+	char   sig;				// Signo de la latitud calculada
+	int    grp;				// Grados de la latitud calculada
+	double mip;				// Minutos de la latitud calculada
+};
+
+struct TCircunmeridi {
+  char  *nom;
+  char  *mag;
+  int    gav;
+  double mav;
+  char   sig;				// Signo de la latitud calculada
+  int    gla;
+  double mla;
+};
+
+struct TAcimutAltura {
+	char*  nom;				// Nombre del astro
+	char*  mag;				// Magnitud del astro
+	int    gac;				// Grados de acimut
+	int    gal;				// Grados de altura
+	double mac;				// Minutos de acimut
+	double mal;				// Minutos de altura
+	char   sal;				// Signo de la altura
+};
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+int  preferen (int latgra, double minutos_lat, char latsig, int longra, double minutos_lon, char lonsig, int horut);
+void trad_ker (void);
+void salvaPos (void);
+int  bisiesto (int);
+void horacrep (int, int*, int*, int*, int*);
+void redualto (int, int, double, int, double, int*, double*);
+void actualat (char, int, double);
+int  siCalcular (enum TsiCalcular);
+void leerPosicionCommon (struct TPosicion*);
+void escribirPosicionCommon (const struct TPosicion*);
+struct Tcomsol* c_fensol (void);
+struct Tcomfel* c_fenlun (void);
+struct TMeridiano* pasoMeridiano (int);
+struct TMeridiano* pasoMeridianoInf (int);
+struct TLatitudCalculada* latitudMeridiana (int, int, int, double, char);
+struct TLatitudCalculada* latitudMeridInf (int, int, int, double);
+struct TLatitudPolar* latitudPolar (int, double, int, double);
+struct TCircunmeridi*
+	   latitudCircun (int, int, char, int, double, int, double);
+struct TAcimutAltura* acimutAltura (int, int, int, int);
+struct TAcimutAltura* declinacionHG (int, int, int, int);
+struct TDetPuntoAproximado*
+	   detPuntoAproximado (int, int, int, double, int, double);
+extern void leerFecha (struct TFecha*);
+void intervaloValidez (int*, int*);
+char* namestar (int);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

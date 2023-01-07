@@ -1,0 +1,47 @@
+{
+  "tabla1": {
+    "diai": 1,
+    "mesi": 8,
+    "anoi": 2011,
+    "horut": 0,
+    "latgra": 21,
+    "minutos_lat": 22.2,
+    "latsig": "N",
+    "longra": 12,
+    "minutos_lon": 12.0,
+    "lonsig": "W"
+  },
+  "Sol": {
+    "hPasoMeridiano": 12,
+    "mPasoMeridiano": 55.2,
+    "gAlturaSol": 86,
+    "mAlturaSol": 38.9,
+    "culminacion": "Sur"
+  },
+  "fenomenoSol": {
+    "principioCrepNautico": { "hora1": 5, "minutos1": 30 },
+    "principioCrepCivil": { "hora1": 5, "minutos1": 58 },
+    "salida": { "hora1": 6, "minutos1": 22 },
+    "puesta": { "hora1": 19, "minutos1": 28 },
+    "finCrepCivil": { "hora1": 19, "minutos1": 52 },
+    "finCrepNautico": { "hora1": 20, "minutos1": 20 },
+    "Acimutes": {
+      "gSalidaSuperior": 70,
+      "mASalidaSuperior": 10.7,
+      "hSalidaSuperior": 6,
+      "mTSalidaSuperior": 22,
+      "gSalidaInferior": 70,
+      "mASalidaInferior": 24.1,
+      "hSalidaInferior": 6,
+      "mTSalidaInferior": 24,
+      "gPuestaSuperior": 289,
+      "mAPuestaSuperior": 40.4,
+      "hPuestaSuperior": 19,
+      "mTPuestaSuperior": 28,
+      "gPuestaInferior": 289,
+      "mAPuestaInferior": 27.0,
+      "hPuestaInferior": 19,
+      "mTPuestaInferior": 26
+    }
+  }
+}

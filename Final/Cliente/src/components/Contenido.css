@@ -1,0 +1,32 @@
+.contenido {
+  grid-column-start: 3;
+  grid-column-end: 11;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 8vh;
+
+  img {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 8vh 4vw;
+    z-index: -1;
+  }
+}
+
+@media (max-width: 1280px) {
+  .contenido {
+    margin-top: 2em;
+  }
+}
+
+@media (max-width: 1366px) {
+  .contenido {
+    img {
+      position: relative;
+      margin: 10vh;
+    }
+  }
+}

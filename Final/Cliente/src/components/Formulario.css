@@ -1,0 +1,135 @@
+.titulo {
+  font-size: xx-large;
+  color: var(--primary-color);
+  padding: 0 1rem;
+}
+
+.formulario {
+  display: flex;
+  justify-content: center;
+  color: var(--fg-color);
+  padding: 0 1em;
+}
+
+.apartado {
+  font-size: 1.25em;
+  margin: 2em 0;
+}
+
+.subapartado {
+  font-size: 1.1em;
+  margin: 1.5em 0;
+}
+
+.linea {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.hora {
+  align-items: center;
+
+  .checkbox {
+    position: relative;
+    top: 24px;
+  }
+}
+
+.inputContainer {
+  label {
+    display: block;
+    margin-bottom: 1em;
+    color: #525252;
+  }
+  margin: 0.5em 0;
+}
+
+.radioGroup {
+  margin: 1em 0;
+}
+
+.radio {
+  label {
+    color: #161616;
+    margin: 0.5em;
+  }
+}
+
+.radioLabel {
+  color: #525252;
+  display: block;
+}
+
+.radioContainer {
+  margin-top: 1.25em;
+  display: flex;
+  justify-content: space-between;
+  width: 146px;
+}
+
+.input {
+  width: 7em;
+  height: 3em;
+  background-color: #f4f4f4;
+  border: 2px solid #ffffff00;
+  border-bottom: 2px solid #8d8d8d;
+  padding: 0em 1em;
+  margin-right: 1.8em;
+  color: #161616;
+
+  &::placeholder {
+    color: #a8a8a8;
+  }
+
+  &:focus {
+    border: 2px solid #173763;
+    outline: none;
+  }
+}
+
+.botones {
+  margin: 1em 0;
+
+  input {
+    cursor: pointer;
+  }
+}
+
+.boton {
+  background-color: var(--fg-color);
+  color: var(--primary-fg-color);
+  display: block;
+  width: 150px;
+  text-align: start;
+  padding: 12px 0 12px 16px;
+  margin: 20px 30px 0 0;
+}
+
+.botonPrimario {
+  background-color: var(--primary-color);
+
+  &:hover {
+    background-color: #1d457c;
+  }
+}
+
+.botonSecundario {
+  background-color: #393939;
+
+  &:hover {
+    background-color: #4d4d4d;
+  }
+}
+
+.datepicker {
+  width: 11em;
+}
+
+.checkbox {
+  margin-bottom: 1em;
+  label {
+    color: #161616;
+    margin: 0.5em;
+  }
+}
