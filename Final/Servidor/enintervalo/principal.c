@@ -24,7 +24,7 @@ int main(void)
     char latsig, lonsig;
     char *data = (char *)calloc(sizeof(char), 40);
 //Access-Control-Allow-Origin: *
-    printf("%s%c%c\n", "Content-Type:application/json;charset=UTF-8\n", 13, 10);
+    printf("%s%c%c\n", "Content-Type:application/json;charset=UTF-8\n Access-Control-Allow-Origin: *", 13, 10);
 
     data = getenv("QUERY_STRING");
     if (data == NULL)
