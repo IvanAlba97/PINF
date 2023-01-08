@@ -74,11 +74,14 @@ export default function Respuesta({ datos, intervalo }) {
                   {dia.dia}/{dia.mes}/{dia.ano}
                 </th>
                 <td>
-                  {dia.SalidaLimboSuperior.hora}:
-                  {dia.SalidaLimboSuperior.minutos}h
+                    {dia.SalidaLimboSuperior.hora || dia.SalidaLimboSuperior.minutos
+                    ? dia.SalidaLimboSuperior.hora + ":" + dia.SalidaLimboSuperior.minutos + "h"
+                    : "----"}
                 </td>
                 <td>
-                  {dia.PasoMeridiano.hora}:{dia.PasoMeridiano.minutos}h
+                                  {dia.PasoMeridiano.hora || dia.PasoMeridiano.minutos
+                    ? dia.PasoMeridiano.hora + ":" + dia.PasoMeridiano.minutos + "h"
+                    : "----"}
                 </td>
                 <td>
                   {dia.PuestaLimboSuperior.hora}:
@@ -146,7 +149,7 @@ export default function Respuesta({ datos, intervalo }) {
                     ? dia.Puesta.hora + ":" + dia.Puesta.minutos + "h"
                     : "----"}
                 </td>
-                <td>{dia.edad}</td>
+                   {dia.edad ? dia.edad : "----"}
               </tr>
             ))}
           </table>
@@ -195,13 +198,17 @@ export default function Respuesta({ datos, intervalo }) {
           <tr>
             <th id="header">Grados Altura Sol</th>
             <td>
-              {Sol.gAlturaSol}º {Sol.mAlturaSol}'
+              {Sol.gAlturaSol || Sol.mAlturaSol
+                    ? Sol.gAlturaSol + ":" + Sol.mAlturaSol + "h"
+                    : "----"}
             </td>
           </tr>
           <tr>
             <th id="header">Hora Paso Meridiano</th>
             <td>
-              {Sol.hPasoMeridiano}:{Sol.mPasoMeridiano}h
+              {Sol.hPasoMeridiano || Sol.mPasoMeridiano
+                    ? Sol.hPasoMeridiano + ":" + Sol.mPasoMeridiano + "h"
+                    : "----"}
             </td>
           </tr>
         </table>
@@ -218,32 +225,40 @@ export default function Respuesta({ datos, intervalo }) {
               <tr>
                 <th id="header">Crepúsculo Civil</th>
                 <td>
-                  {Fenomenos.principioCrepCivil.hora1}:
-                  {Fenomenos.principioCrepCivil.minutos1}h
+                    {Fenomenos.principioCrepCivil.hora1 || Fenomenos.principioCrepCivil.minutos1
+                    ? Fenomenos.principioCrepCivil.hora1 + ":" + Fenomenos.principioCrepCivil.minutos1 + "h"
+                    : "----"}
                 </td>
                 <td>
-                  {Fenomenos.finCrepCivil.hora1}:
-                  {Fenomenos.finCrepCivil.minutos1}h
+                    {Fenomenos.finCrepCivil.hora1 || Fenomenos.finCrepCivil.minutos1
+                    ? Fenomenos.finCrepCivil.hora1 + ":" + Fenomenos.finCrepCivil.minutos1 + "h"
+                    : "----"}
                 </td>
               </tr>
               <tr>
                 <th id="header">Crepúsculo Nautico</th>
                 <td>
-                  {Fenomenos.principioCrepNautico.hora1}:
-                  {Fenomenos.principioCrepNautico.minutos1}h
+                    {Fenomenos.principioCrepNautico.hora1 || Fenomenos.principioCrepNautico.minutos1
+                    ? Fenomenos.principioCrepNautico.hora1 + ":" + Fenomenos.principioCrepNautico.minutos1 + "h"
+                    : "----"}
                 </td>
                 <td>
-                  {Fenomenos.finCrepNautico.hora1}:
-                  {Fenomenos.finCrepNautico.minutos1}h
+                    {Fenomenos.finCrepNautico.hora1 || Fenomenos.finCrepNautico.minutos1
+                    ? Fenomenos.finCrepNautico.hora1 + ":" + Fenomenos.finCrepNautico.minutos1 + "h"
+                    : "----"}
                 </td>
               </tr>
               <tr>
                 <th id="header">Salida/Puesta</th>
                 <td>
-                  {Fenomenos.salida.hora1}:{Fenomenos.salida.minutos1}h
+                    {Fenomenos.salida.hora1 || Fenomenos.salida.minutos1
+                    ? Fenomenos.salida.hora1 + ":" + Fenomenos.salida.minutos1 + "h"
+                    : "----"}
                 </td>
                 <td>
-                  {Fenomenos.puesta.hora1}:{Fenomenos.puesta.minutos1}h
+                  {Fenomenos.puesta.hora1 || Fenomenos.puesta.minutos1
+                    ? Fenomenos.puesta.hora1 + ":" + Fenomenos.puesta.minutos1 + "h"
+                    : "----"}
                 </td>
               </tr>
             </table>
@@ -265,24 +280,28 @@ export default function Respuesta({ datos, intervalo }) {
               <td>
                 <table id="doble">
                   <td>
-                    {Fenomenos.Acimutes.gSalidaSuperior}º{" "}
-                    {Fenomenos.Acimutes.mASalidaSuperior}'
+                    {Fenomenos.Acimutes.gSalidaSuperior|| Fenomenos.Acimutes.mASalidaSuperior
+                    ? Fenomenos.Acimutes.gSalidaSuperior + "º " + Fenomenos.Acimutes.mASalidaSuperior + "'"
+                    : "----"}
                   </td>
                   <td>
-                    {Fenomenos.Acimutes.hSalidaSuperior}:
-                    {Fenomenos.Acimutes.mTSalidaSuperior}h
+                    {Fenomenos.Acimutes.hSalidaSuperior || Fenomenos.Acimutes.mTSalidaSuperior
+                    ? Fenomenos.Acimutes.hSalidaSuperior + ":" + Fenomenos.Acimutes.mTSalidaSuperior + "h"
+                    : "----"}
                   </td>
                 </table>
               </td>
               <td>
                 <table id="doble">
                   <td>
-                    {Fenomenos.Acimutes.gSalidaInferior}º{" "}
-                    {Fenomenos.Acimutes.mASalidaInferior}'
+                    {Fenomenos.Acimutes.gSalidaInferior || Fenomenos.Acimutes.mASalidaInferior
+                    ? Fenomenos.Acimutes.gSalidaInferior + "º" + Fenomenos.Acimutes.mASalidaInferior + "'"
+                    : "----"}
                   </td>
                   <td>
-                    {Fenomenos.Acimutes.hSalidaInferior}:
-                    {Fenomenos.Acimutes.mTSalidaInferior}h
+                    {Fenomenos.Acimutes.hSalidaSuperior || Fenomenos.Acimutes.mTSalidaSuperior
+                    ? Fenomenos.Acimutes.hSalidaInferior + ":" + Fenomenos.Acimutes.mTSalidaInferior + "h"
+                    : "----"}
                   </td>
                 </table>
               </td>
@@ -292,24 +311,28 @@ export default function Respuesta({ datos, intervalo }) {
               <td>
                 <table id="doble">
                   <td>
-                    {Fenomenos.Acimutes.gPuestaSuperior}º{" "}
-                    {Fenomenos.Acimutes.mAPuestaSuperior}'
+                  {Fenomenos.Acimutes.gPuestaSuperior || Fenomenos.Acimutes.mAPuestaSuperior
+                    ? Fenomenos.Acimutes.gPuestaSuperior + "º " + Fenomenos.Acimutes.mAPuestaSuperior + "'"
+                    : "----"}
                   </td>
                   <td>
-                    {Fenomenos.Acimutes.hPuestaSuperior}:
-                    {Fenomenos.Acimutes.mTPuestaSuperior}h
+                    {Fenomenos.Acimutes.hPuestaSuperior || Fenomenos.Acimutes.mTPuestaSuperior
+                    ? Fenomenos.Acimutes.hPuestaSuperior + ":" + Fenomenos.Acimutes.mTPuestaSuperior + "h"
+                    : "----"}
                   </td>
                 </table>
               </td>
               <td>
                 <table id="doble">
                   <td>
-                    {Fenomenos.Acimutes.gPuestaInferior}º{" "}
-                    {Fenomenos.Acimutes.mAPuestaInferior}'
+                    {Fenomenos.Acimutes.gPuestaInferior || Fenomenos.Acimutes.mAPuestaInferior
+                    ? Fenomenos.Acimutes.gPuestaInferior + "º " + Fenomenos.Acimutes.mAPuestaInferior + "'"
+                    : "----"}
                   </td>
                   <td>
-                    {Fenomenos.Acimutes.hPuestaInferior}:
-                    {Fenomenos.Acimutes.mTPuestaInferior}h
+                    {Fenomenos.Acimutes.hPuestaInferior || Fenomenos.Acimutes.mTPuestaInferior
+                    ? Fenomenos.Acimutes.hPuestaInferior + ":" + Fenomenos.Acimutes.mTPuestaInferior + "h"
+                    : "----"}
                   </td>
                 </table>
               </td>
@@ -356,13 +379,17 @@ export default function Respuesta({ datos, intervalo }) {
           <tr>
             <th id="header">Grados Altura Luna</th>
             <td>
-              {Luna.gAlturaMeridiano}º {Luna.mAlturaMeridiano}'
+              {Luna.gAlturaMeridiano || Luna.mAlturaMeridiano
+              ? Luna.gAlturaMeridiano + "º " + Luna.mAlturaMeridiano + "'"
+              : "----"}
             </td>
           </tr>
           <tr>
             <th id="header">Hora Paso Meridiano</th>
             <td>
-              {Luna.hPasoMeridiano}:{Luna.mPasoMeridiano}h
+              {Luna.hPasoMeridiano || Luna.mPasoMeridiano
+              ? Luna.hPasoMeridiano + ":" + Luna.mPasoMeridiano + "h"
+              : "----"}
             </td>
           </tr>
         </table>
@@ -379,16 +406,22 @@ export default function Respuesta({ datos, intervalo }) {
               {datos.Acimutes.gAcimutSalida}º {datos.Acimutes.mAcimutSalida}'
             </td>
             <td>
-              {datos.Acimutes.hSalida}:{datos.Acimutes.mSalida}h
+              {datos.Acimutes.hSalida || datos.Acimutes.mSalida
+              ? datos.Acimutes.hSalida + ":" + datos.Acimutes.mSalida + "h"
+              : "----"}
             </td>
           </tr>
           <tr>
             <th id="header">Puesta</th>
             <td>
-              {datos.Acimutes.gAcimutPuesta}º {datos.Acimutes.mAcimutPuesta}'
+              {datos.Acimutes.gAcimutPuesta || datos.Acimutes.mAcimutPuesta
+              ? datos.Acimutes.gAcimutPuesta + "º " + datos.Acimutes.mAcimutPuesta + "'"
+              : "----"}
             </td>
             <td>
-              {datos.Acimutes.hPuesta}:{datos.Acimutes.mPuesta}h
+             {datos.Acimutes.hPuesta || datos.Acimutes.mPuesta
+              ? datos.Acimutes.hPuesta + ":" + datos.Acimutes.mPuesta + "h"
+              : "----"}
             </td>
           </tr>
         </table>
