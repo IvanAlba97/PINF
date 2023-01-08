@@ -101,7 +101,7 @@ int main(void)
         }
         if ((anoi * 366 + 31 * mesi + diai) > (anof * 366 + 31 * mesf + diaf))
         {
-            printf("\"ERROR\":\"La fecha inicio debe ser menor que la fecha fin\"}");
+            printf("{\"ERROR\":\"La fecha inicio debe ser menor que la fecha fin\"}");
             exit(EXIT_FAILURE);
         }
         if ((horut < -11) || (horut > 12))
