@@ -96,7 +96,7 @@ int main(void)
         }
         if (!(fecha_valida(anoi, mesi, diai)) || !(fecha_valida(anof, mesf, diaf)))
         {
-            printf("\"ERROR\":\"La fecha debe estar dentro del intervalo de fechas válidas\"}");
+            printf("{\"ERROR\":\"La fecha debe estar dentro del intervalo de fechas válidas\"}");
             exit(EXIT_FAILURE);
         }
         if ((anoi * 366 + 31 * mesi + diai) > (anof * 366 + 31 * mesf + diaf))
@@ -106,7 +106,7 @@ int main(void)
         }
         if ((horut < -11) || (horut > 12))
         {
-            printf("\"ERROR\">La diferencia horaria (Hora - UT) debe estar entre -11 y 12\"}");
+            printf("{\"ERROR\">La diferencia horaria (Hora - UT) debe estar entre -11 y 12\"}");
             exit(EXIT_FAILURE);
         }
     }
