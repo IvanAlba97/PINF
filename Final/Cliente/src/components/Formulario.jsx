@@ -41,7 +41,7 @@ export default function Formulario({ nombre, enlace }) {
     const mesf = fechaF.getMonth() + 1;
     const añof = fechaF.getFullYear();
     let url;
-    const ip = "localhost"
+    const ip = "10.41.0.13"
     console.log(nombre);
     if (!intervalo) {
       if (nombre === 'sol') {
@@ -126,31 +126,25 @@ export default function Formulario({ nombre, enlace }) {
   function Fecha() {
     if (!intervalo) {
       return (
-        <div className='linea'>
           <DatePicker
             label={'Fecha'}
             onChange={actualizarFecha}
             value={datos.fecha}
           />
-        </div>
       );
     } else {
       return (
         <>
-          <div className='linea'>
             <DatePicker
               label={'Fecha inicial'}
               onChange={actualizarFecha}
               value={datos.fecha}
             />
-          </div>
-          <div className='linea'>
             <DatePicker
               label={'Fecha final'}
               onChange={actualizarFechaF}
               value={datos.fechaF}
             />
-          </div>
         </>
       );
     }
