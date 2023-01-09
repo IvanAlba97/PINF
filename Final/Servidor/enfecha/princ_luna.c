@@ -323,9 +323,11 @@ void rellenarListaLuna(struct TFecha *fecIni)
                     primero = 0;
                 }
                 printf("\"hPuesta\": %2i, \"mPuesta\": %2.0lf, ", comfel->hpu, comfel->mpu);
-                printf("\"gAcimutPuesta\": %3i, \"mAcimutPuesta\":%4.1lf ", comfel->gzp, comfel->mzp);
+                printf("\"gAcimutPuesta\": %3i, \"mAcimutPuesta\":%4.1lf}", comfel->gzp, comfel->mzp);
             }
-            printf("}}");
+            else
+                printf("}");
+            printf("}");
 
             // else {
             //     printf("<TR><TD><B>Puesta...............:</B> ---------- </TD>");
@@ -343,8 +345,9 @@ void rellenarListaLuna(struct TFecha *fecIni)
         if (comfel->bpm == 99)
             printf("\"sinFenomeno\":\"Luna siempre por encima del horizonte\",}, ");
         else
-            printf("\"sinFenomeno\":\"Luna siempre por debajo del horizonte\", }, ");
+            printf("\"sinFenomeno\":\"Luna siempre por debajo del horizonte\", } ");
     }
+    printf("}");
 }
 
 // void fase(int edad) {
