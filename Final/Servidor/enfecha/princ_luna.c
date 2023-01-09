@@ -116,6 +116,7 @@ int main(void)
 
     rellenarListaLuna(fecIni);
 
+    printf("}");
     free(fecIni);
     return 0;
 }
