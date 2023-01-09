@@ -63,7 +63,7 @@ export default function SideBar() {
   if (windowWidth > 1280) {
     return (
       <div className='fondo'>
-        <h1>Almanaque naútico</h1>
+        <h1>Almanaque náutico</h1>
         <nav>
           <ul>{listItems}</ul>
         </nav>

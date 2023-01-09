@@ -3,7 +3,6 @@
   top: 0;
   padding: 8vh 0 8vh 4vw;
   height: 100vh;
-  max-width: 33em;
   background-color: var(--primary-color);
   grid-column-start: 1;
   grid-column-end: 3;

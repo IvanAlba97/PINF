@@ -12,12 +12,29 @@
     top: 0;
     right: 0;
     margin: 8vh 4vw;
+    width: 138px;
     z-index: -1;
+  }
+}
+
+.default {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding-bottom: 8vh;
+  h1 {
+    font-family: Verdana, 'Bitstream Vera Sans', 'VerdanaLinux Bold', sans-serif;
+    font-weight: 700;
+    font-size: clamp(1.2em, 4vw, 1.5em);
+    text-align: center;
   }
 }
 
 @media (max-width: 1280px) {
   .contenido {
+    margin-top: 2em;
+  }
+  .default {
     margin-top: 2em;
   }
 }
@@ -26,7 +43,7 @@
   .contenido {
     img {
       position: relative;
-      margin: 10vh;
+      margin: 8vh;
     }
   }
 }

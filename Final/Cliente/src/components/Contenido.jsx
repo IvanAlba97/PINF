@@ -9,9 +9,14 @@ export default function Contenido(props) {
       case 'luna':
         return <Formulario tipo={props.estado} nombre='luna' />;
       default:
-        return <p>Selecciona</p>;
+        return (
+          <div className='default'>
+            <h1>Selecciona la opción deseada</h1>
+          </div>
+        );
     }
   }
+
   return (
     <div className='contenido'>
       {contenedor()}
