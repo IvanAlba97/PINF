@@ -277,7 +277,7 @@ void rellenarListaLuna(struct TFecha *fecIni)
     printf("\"Luna\": {");
     comfel = c_fenlun();
 
-    printf("\"edad0h\": %.1lf,", comfel->eda);
+    printf("\"edad0h\": %.1lf", comfel->eda);
     // printf("<TABLE><TR><TD><B>Edad (a 0h):</B> %.1lf d&iacute;as</TD>", comfel->eda);
 
     // fase((int)comfel->eda);
@@ -293,7 +293,12 @@ void rellenarListaLuna(struct TFecha *fecIni)
             primero = 0;
         }
         else
-            printf("}");
+        {
+            printf("\"hPasoMeridiano\":%2i,\"mPasoMeridiano\": ---, ");
+            printf("\"gAlturaMeridiano\": %i, \"mAlturaMeridiano\": ---, ");
+            printf("\"culminacion\": ---");
+        }
+        printf("}");
         // Si no hay, escribimos una l�nea
         // else {
         //     printf("<TR><TD COLSPAN=2><B>Paso meridiano lugar.:</B> --------- ");
