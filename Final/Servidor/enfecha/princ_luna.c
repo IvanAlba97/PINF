@@ -353,7 +353,6 @@ void rellenarListaLuna(struct TFecha *fecIni)
         else
             printf("\"sinFenomeno\":\"Luna siempre por debajo del horizonte\", } ");
     }
-    printf("}");
 }
 
 // void fase(int edad) {
