@@ -277,7 +277,7 @@ export default function Respuesta({ datos, intervalo }) {
             </tr>
             <tr>
               <th id="header">Salida</th>
-              <td>
+              <td className='huecoAcimutes'>
                 <table id="doble">
                   <td>
                     {Fenomenos.Acimutes.gSalidaSuperior|| Fenomenos.Acimutes.mASalidaSuperior
@@ -291,7 +291,7 @@ export default function Respuesta({ datos, intervalo }) {
                   </td>
                 </table>
               </td>
-              <td>
+              <td className='huecoAcimutes'>
                 <table id="doble">
                   <td>
                     {Fenomenos.Acimutes.gSalidaInferior || Fenomenos.Acimutes.mASalidaInferior
@@ -308,7 +308,7 @@ export default function Respuesta({ datos, intervalo }) {
             </tr>
             <tr>
               <th id="header">Puesta</th>
-              <td>
+              <td className='huecoAcimutes'>
                 <table id="doble">
                   <td>
                   {Fenomenos.Acimutes.gPuestaSuperior || Fenomenos.Acimutes.mAPuestaSuperior
@@ -322,7 +322,7 @@ export default function Respuesta({ datos, intervalo }) {
                   </td>
                 </table>
               </td>
-              <td>
+              <td className='huecoAcimutes'>
                 <table id="doble">
                   <td>
                     {Fenomenos.Acimutes.gPuestaInferior || Fenomenos.Acimutes.mAPuestaInferior
