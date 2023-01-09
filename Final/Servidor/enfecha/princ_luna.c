@@ -283,24 +283,29 @@ void rellenarListaLuna(struct TFecha *fecIni)
     // fase((int)comfel->eda);
     if (comfel->bpm != -99 && (comfel->bpm != 99 || comfel->hpm != -1))
     {
-
+        int primero = 1;
         if (comfel->hpm != -1)
         {
             printf("\"hPasoMeridiano\":%2i,\"mPasoMeridiano\": %4.1lf, ", comfel->hpm, comfel->mpm);
             printf("\"gAlturaMeridiano\": %i, \"mAlturaMeridiano\": %.1lf, ", comfel->gam, comfel->mam);
 
-            printf("\"culminacion\":%s},", comfel->cul == 'N' ? "\"Norte\"" : "\"Sur\"");
+            printf("\"culminacion\":%s", comfel->cul == 'N' ? "\"Norte\"" : "\"Sur\"");
+            primero = 0;
         }
+        else
+            printf("}");
         // Si no hay, escribimos una l�nea
         // else {
         //     printf("<TR><TD COLSPAN=2><B>Paso meridiano lugar.:</B> --------- ");
         //     printf("<BR>&nbsp;&nbsp;&nbsp;&nbsp;<B>Altura verdadera.:</B> --------- ");
         //     printf("<BR>&nbsp;&nbsp;&nbsp;&nbsp;<B>Culminaci&oacute;n......:</B> --------- </TD></TR>");
         // }
+        if (!primero)
+            printf(",");
 
         if (comfel->bpm != 99)
         { /////////////********
-            int primero = 1;
+            primero = 1;
             printf("\"Acimutes\": {");
 
             // Si hay salida de la luna mandamos los datos
