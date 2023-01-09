@@ -41,7 +41,7 @@ export default function Formulario({ nombre, enlace }) {
     const mesf = fechaF.getMonth() + 1;
     const añof = fechaF.getFullYear();
     let url;
-    const ip = "10.41.0.13"
+    const ip = "192.168.0.8"
     console.log(nombre);
     if (!intervalo) {
       if (nombre === 'sol') {
@@ -206,7 +206,7 @@ export default function Formulario({ nombre, enlace }) {
               label='Grados'
               value={datos.gradosLong}
               onChange={actualizarGradosLong}
-              max={90}
+              max={180}
 
             />
             <InputNumber
