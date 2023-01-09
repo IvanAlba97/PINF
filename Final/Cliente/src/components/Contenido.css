@@ -23,8 +23,6 @@
   height: 100%;
   padding-bottom: 8vh;
   h1 {
-    font-family: Verdana, 'Bitstream Vera Sans', 'VerdanaLinux Bold', sans-serif;
-    font-weight: 700;
     font-size: clamp(1.2em, 4vw, 1.5em);
     text-align: center;
   }
