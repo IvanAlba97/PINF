@@ -294,8 +294,8 @@ void rellenarListaLuna(struct TFecha *fecIni)
         }
         else
         {
-            printf("\"hPasoMeridiano\":%2i,\"mPasoMeridiano\": ---, ");
-            printf("\"gAlturaMeridiano\": %i, \"mAlturaMeridiano\": ---, ");
+            printf("\"hPasoMeridiano\":---,\"mPasoMeridiano\": ---, ");
+            printf("\"gAlturaMeridiano\": ---, \"mAlturaMeridiano\": ---, ");
             printf("\"culminacion\": ---");
         }
         printf("}");
