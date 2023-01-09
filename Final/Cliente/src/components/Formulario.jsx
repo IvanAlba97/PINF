@@ -41,7 +41,7 @@ export default function Formulario({ nombre, enlace }) {
     const mesf = fechaF.getMonth() + 1;
     const añof = fechaF.getFullYear();
     let url;
-    const ip = '192.168.0.23';
+    const ip = '192.168.0.17';
     console.log(nombre);
     if (!intervalo) {
       if (nombre === 'sol') {
