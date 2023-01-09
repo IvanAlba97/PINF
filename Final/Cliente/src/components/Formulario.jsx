@@ -41,7 +41,7 @@ export default function Formulario({ nombre, enlace }) {
     const mesf = fechaF.getMonth() + 1;
     const añof = fechaF.getFullYear();
     let url;
-    const ip = "192.168.0.23"
+    const ip = '192.168.0.23';
     console.log(nombre);
     if (!intervalo) {
       if (nombre === 'sol') {
@@ -126,25 +126,25 @@ export default function Formulario({ nombre, enlace }) {
   function Fecha() {
     if (!intervalo) {
       return (
-          <DatePicker
-            label={'Fecha'}
-            onChange={actualizarFecha}
-            value={datos.fecha}
-          />
+        <DatePicker
+          label={'Fecha'}
+          onChange={actualizarFecha}
+          value={datos.fecha}
+        />
       );
     } else {
       return (
         <>
-            <DatePicker
-              label={'Fecha inicial'}
-              onChange={actualizarFecha}
-              value={datos.fecha}
-            />
-            <DatePicker
-              label={'Fecha final'}
-              onChange={actualizarFechaF}
-              value={datos.fechaF}
-            />
+          <DatePicker
+            label={'Fecha inicial'}
+            onChange={actualizarFecha}
+            value={datos.fecha}
+          />
+          <DatePicker
+            label={'Fecha final'}
+            onChange={actualizarFechaF}
+            value={datos.fechaF}
+          />
         </>
       );
     }
@@ -170,14 +170,12 @@ export default function Formulario({ nombre, enlace }) {
               value={datos.minutosLat}
               onChange={actualizarMinutosLat}
               max={60}
-
             />
             <InputNumber
               label='Segundos'
               value={datos.segundosLat}
               onChange={actualizarSegundosLat}
               max={60}
-
             />
             <div className='radioGroup'>
               <label className='radioLabel'>Orientación</label>
@@ -207,21 +205,18 @@ export default function Formulario({ nombre, enlace }) {
               value={datos.gradosLong}
               onChange={actualizarGradosLong}
               max={180}
-
             />
             <InputNumber
               label='Minutos'
               value={datos.minutosLong}
               onChange={actualizarMinutosLong}
               max={60}
-
             />
             <InputNumber
               label='Segundos'
               value={datos.segundosLong}
               onChange={actualizarSegundosLong}
               max={60}
-              
             />
             <div className='radioGroup'>
               <label className='radioLabel'>Orientación</label>
