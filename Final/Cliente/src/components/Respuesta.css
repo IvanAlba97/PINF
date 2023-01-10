@@ -12,6 +12,10 @@ td {
   vertical-align: middle;
 }
 
+tr {
+  background-color: #f4f4f4;
+}
+
 .huecoAcimutes {
   padding: 0;
 }
