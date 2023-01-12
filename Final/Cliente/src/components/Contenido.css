@@ -13,6 +13,7 @@
     right: 0;
     margin: 8vh 4vw;
     width: 138px;
+    height: 138px;
     z-index: -1;
   }
 }
