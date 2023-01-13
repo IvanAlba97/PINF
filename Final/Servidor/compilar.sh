@@ -1,12 +1,33 @@
 #!/bin/bash
-g++ ./kernel/*.c -c
-cp ./kernel/*.o ./enfecha/
-cp ./kernel/*.o ./enintervalo/
+
+if [[ ! -d $1 ]]; then
+    if [[ $1 = "" ]]; then
+        echo "Es necesario introducir el destino de la compilación."
+    else
+        echo "El directorio introducido no existe en el sistema."
+    fi
+    exit 1
+fi
+
 cd ./enfecha
 make
+mv enfecha.cgi ../cgi-bin
+mv enfechaluna.cgi ../cgi-bin
 cd ../enintervalo
+g++ -c principal.c
+cp makesol makefile
 make
-cd ..
-rm *.o
+mv andi.cgi ../cgi-bin
+cp makeluna makefile
+make
+mv andiluna.cgi ../cgi-bin
 
-#^latgra=21&latmin=22&latseg=12&latsig=N&longra=12&lonmin=12&lonseg=2&lonsig=W&horut=0&anoi=2011&mesi=8&diai=1
+cd ..
+if  [[ -w $1 ]]; then
+    cp ./cgi-bin/* $1
+    chmod +x $1/*
+else
+    sudo cp ./cgi-bin/* $1
+    sudo chmod +x $1/*
+fi
+
